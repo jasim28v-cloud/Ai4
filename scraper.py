@@ -1,7 +1,7 @@
 import os
 
 def create_website_files():
-    """إنشاء Vault X Ultimate - خزنة الملفات الأسطورية"""
+    """إنشاء Vault X God Mode - الخزنة الأسطورية النهائية"""
     
     os.makedirs("www", exist_ok=True)
     
@@ -10,19 +10,20 @@ def create_website_files():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vault X | Ultimate</title>
+    <title>Vault X | God Mode</title>
     <style>
         :root {
             --bg: #000;
-            --surface: #080808;
+            --surface: #060606;
             --border: #1a1a1a;
             --gold: #c9a84c;
             --gold-light: #e2c97e;
-            --gold-glow: rgba(201,168,76,0.4);
+            --gold-glow: rgba(201,168,76,0.5);
             --accent: #00ff88;
             --accent2: #00aaff;
             --text: #e0d5c0;
             --text-dim: #6b6355;
+            --card: #0a0a0a;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -30,120 +31,167 @@ def create_website_files():
         body {
             background: #000;
             color: var(--text);
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             user-select: none;
             -webkit-user-select: none;
-            overflow: hidden;
             -webkit-tap-highlight-color: transparent;
+            overflow: hidden;
+            background-image: 
+                radial-gradient(ellipse at 50% 0%, rgba(0,255,136,0.04) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 100%, rgba(201,168,76,0.04) 0%, transparent 50%);
+        }
+
+        .bg-particles {
+            position: fixed; inset: 0; pointer-events: none; z-index: 0;
+        }
+
+        .bg-dot {
+            position: absolute; background: var(--accent);
+            border-radius: 50%; opacity: 0;
+            animation: floatDot 6s ease-in infinite;
+        }
+
+        @keyframes floatDot {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.3; }
+            90% { opacity: 0.05; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
         }
 
         .app {
-            width: 100%;
-            max-width: 480px;
-            height: 100vh;
-            max-height: 850px;
-            display: flex;
-            flex-direction: column;
+            width: 100%; max-width: 480px;
+            height: 100vh; max-height: 860px;
+            display: flex; flex-direction: column;
             background: var(--bg);
             border: 1px solid var(--border);
-            position: relative;
+            position: relative; z-index: 1;
+            border-radius: 8px;
+            box-shadow: 0 0 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.02) inset;
         }
 
         /* ==================== LOCK SCREEN ==================== */
         .lock-screen {
-            position: absolute;
-            inset: 0;
+            position: absolute; inset: 0;
             background: #000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            transition: all 0.5s;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: center;
+            z-index: 100; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
             padding: 20px;
             background-image: 
-                radial-gradient(ellipse at 50% 30%, rgba(201,168,76,0.06) 0%, transparent 60%);
+                radial-gradient(ellipse at 50% 20%, rgba(201,168,76,0.08) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 80%, rgba(0,255,136,0.05) 0%, transparent 60%);
         }
 
         .lock-screen.hidden {
-            opacity: 0;
-            pointer-events: none;
-            transform: scale(1.1);
+            opacity: 0; pointer-events: none;
+            transform: scale(1.15); filter: blur(10px);
         }
 
-        .lock-icon {
-            font-size: 50px;
-            animation: lockFloat 2s ease-in-out infinite;
-            margin-bottom: 16px;
+        .lock-icon-container {
+            position: relative;
+            width: 100px; height: 100px;
+            margin-bottom: 20px;
         }
 
-        @keyframes lockFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+        .lock-ring-outer {
+            position: absolute; inset: -8px;
+            border: 1px solid rgba(0,255,136,0.2);
+            border-radius: 50%;
+            animation: ringSpin 20s linear infinite;
+        }
+
+        .lock-ring-inner {
+            position: absolute; inset: -4px;
+            border: 1px dashed rgba(0,255,136,0.15);
+            border-radius: 50%;
+            animation: ringSpin 15s linear infinite reverse;
+        }
+
+        @keyframes ringSpin { to { transform: rotate(360deg); } }
+
+        .lock-icon-core {
+            width: 100%; height: 100%;
+            background: radial-gradient(circle at 40% 40%, #0a1a0a, #000);
+            border: 2px solid var(--accent);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 40px;
+            box-shadow: 0 0 40px rgba(0,255,136,0.3), 0 0 80px rgba(0,255,136,0.1);
+            animation: iconPulse 3s ease-in-out infinite;
+            position: relative; z-index: 3;
+        }
+
+        @keyframes iconPulse {
+            0%, 100% { box-shadow: 0 0 40px rgba(0,255,136,0.3), 0 0 80px rgba(0,255,136,0.1); }
+            50% { box-shadow: 0 0 60px rgba(0,255,136,0.5), 0 0 100px rgba(0,255,136,0.2); }
+        }
+
+        .lock-spark {
+            position: absolute; width: 3px; height: 3px;
+            background: var(--accent); border-radius: 50%;
+            animation: sparkFloat 2s ease-in-out infinite; z-index: 4;
+        }
+        .lock-spark:nth-child(1) { top: 8px; left: 15px; animation-delay: 0s; }
+        .lock-spark:nth-child(2) { top: 15px; right: 10px; animation-delay: 0.5s; }
+        .lock-spark:nth-child(3) { bottom: 12px; left: 12px; animation-delay: 1s; }
+        .lock-spark:nth-child(4) { bottom: 8px; right: 16px; animation-delay: 1.5s; }
+
+        @keyframes sparkFloat {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 1; transform: scale(2.5); }
         }
 
         .lock-title {
-            font-size: 22px;
-            font-weight: 900;
-            letter-spacing: 4px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-light), var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 26px; font-weight: 900; letter-spacing: 5px;
+            background: linear-gradient(180deg, var(--gold-light), var(--gold), #8b7300);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 4px;
+            filter: drop-shadow(0 0 20px var(--gold-glow));
         }
 
         .lock-subtitle {
-            font-size: 8px;
-            color: var(--text-dim);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
+            font-size: 8px; color: var(--text-dim);
+            letter-spacing: 5px; text-transform: uppercase; margin-bottom: 22px;
         }
 
         .pin-dots {
-            display: flex;
-            gap: 14px;
-            margin-bottom: 20px;
+            display: flex; gap: 16px; margin-bottom: 22px;
         }
 
         .pin-dot {
-            width: 14px;
-            height: 14px;
+            width: 16px; height: 16px;
             border-radius: 50%;
-            background: #1a1a1a;
-            border: 2px solid #333;
-            transition: all 0.3s;
+            background: #111;
+            border: 2px solid #222;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .pin-dot.filled {
             background: var(--accent);
             border-color: var(--accent);
-            box-shadow: 0 0 15px rgba(0,255,136,0.5);
+            box-shadow: 0 0 20px rgba(0,255,136,0.6), 0 0 40px rgba(0,255,136,0.2);
+            transform: scale(1.2);
         }
 
         .pin-dot.error {
-            background: #ff3344;
-            border-color: #ff3344;
-            animation: shake 0.5s ease;
+            background: #ff3344; border-color: #ff3344;
+            box-shadow: 0 0 20px rgba(255,51,68,0.6);
+            animation: dotShake 0.5s ease;
         }
 
-        @keyframes shake {
+        @keyframes dotShake {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
+            25% { transform: translateX(-6px); }
+            75% { transform: translateX(6px); }
         }
 
         .keypad {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            max-width: 260px;
-            width: 100%;
+            display: grid; grid-template-columns: repeat(3, 1fr);
+            gap: 10px; max-width: 260px; width: 100%;
         }
 
         .key-btn {
@@ -152,373 +200,440 @@ def create_website_files():
             border: 1px solid #1a1a1a;
             color: var(--text);
             cursor: pointer;
-            border-radius: 16px;
-            font-size: 20px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
+            border-radius: 18px;
+            font-size: 20px; font-weight: 700;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
             font-family: inherit;
+            position: relative; overflow: hidden;
+        }
+
+        .key-btn::after {
+            content: ''; position: absolute; inset: 0;
+            background: radial-gradient(circle at center, rgba(0,255,136,0.2), transparent);
+            opacity: 0; transition: opacity 0.3s;
         }
 
         .key-btn:active {
-            background: rgba(0,255,136,0.15);
             border-color: var(--accent);
-            transform: scale(0.9);
-            box-shadow: 0 0 20px rgba(0,255,136,0.2);
+            transform: scale(0.85);
+            box-shadow: 0 0 25px rgba(0,255,136,0.3);
         }
+        .key-btn:active::after { opacity: 1; }
 
-        .key-btn.key-del { font-size: 14px; color: #ff4444; }
-        .key-btn.key-empty { background: transparent; border: none; pointer-events: none; }
+        .key-del { color: #ff4444; }
+        .key-empty { background: transparent; border: none; pointer-events: none; }
 
         .lock-error {
-            font-size: 9px;
-            color: #ff4444;
-            letter-spacing: 2px;
-            margin-top: 10px;
-            height: 16px;
+            font-size: 9px; letter-spacing: 2px;
+            margin-top: 10px; height: 16px;
+            transition: all 0.3s;
         }
 
         /* ==================== MAIN APP ==================== */
         .main-app {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            flex: 1; display: flex; flex-direction: column; overflow: hidden;
         }
 
         .header {
-            padding: 10px 14px;
-            background: #0a0a0a;
+            padding: 12px 16px;
+            background: rgba(6,6,6,0.95);
             border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            z-index: 10;
+            display: flex; align-items: center; justify-content: space-between;
+            z-index: 10; backdrop-filter: blur(10px);
         }
 
         .header-title {
-            font-size: 13px;
-            font-weight: 900;
-            letter-spacing: 3px;
+            font-size: 14px; font-weight: 900; letter-spacing: 4px;
             color: var(--accent);
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            display: flex; align-items: center; gap: 8px;
+            text-shadow: 0 0 15px rgba(0,255,136,0.4);
         }
 
-        .header-actions {
-            display: flex;
-            gap: 6px;
-        }
+        .header-actions { display: flex; gap: 6px; }
 
         .header-btn {
-            padding: 5px 10px;
-            background: rgba(0,255,136,0.08);
+            padding: 7px 12px;
+            background: rgba(0,255,136,0.06);
             border: 1px solid rgba(0,255,136,0.2);
             color: var(--accent);
-            cursor: pointer;
-            border-radius: 8px;
-            font-size: 8px;
-            letter-spacing: 1px;
-            font-family: inherit;
+            cursor: pointer; border-radius: 20px;
+            font-size: 8px; letter-spacing: 2px;
+            font-family: inherit; transition: all 0.3s;
         }
 
+        .header-btn:hover { background: rgba(0,255,136,0.12); }
         .header-btn.lock-btn {
-            background: rgba(255,51,68,0.08);
-            border-color: rgba(255,51,68,0.2);
-            color: #ff4444;
+            background: rgba(255,51,68,0.06);
+            border-color: rgba(255,51,68,0.2); color: #ff4444;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: flex; gap: 6px;
+            padding: 8px 14px;
+            background: #050505;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .stat-item {
+            flex: 1; text-align: center;
+            padding: 6px; background: #0a0a0a;
+            border: 1px solid #1a1a1a; border-radius: 8px;
+        }
+
+        .stat-val {
+            font-size: 14px; font-weight: 900;
+            color: var(--accent); display: block;
+            text-shadow: 0 0 8px rgba(0,255,136,0.3);
+        }
+
+        .stat-lbl {
+            font-size: 7px; color: #444;
+            letter-spacing: 2px; text-transform: uppercase;
         }
 
         /* Toolbar */
         .toolbar {
-            display: flex;
-            gap: 4px;
-            padding: 8px 12px;
+            display: flex; gap: 5px;
+            padding: 10px 14px;
             background: #050505;
             border-bottom: 1px solid var(--border);
             overflow-x: auto;
         }
 
-        .toolbar::-webkit-scrollbar { height: 2px; }
-        .toolbar::-webkit-scrollbar-thumb { background: #1a1a1a; }
+        .toolbar::-webkit-scrollbar { height: 0; }
 
         .tool-btn {
-            padding: 8px 12px;
+            padding: 9px 14px;
             background: #0a0a0a;
             border: 1px solid #1a1a1a;
-            color: #888;
-            cursor: pointer;
-            border-radius: 20px;
-            font-size: 9px;
-            white-space: nowrap;
-            letter-spacing: 1px;
-            transition: all 0.3s;
-            font-family: inherit;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+            color: #666; cursor: pointer;
+            border-radius: 25px; font-size: 9px;
+            white-space: nowrap; letter-spacing: 1px;
+            transition: all 0.3s; font-family: inherit;
+            display: flex; align-items: center; gap: 5px;
         }
 
-        .tool-btn:hover { border-color: #444; color: #aaa; }
+        .tool-btn:hover { border-color: #333; color: #999; }
         .tool-btn.active {
-            border-color: var(--accent);
-            color: var(--accent);
+            border-color: var(--accent); color: var(--accent);
             background: rgba(0,255,136,0.08);
+            box-shadow: 0 0 15px rgba(0,255,136,0.1);
         }
 
-        /* Content Area */
+        .tool-btn .count {
+            background: rgba(0,255,136,0.15);
+            padding: 2px 6px; border-radius: 10px;
+            font-size: 8px;
+        }
+
+        /* Content */
         .content-area {
-            flex: 1;
-            overflow-y: auto;
-            padding: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            flex: 1; overflow-y: auto;
+            padding: 12px; display: flex;
+            flex-direction: column; gap: 10px;
             background: #000;
+            scroll-behavior: smooth;
         }
 
         .content-area::-webkit-scrollbar { width: 3px; }
         .content-area::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 3px; }
 
+        /* Grid Mode */
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+        }
+
+        .content-grid .file-card {
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 16px 10px;
+        }
+
+        .content-grid .file-icon { font-size: 36px; margin-bottom: 6px; }
+        .content-grid .file-actions { margin-top: 6px; }
+
+        /* List Mode */
+        .content-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
         .file-card {
-            background: #0a0a0a;
-            border: 1px solid #1a1a1a;
-            border-radius: 12px;
-            padding: 12px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+            padding: 14px;
             display: flex;
             align-items: center;
             gap: 12px;
             transition: all 0.3s;
-            animation: cardIn 0.3s ease;
+            animation: cardSlide 0.4s ease;
             position: relative;
+            overflow: hidden;
         }
 
-        @keyframes cardIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes cardSlide {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
         }
 
-        .file-card:hover { border-color: #333; }
-        .file-card:active { background: #0f0f0f; }
+        .file-card::before {
+            content: ''; position: absolute; left: 0; top: 10%; bottom: 10%; width: 2px;
+            background: linear-gradient(180deg, transparent, var(--accent), transparent);
+            opacity: 0; transition: opacity 0.3s;
+            border-radius: 0 2px 2px 0;
+        }
+
+        .file-card:hover { border-color: #2a2a2a; background: #0d0d0d; }
+        .file-card:hover::before { opacity: 0.5; }
+        .file-card:active { transform: scale(0.98); }
 
         .file-icon {
-            font-size: 30px;
-            flex-shrink: 0;
-            width: 44px;
-            text-align: center;
+            font-size: 32px; flex-shrink: 0;
+            width: 48px; height: 48px;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(0,255,136,0.04);
+            border-radius: 12px;
         }
 
         .file-info { flex: 1; min-width: 0; }
 
         .file-name {
-            font-size: 12px;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            font-size: 12px; font-weight: 600;
+            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+            letter-spacing: 0.5px;
         }
 
         .file-meta {
-            font-size: 8px;
-            color: var(--text-dim);
-            letter-spacing: 1px;
-            margin-top: 2px;
+            font-size: 8px; color: var(--text-dim);
+            letter-spacing: 1px; margin-top: 3px;
+            display: flex; gap: 8px; align-items: center;
         }
 
-        .file-actions {
-            display: flex;
-            gap: 4px;
+        .file-type-badge {
+            padding: 2px 8px; border-radius: 10px;
+            font-size: 7px; letter-spacing: 1px;
+            text-transform: uppercase;
         }
+
+        .badge-image { background: rgba(0,170,255,0.1); color: #00aaff; border: 1px solid rgba(0,170,255,0.2); }
+        .badge-video { background: rgba(255,136,0,0.1); color: #ff8800; border: 1px solid rgba(255,136,0,0.2); }
+        .badge-audio { background: rgba(170,0,255,0.1); color: #aa00ff; border: 1px solid rgba(170,0,255,0.2); }
+        .badge-text { background: rgba(0,255,136,0.1); color: #00ff88; border: 1px solid rgba(0,255,136,0.2); }
+        .badge-password { background: rgba(255,51,68,0.1); color: #ff3344; border: 1px solid rgba(255,51,68,0.2); }
+        .badge-link { background: rgba(201,168,76,0.1); color: #c9a84c; border: 1px solid rgba(201,168,76,0.2); }
+
+        .file-actions { display: flex; gap: 4px; }
 
         .file-btn {
-            width: 28px;
-            height: 28px;
-            background: #111;
-            border: 1px solid #1a1a1a;
-            color: #888;
-            cursor: pointer;
-            border-radius: 8px;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 30px; height: 30px;
+            background: #111; border: 1px solid #1a1a1a;
+            color: #777; cursor: pointer;
+            border-radius: 10px; font-size: 12px;
+            display: flex; align-items: center; justify-content: center;
             transition: all 0.3s;
         }
 
-        .file-btn:hover { border-color: #444; color: #fff; }
-        .file-btn.danger:hover { border-color: #ff4444; color: #ff4444; }
+        .file-btn:hover { border-color: #444; color: #fff; background: #1a1a1a; }
+        .file-btn.danger:hover { border-color: #ff4444; color: #ff4444; background: rgba(255,68,68,0.1); }
 
-        /* Image Preview */
-        .image-preview {
-            width: 100%;
-            border-radius: 12px;
-            border: 1px solid #1a1a1a;
-            cursor: pointer;
-            transition: all 0.3s;
+        /* Previews */
+        .card-preview {
+            width: 100%; margin-top: 8px;
+            border-radius: 10px; border: 1px solid #1a1a1a;
+            overflow: hidden;
         }
 
-        .image-preview:active { transform: scale(0.98); }
-
-        /* Video Preview */
-        .video-preview {
-            width: 100%;
-            border-radius: 12px;
-            border: 1px solid #1a1a1a;
-            max-height: 200px;
-            background: #000;
+        .card-preview img {
+            width: 100%; max-height: 140px;
+            object-fit: cover; display: block;
+            cursor: pointer; transition: all 0.3s;
         }
 
-        /* Audio Player */
-        .audio-player {
-            width: 100%;
-            height: 40px;
-            border-radius: 20px;
-            background: #0a0a0a;
-            border: 1px solid #1a1a1a;
+        .card-preview img:hover { transform: scale(1.02); }
+
+        .card-preview video {
+            width: 100%; max-height: 120px;
+            border-radius: 10px; background: #000;
         }
 
-        /* Fullscreen Viewer */
-        .viewer-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.95);
-            z-index: 200;
-            align-items: center;
-            justify-content: center;
-            flex-direction: column;
+        .card-preview audio {
+            width: 100%; height: 36px;
+            border-radius: 20px; background: #0a0a0a;
         }
 
-        .viewer-overlay.show { display: flex; }
-
-        .viewer-content {
-            max-width: 95%;
-            max-height: 80%;
-            border-radius: 12px;
+        /* View Mode Toggle */
+        .view-toggle {
+            display: flex; gap: 4px;
+            padding: 6px 14px; justify-content: flex-end;
         }
 
-        .viewer-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: #fff;
-            cursor: pointer;
-            border-radius: 50%;
-            font-size: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
+        .view-btn {
+            padding: 5px 10px;
+            background: #0a0a0a; border: 1px solid #1a1a1a;
+            color: #555; cursor: pointer; border-radius: 8px;
+            font-size: 14px; transition: all 0.3s;
         }
 
+        .view-btn.active {
+            border-color: var(--accent); color: var(--accent);
+            background: rgba(0,255,136,0.05);
+        }
+
+        /* Empty State */
         .empty-state {
-            text-align: center;
-            color: #1a1a1a;
-            margin-top: 40px;
+            text-align: center; color: #111;
+            margin-top: 50px; padding: 20px;
         }
 
-        .empty-state .icon { font-size: 40px; display: block; margin-bottom: 8px; }
-        .empty-state .text { font-size: 10px; letter-spacing: 2px; }
+        .empty-state .icon {
+            font-size: 50px; display: block;
+            margin-bottom: 10px; opacity: 0.4;
+            animation: emptyFloat 3s ease-in-out infinite;
+        }
 
-        /* Input Area */
+        @keyframes emptyFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+
+        .empty-state .text {
+            font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
+        }
+
+        /* Input */
         .input-area {
-            padding: 10px 14px;
-            background: #0a0a0a;
+            padding: 12px 14px;
+            background: rgba(6,6,6,0.95);
             border-top: 1px solid var(--border);
-            display: flex;
-            gap: 8px;
-            align-items: flex-end;
+            display: flex; gap: 8px; align-items: flex-end;
+            backdrop-filter: blur(10px);
         }
 
         .input-area input {
-            flex: 1;
-            padding: 10px 14px;
-            background: #000;
-            border: 1px solid var(--border);
-            color: var(--text);
-            font-size: 12px;
-            border-radius: 20px;
-            font-family: inherit;
-            outline: none;
-            transition: all 0.3s;
+            flex: 1; padding: 12px 16px;
+            background: #000; border: 1px solid var(--border);
+            color: var(--text); font-size: 12px;
+            border-radius: 25px; font-family: inherit;
+            outline: none; transition: all 0.3s;
         }
 
         .input-area input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(0,255,136,0.1);
+            box-shadow: 0 0 0 4px rgba(0,255,136,0.08);
         }
 
-        .input-area input::placeholder { color: #2a2520; }
+        .input-area input::placeholder { color: #1a1a1a; }
 
         .add-btn {
-            width: 38px;
-            height: 38px;
+            width: 42px; height: 42px;
             background: linear-gradient(135deg, #00ff88, #00cc66);
-            border: none;
-            color: #000;
-            cursor: pointer;
-            border-radius: 50%;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: all 0.3s;
+            border: none; color: #000;
+            cursor: pointer; border-radius: 50%;
+            font-size: 18px; display: flex;
+            align-items: center; justify-content: center;
+            flex-shrink: 0; transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,255,136,0.3);
         }
 
-        .add-btn:active { transform: scale(0.9); }
+        .add-btn:active { transform: scale(0.85); box-shadow: 0 2px 10px rgba(0,255,136,0.2); }
 
         .upload-btn {
-            width: 38px;
-            height: 38px;
-            background: #0a0a0a;
-            border: 1px solid var(--accent2);
-            color: var(--accent2);
-            cursor: pointer;
-            border-radius: 50%;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: all 0.3s;
+            width: 42px; height: 42px;
+            background: #0a0a0a; border: 1px solid var(--accent2);
+            color: var(--accent2); cursor: pointer;
+            border-radius: 50%; font-size: 16px;
+            display: flex; align-items: center; justify-content: center;
+            flex-shrink: 0; transition: all 0.3s;
         }
 
         .upload-btn:active { background: rgba(0,170,255,0.1); }
 
         input[type="file"] { display: none; }
 
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(120px);
-            background: #0a0a0a;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 10px 20px;
-            border-radius: 20px;
-            font-size: 10px;
-            letter-spacing: 2px;
-            z-index: 300;
-            transition: transform 0.4s;
+        /* Viewer */
+        .viewer-overlay {
+            display: none; position: fixed; inset: 0;
+            background: rgba(0,0,0,0.97); z-index: 200;
+            align-items: center; justify-content: center;
+            flex-direction: column; backdrop-filter: blur(20px);
         }
+
+        .viewer-overlay.show { display: flex; }
+
+        .viewer-content {
+            max-width: 95%; max-height: 80%;
+            border-radius: 16px;
+            box-shadow: 0 0 60px rgba(0,0,0,0.8);
+        }
+
+        .viewer-close {
+            position: absolute; top: 20px; right: 20px;
+            width: 44px; height: 44px;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: #fff; cursor: pointer;
+            border-radius: 50%; font-size: 20px;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s;
+        }
+
+        .viewer-close:hover { background: rgba(255,255,255,0.12); }
+
+        .viewer-info {
+            color: #888; font-size: 10px;
+            letter-spacing: 2px; margin-top: 12px;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: 40px; left: 50%;
+            transform: translateX(-50%) translateY(120px);
+            background: #0a0a0a; border: 1px solid var(--accent);
+            color: var(--accent); padding: 14px 28px;
+            border-radius: 30px; font-size: 11px;
+            letter-spacing: 2px; z-index: 300;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.9), 0 0 30px rgba(0,255,136,0.2);
+            text-align: center;
+        }
+
         .toast.show { transform: translateX(-50%) translateY(0); }
+
+        .footer {
+            text-align: center; padding: 4px;
+            font-size: 7px; color: #0a0a0a; letter-spacing: 2px;
+            background: #000; border-top: 1px solid var(--border);
+        }
+        .footer span { color: var(--accent); }
     </style>
 </head>
 <body>
+    <!-- Background -->
+    <div class="bg-particles" id="bgParticles"></div>
+
     <div class="app">
         <!-- ==================== LOCK SCREEN ==================== -->
         <div class="lock-screen" id="lockScreen">
-            <div class="lock-icon">🔐</div>
+            <div class="lock-icon-container">
+                <div class="lock-ring-outer"></div>
+                <div class="lock-ring-inner"></div>
+                <div class="lock-icon-core">
+                    🔐
+                    <span class="lock-spark"></span>
+                    <span class="lock-spark"></span>
+                    <span class="lock-spark"></span>
+                    <span class="lock-spark"></span>
+                </div>
+            </div>
             <div class="lock-title">VAULT X</div>
-            <div class="lock-subtitle">✦ Ultimate Vault ✦</div>
+            <div class="lock-subtitle">✦ God Mode ✦</div>
             
             <div class="pin-dots">
                 <div class="pin-dot" id="dot1"></div>
@@ -550,73 +665,136 @@ def create_website_files():
             <div class="header">
                 <span class="header-title">🔐 VAULT X</span>
                 <div class="header-actions">
-                    <button class="header-btn" onclick="exportAll()">📤</button>
-                    <button class="header-btn lock-btn" onclick="lockVault()">🔒</button>
+                    <button class="header-btn" onclick="exportAll()">📤 Export</button>
+                    <button class="header-btn lock-btn" onclick="lockVault()">🔒 Lock</button>
                 </div>
             </div>
 
-            <div class="toolbar" id="toolbar">
-                <button class="tool-btn active" data-type="all" onclick="filterType('all', this)">📂 All</button>
-                <button class="tool-btn" data-type="text" onclick="filterType('text', this)">📝 Text</button>
-                <button class="tool-btn" data-type="image" onclick="filterType('image', this)">🖼️ Images</button>
-                <button class="tool-btn" data-type="video" onclick="filterType('video', this)">🎥 Video</button>
-                <button class="tool-btn" data-type="audio" onclick="filterType('audio', this)">🎵 Audio</button>
-                <button class="tool-btn" data-type="password" onclick="filterType('password', this)">🔑 Pass</button>
-                <button class="tool-btn" data-type="link" onclick="filterType('link', this)">🔗 Links</button>
+            <!-- Stats -->
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <span class="stat-val" id="statTotal">0</span>
+                    <span class="stat-lbl">Files</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-val" id="statSize">0KB</span>
+                    <span class="stat-lbl">Storage</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-val" id="statTypes">0</span>
+                    <span class="stat-lbl">Types</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-val" id="statEncrypted">🔒</span>
+                    <span class="stat-lbl">Secure</span>
+                </div>
             </div>
 
-            <div class="content-area" id="contentArea">
+            <!-- View Toggle -->
+            <div class="view-toggle">
+                <button class="view-btn active" onclick="setView('list', this)">📋</button>
+                <button class="view-btn" onclick="setView('grid', this)">🔲</button>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="toolbar" id="toolbar">
+                <button class="tool-btn active" data-type="all" onclick="filterType('all', this)">
+                    📂 All <span class="count" id="countAll">0</span>
+                </button>
+                <button class="tool-btn" data-type="image" onclick="filterType('image', this)">
+                    🖼️ Images
+                </button>
+                <button class="tool-btn" data-type="video" onclick="filterType('video', this)">
+                    🎥 Video
+                </button>
+                <button class="tool-btn" data-type="audio" onclick="filterType('audio', this)">
+                    🎵 Audio
+                </button>
+                <button class="tool-btn" data-type="text" onclick="filterType('text', this)">
+                    📝 Text
+                </button>
+                <button class="tool-btn" data-type="password" onclick="filterType('password', this)">
+                    🔑 Pass
+                </button>
+                <button class="tool-btn" data-type="link" onclick="filterType('link', this)">
+                    🔗 Links
+                </button>
+            </div>
+
+            <!-- Content -->
+            <div class="content-area content-list" id="contentArea">
                 <div class="empty-state" id="emptyState">
                     <span class="icon">🔐</span>
                     <span class="text">Vault is empty</span>
                 </div>
             </div>
 
+            <!-- Input -->
             <div class="input-area">
-                <input type="text" id="textInput" placeholder="Add note, link, or password..." onkeypress="if(event.key==='Enter')addText()">
+                <input type="text" id="textInput" placeholder="Add note, link, or pass:xxx..." onkeypress="if(event.key==='Enter')addText()">
                 <input type="file" id="fileInput" onchange="addFile()" multiple accept="*/*">
                 <button class="upload-btn" onclick="document.getElementById('fileInput').click()">📎</button>
                 <button class="add-btn" onclick="addText()">+</button>
             </div>
+
+            <div class="footer"><span>◆</span> VAULT X GOD MODE <span>•</span> ENCRYPTED <span>◆</span></div>
         </div>
     </div>
 
-    <!-- Fullscreen Viewer -->
+    <!-- Viewer -->
     <div class="viewer-overlay" id="viewerOverlay">
         <button class="viewer-close" onclick="closeViewer()">✕</button>
         <img class="viewer-content" id="viewerImage" style="display:none">
         <video class="viewer-content" id="viewerVideo" controls style="display:none"></video>
+        <span class="viewer-info" id="viewerInfo"></span>
     </div>
 
     <!-- Toast -->
     <div class="toast" id="toast"></div>
 
     <script>
+        // ==================== PARTICLES ====================
+        (function() {
+            const c = document.getElementById('bgParticles');
+            for (let i = 0; i < 25; i++) {
+                const d = document.createElement('div');
+                d.className = 'bg-dot';
+                d.style.left = Math.random() * 100 + '%';
+                const s = Math.random() * 2 + 1;
+                d.style.width = s + 'px'; d.style.height = s + 'px';
+                d.style.animationDuration = (Math.random() * 8 + 4) + 's';
+                d.style.animationDelay = (Math.random() * 6) + 's';
+                c.appendChild(d);
+            }
+        })();
+
         // ==================== CONSTANTS ====================
         const CORRECT_PIN = '1235';
         let pinInput = '';
         let isUnlocked = false;
         let currentFilter = 'all';
+        let currentView = 'list';
         let vaultFiles = [];
         let failedAttempts = 0;
         let lockTimeout = null;
-        const AUTO_LOCK_TIME = 120000;
+        const AUTO_LOCK_TIME = 180000;
 
         // ==================== ENCRYPTION ====================
         function encrypt(text) {
             let result = '';
-            const key = CORRECT_PIN;
+            const key = CORRECT_PIN + 'vaultx_salt';
             for (let i = 0; i < text.length; i++) {
                 result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
             }
-            return btoa(result);
+            return btoa(btoa(result));
         }
 
         function decrypt(encrypted) {
             try {
-                const text = atob(encrypted);
+                const step1 = atob(encrypted);
+                const text = atob(step1);
                 let result = '';
-                const key = CORRECT_PIN;
+                const key = CORRECT_PIN + 'vaultx_salt';
                 for (let i = 0; i < text.length; i++) {
                     result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
                 }
@@ -629,7 +807,7 @@ def create_website_files():
             if (pinInput.length >= 4) return;
             pinInput += num;
             updateDots();
-            if (pinInput.length === 4) setTimeout(checkPin, 200);
+            if (pinInput.length === 4) setTimeout(checkPin, 250);
         }
 
         function deleteKey() {
@@ -652,17 +830,19 @@ def create_website_files():
             } else {
                 failedAttempts++;
                 document.querySelectorAll('.pin-dot').forEach(d => d.classList.add('error'));
-                document.getElementById('lockError').textContent = '❌ Wrong! ' + (3 - failedAttempts) + ' tries';
+                const err = document.getElementById('lockError');
+                err.textContent = '❌ Wrong PIN! ' + Math.max(0, 3 - failedAttempts) + ' tries left';
+                err.style.color = '#ff4444';
                 if (failedAttempts >= 3) {
-                    document.getElementById('lockError').textContent = '⏳ Locked 30s';
+                    err.textContent = '⏳ Locked for 30 seconds...';
                     document.querySelectorAll('.key-btn').forEach(b => b.style.pointerEvents = 'none');
                     setTimeout(() => {
-                        failedAttempts = 0;
+                        failedAttempts = 0; pinInput = ''; updateDots();
                         document.querySelectorAll('.key-btn').forEach(b => b.style.pointerEvents = 'auto');
-                        document.getElementById('lockError').textContent = '';
+                        err.textContent = ''; err.style.color = '';
                     }, 30000);
                 }
-                setTimeout(() => { pinInput = ''; updateDots(); }, 500);
+                setTimeout(() => { pinInput = ''; updateDots(); }, 600);
             }
         }
 
@@ -674,7 +854,7 @@ def create_website_files():
             updateDots();
             loadVault();
             resetAutoLock();
-            showToast('✅ Unlocked');
+            showToast('✅ Vault Unlocked');
         }
 
         function lockVault() {
@@ -682,7 +862,7 @@ def create_website_files():
             document.getElementById('lockScreen').classList.remove('hidden');
             if (lockTimeout) clearTimeout(lockTimeout);
             saveVault();
-            showToast('🔒 Locked');
+            showToast('🔒 Vault Locked');
         }
 
         function resetAutoLock() {
@@ -691,32 +871,29 @@ def create_website_files():
         }
 
         document.addEventListener('click', () => { if (isUnlocked) resetAutoLock(); });
+        document.addEventListener('touchstart', () => { if (isUnlocked) resetAutoLock(); });
 
-        // ==================== FILE MANAGEMENT ====================
+        // ==================== FILES ====================
         function addText() {
             const input = document.getElementById('textInput');
             const text = input.value.trim();
             if (!text) return;
 
-            // Detect type
             let type = 'text';
             if (text.startsWith('http')) type = 'link';
-            if (text.startsWith('pass:')) type = 'password';
+            else if (text.startsWith('pass:')) type = 'password';
 
-            const file = {
+            vaultFiles.unshift({
                 id: Date.now(),
-                name: text.substring(0, 30) + (text.length > 30 ? '...' : ''),
-                type: type,
-                content: text,
+                name: text.substring(0, 40).replace(/pass:/, '••••'),
+                type, content: text,
                 size: new Blob([text]).size,
-                date: new Date().toLocaleString(),
-            };
+                date: new Date().toLocaleString()
+            });
 
-            vaultFiles.unshift(file);
             input.value = '';
-            saveVault();
-            renderFiles();
-            resetAutoLock();
+            saveVault(); renderFiles();
+            resetAutoLock(); showToast('✅ Added');
         }
 
         function addFile() {
@@ -732,67 +909,59 @@ def create_website_files():
                     else if (f.type.startsWith('video/')) type = 'video';
                     else if (f.type.startsWith('audio/')) type = 'audio';
 
-                    const fileObj = {
+                    vaultFiles.unshift({
                         id: Date.now() + Math.random(),
-                        name: f.name,
-                        type: type,
-                        mimeType: f.type,
-                        content: e.target.result,
-                        size: f.size,
-                        date: new Date().toLocaleString(),
-                    };
+                        name: f.name, type, mimeType: f.type,
+                        content: e.target.result, size: f.size,
+                        date: new Date().toLocaleString()
+                    });
 
-                    vaultFiles.unshift(fileObj);
-                    saveVault();
-                    renderFiles();
+                    saveVault(); renderFiles();
                     resetAutoLock();
-                    showToast('📎 ' + f.name + ' added');
                 };
                 reader.readAsDataURL(f);
             });
 
             input.value = '';
+            showToast('📎 Files added');
         }
 
         function deleteFile(id) {
             vaultFiles = vaultFiles.filter(f => f.id !== id);
-            saveVault();
-            renderFiles();
+            saveVault(); renderFiles();
             showToast('🗑 Deleted');
             resetAutoLock();
         }
 
         function viewFile(file) {
+            resetAutoLock();
             if (file.type === 'image') {
                 document.getElementById('viewerImage').src = file.content;
                 document.getElementById('viewerImage').style.display = 'block';
                 document.getElementById('viewerVideo').style.display = 'none';
+                document.getElementById('viewerInfo').textContent = file.name;
                 document.getElementById('viewerOverlay').classList.add('show');
             } else if (file.type === 'video') {
                 document.getElementById('viewerVideo').src = file.content;
                 document.getElementById('viewerVideo').style.display = 'block';
                 document.getElementById('viewerImage').style.display = 'none';
+                document.getElementById('viewerInfo').textContent = file.name;
                 document.getElementById('viewerOverlay').classList.add('show');
                 document.getElementById('viewerVideo').play();
             } else if (file.type === 'audio') {
-                const audio = new Audio(file.content);
-                audio.play();
-                showToast('🎵 Playing...');
+                new Audio(file.content).play();
+                showToast('🎵 Playing: ' + file.name);
             } else if (file.type === 'link') {
                 window.open(file.content, '_blank');
             } else {
-                // Copy text
-                navigator.clipboard.writeText(file.content).then(() => {
-                    showToast('📋 Copied!');
-                });
+                navigator.clipboard.writeText(file.content).then(() => showToast('📋 Copied!'));
             }
-            resetAutoLock();
         }
 
         function closeViewer() {
             document.getElementById('viewerOverlay').classList.remove('show');
-            document.getElementById('viewerVideo').pause();
-            document.getElementById('viewerVideo').src = '';
+            const vid = document.getElementById('viewerVideo');
+            vid.pause(); vid.src = '';
         }
 
         function downloadFile(file) {
@@ -812,32 +981,40 @@ def create_website_files():
             resetAutoLock();
         }
 
+        function setView(view, btn) {
+            currentView = view;
+            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            const area = document.getElementById('contentArea');
+            area.className = view === 'grid' ? 'content-area content-grid' : 'content-area content-list';
+            renderFiles();
+            resetAutoLock();
+        }
+
         // ==================== STORAGE ====================
         function saveVault() {
             try {
                 const json = JSON.stringify(vaultFiles);
                 const encrypted = encrypt(json);
-                localStorage.setItem('vaultx_ultimate', encrypted);
-                sessionStorage.setItem('vaultx_ram', json);
+                localStorage.setItem('vaultx_god', encrypted);
+                sessionStorage.setItem('vaultx_god_ram', json);
             } catch(e) {
-                showToast('⚠️ Storage full! Clear some files.');
+                showToast('⚠️ Storage full!');
             }
         }
 
         function loadVault() {
             try {
-                const encrypted = localStorage.getItem('vaultx_ultimate');
+                const encrypted = localStorage.getItem('vaultx_god');
                 if (encrypted) {
                     const decrypted = decrypt(encrypted);
                     if (decrypted) vaultFiles = JSON.parse(decrypted);
                 }
                 if (!vaultFiles.length) {
-                    const ram = sessionStorage.getItem('vaultx_ram');
+                    const ram = sessionStorage.getItem('vaultx_god_ram');
                     if (ram) vaultFiles = JSON.parse(ram);
                 }
-            } catch(e) {
-                vaultFiles = [];
-            }
+            } catch(e) { vaultFiles = []; }
             renderFiles();
         }
 
@@ -849,6 +1026,14 @@ def create_website_files():
                 ? vaultFiles 
                 : vaultFiles.filter(f => f.type === currentFilter);
 
+            // Update stats
+            const totalSize = vaultFiles.reduce((s, f) => s + (f.size || 0), 0);
+            const types = new Set(vaultFiles.map(f => f.type));
+            document.getElementById('statTotal').textContent = vaultFiles.length;
+            document.getElementById('statSize').textContent = totalSize > 1048576 ? (totalSize/1048576).toFixed(1)+'MB' : (totalSize/1024).toFixed(1)+'KB';
+            document.getElementById('statTypes').textContent = types.size;
+            document.getElementById('countAll').textContent = vaultFiles.length;
+
             if (filtered.length === 0) {
                 empty.style.display = 'block';
                 area.innerHTML = '';
@@ -857,20 +1042,20 @@ def create_website_files():
                 empty.style.display = 'none';
                 area.innerHTML = filtered.map(f => {
                     const icons = {
-                        text: '📝', image: '🖼️', video: '🎥', audio: '🎵',
-                        password: '🔑', link: '🔗', file: '📄'
+                        image: '🖼️', video: '🎥', audio: '🎵',
+                        text: '📝', password: '🔑', link: '🔗', file: '📄'
                     };
                     const icon = icons[f.type] || '📄';
-                    const sizeStr = f.size > 1024*1024 ? (f.size/(1024*1024)).toFixed(1)+'MB' : 
-                                   f.size > 1024 ? (f.size/1024).toFixed(1)+'KB' : f.size+'B';
+                    const sizeStr = f.size > 1048576 ? (f.size/1048576).toFixed(1)+'MB' : f.size > 1024 ? (f.size/1024).toFixed(1)+'KB' : f.size+'B';
+                    const badgeClass = 'badge-' + f.type;
 
                     let preview = '';
-                    if (f.type === 'image') {
-                        preview = `<img src="${f.content}" class="image-preview" style="max-height:120px;object-fit:cover" onclick="viewFile(vaultFiles.find(x=>x.id===${f.id}))">`;
-                    } else if (f.type === 'video') {
-                        preview = `<video src="${f.content}" class="video-preview" controls></video>`;
-                    } else if (f.type === 'audio') {
-                        preview = `<audio src="${f.content}" class="audio-player" controls></audio>`;
+                    if (f.type === 'image' && currentView === 'list') {
+                        preview = `<div class="card-preview"><img src="${f.content}" onclick="viewFile(vaultFiles.find(x=>x.id===${f.id}))" loading="lazy"></div>`;
+                    } else if (f.type === 'video' && currentView === 'list') {
+                        preview = `<div class="card-preview"><video src="${f.content}" controls></video></div>`;
+                    } else if (f.type === 'audio' && currentView === 'list') {
+                        preview = `<div class="card-preview"><audio src="${f.content}" controls></audio></div>`;
                     }
 
                     return `
@@ -878,7 +1063,11 @@ def create_website_files():
                             <div class="file-icon">${icon}</div>
                             <div class="file-info">
                                 <div class="file-name">${escapeHtml(f.name)}</div>
-                                <div class="file-meta">${f.date} • ${sizeStr} • ${f.type}</div>
+                                <div class="file-meta">
+                                    <span class="file-type-badge ${badgeClass}">${f.type}</span>
+                                    <span>${sizeStr}</span>
+                                    <span>${f.date}</span>
+                                </div>
                                 ${preview}
                             </div>
                             <div class="file-actions">
@@ -890,14 +1079,6 @@ def create_website_files():
                     `;
                 }).join('');
             }
-            
-            updateRamIndicator();
-        }
-
-        function updateRamIndicator() {
-            const total = vaultFiles.reduce((s, f) => s + (f.size || 0), 0);
-            const sizeStr = total > 1024*1024 ? (total/(1024*1024)).toFixed(1)+'MB' : (total/1024).toFixed(1)+'KB';
-            // Silent update - no visible indicator needed
         }
 
         function escapeHtml(t) {
@@ -909,16 +1090,16 @@ def create_website_files():
         // ==================== EXPORT ====================
         function exportAll() {
             if (!isUnlocked) return;
-            const pw = prompt('Export password:');
+            const pw = prompt('Set export password:');
             if (!pw) return;
             const json = JSON.stringify(vaultFiles, null, 2);
             const enc = encrypt(json);
             const blob = new Blob([enc], {type:'text/plain'});
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = 'vaultx-'+Date.now()+'.enc';
+            a.download = 'vaultx-god-'+Date.now()+'.enc';
             a.click();
-            showToast('📤 Exported encrypted');
+            showToast('📤 Encrypted export');
             resetAutoLock();
         }
 
@@ -948,27 +1129,25 @@ def create_website_files():
         f.write(html_content)
 
     print("╔══════════════════════════════════════════╗")
-    print("║  🔐 Vault X - ULTIMATE EDITION         ║")
-    print("║  📂 تم الإنشاء بنجاح                   ║")
+    print("║  👑 Vault X - GOD MODE EDITION         ║")
+    print("║  🔐 تم الإنشاء بنجاح                   ║")
     print("╚══════════════════════════════════════════╝")
     print(f"📁 www/index.html")
     print(f"💾 حجم الملف: {os.path.getsize('www/index.html')/1024:.1f} KB")
     print("")
-    print("🔐 المميزات الأسطورية:")
-    print("  🔢 PIN: 1235")
-    print("  🔐 تشفير XOR + Base64")
-    print("  🧠 RAM + localStorage")
-    print("  📝 نصوص وملاحظات")
-    print("  🔗 روابط")
-    print("  🔑 كلمات سر (pass:xxx)")
-    print("  🖼️ صور (رفع وعرض وتحميل)")
-    print("  🎥 فيديو (رفع وتشغيل)")
-    print("  🎵 صوت (رفع وتشغيل)")
-    print("  📄 جميع الملفات")
-    print("  👁️ عارض كامل الشاشة")
-    print("  📥 تحميل الملفات")
+    print("👑 المميزات الإلهية:")
+    print("  ✨ جسيمات ذهبية متحركة")
+    print("  💫 حلقات دائرية حول أيقونة القفل")
+    print("  ⚡ بريق متحرك حول الأيقونة")
+    print("  📊 شريط إحصائيات (ملفات، حجم، أنواع)")
+    print("  🔲 عرضين: قائمة وشبكة")
+    print("  🏷️ شارات ملونة لكل نوع ملف")
+    print("  🎨 تدرجات ذهبية وخضراء")
+    print("  🔐 تشفير مزدوج (Double Base64 + XOR)")
     print("  📤 تصدير مشفر")
-    print("  ⏱️ Auto-lock بعد دقيقتين")
+    print("  📥 رفع وتحميل جميع الملفات")
+    print("  👁️ عارض كامل الشاشة")
+    print("  ⏱️ Auto-lock 3 دقائق")
 
 if __name__ == "__main__":
     create_website_files()
