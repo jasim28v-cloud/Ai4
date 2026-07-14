@@ -1,7 +1,4 @@
 function showLoading(){document.getElementById('loadingOverlay').classList.add('show')}
 function hideLoading(){document.getElementById('loadingOverlay').classList.remove('show')}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
-function downloadPattern(){if(!stitchData)return;const canvas=document.getElementById('stitchCanvas');const link=document.createElement('a');link.download='cross-stitch-pattern-2044.png';link.href=canvas.toDataURL('image/png');link.click();showToast('✅ تم تحميل الباترن!')}
-function downloadChart(){if(!usedColors.length)return;let text='🧵 Cross Stitch 2044 - Color Chart\n'+'═'.repeat(40)+'\n\n';usedColors.forEach(c=>{text+=`DMC ${c.code}: ${c.name} (${c.hex})\n`});text+=`\n🧵 Total Stitches: ${totalStitches}\n🎨 Colors: ${usedColors.length}`;const blob=new Blob([text],{type:'text/plain;charset=utf-8'});const link=document.createElement('a');link.download='color-chart-2044.txt';link.href=URL.createObjectURL(blob);link.click();showToast('📋 تم تحميل جدول الألوان!')}
-function sharePattern(){if(!stitchData)return;const canvas=document.getElementById('stitchCanvas');canvas.toBlob(blob=>{if(navigator.share){navigator.share({title:'🧵 Cross Stitch Pattern',files:[new File([blob],'pattern.png',{type:'image/png'})]}).catch(()=>{})}else{showToast('📤 انسخ الصورة وشاركها يدوياً')}},'image/png')}
 initParticles();
