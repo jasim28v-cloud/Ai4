@@ -1,0 +1,68 @@
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#0a0a0f;--accent:#00ffcc;--accent2:#ff44aa;--accent3:#ffaa00;--glass:rgba(255,255,255,0.05);--border:rgba(255,255,255,0.1)}
+body{background:var(--bg);font-family:'Cairo',sans-serif;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden;-webkit-tap-highlight-color:transparent;user-select:none;color:#fff;direction:rtl}
+
+.app{width:100%;max-width:460px;height:100vh;max-height:850px;display:flex;flex-direction:column;position:relative;z-index:1;padding:10px}
+
+.header{display:flex;align-items:center;gap:10px;padding:8px 12px;margin-bottom:8px;background:rgba(10,10,15,0.7);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-radius:18px;border:1px solid var(--border)}
+.logo{width:42px;height:42px;background:var(--glass);border:1px solid var(--border);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;animation:logoPulse 3s ease-in-out infinite}
+@keyframes logoPulse{0%,100%{box-shadow:0 0 0 rgba(0,255,204,0)}50%{box-shadow:0 0 20px rgba(0,255,204,0.4)}}
+.header-text h1{font-size:16px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header-text span{font-size:7px;color:rgba(255,255,255,0.4);letter-spacing:2px}
+
+.game-wrapper{flex:1;display:flex;flex-direction:column;gap:8px}
+
+.canvas-container{position:relative;flex:1;display:flex;align-items:center;justify-content:center;background:rgba(10,10,15,0.5);border-radius:18px;border:1px solid var(--border);overflow:hidden;min-height:280px}
+canvas{display:block;border-radius:12px}
+.game-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.85);backdrop-filter:blur(10px);display:flex;align-items:center;justify-content:center;border-radius:18px}
+.overlay-content{text-align:center;animation:fadeIn 0.5s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.overlay-icon{font-size:60px;margin-bottom:8px}
+.overlay-content h2{font-size:22px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:4px}
+.overlay-content p{font-size:12px;color:rgba(255,255,255,0.5);margin-bottom:12px}
+.overlay-score{font-size:36px;font-weight:900;color:var(--accent);text-shadow:0 0 30px rgba(0,255,204,0.5);margin-bottom:12px}
+.btn-game{padding:12px 30px;background:linear-gradient(135deg,var(--accent),var(--accent2));border:none;color:#000;font-weight:700;font-size:14px;border-radius:25px;cursor:pointer;font-family:'Cairo',sans-serif;box-shadow:0 8px 25px rgba(0,255,204,0.3);transition:all 0.3s}
+.btn-game:active{transform:scale(0.95)}
+
+.stats-row{display:flex;gap:6px}
+.stat-box{flex:1;text-align:center;padding:6px;background:rgba(10,10,15,0.5);border-radius:14px;border:1px solid var(--border)}
+.stat-label{font-size:7px;color:rgba(255,255,255,0.4);margin-bottom:2px}
+.stat-value{font-size:15px;font-weight:700;color:var(--accent)}
+
+.controls-mobile{display:grid;grid-template-columns:repeat(3,1fr);grid-template-rows:repeat(3,1fr);gap:4px;max-width:180px;margin:0 auto}
+.ctrl-btn{padding:14px;background:var(--glass);border:1px solid var(--border);color:#fff;cursor:pointer;border-radius:12px;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.ctrl-btn:active{transform:scale(0.85);background:rgba(0,255,204,0.15)}
+.ctrl-btn.up{grid-column:2;grid-row:1}
+.ctrl-btn.left{grid-column:1;grid-row:2}
+.ctrl-btn.right{grid-column:3;grid-row:2}
+.ctrl-btn.down{grid-column:2;grid-row:3}
+
+.action-btns{display:flex;gap:6px;justify-content:center}
+.btn-small{padding:8px 12px;background:var(--glass);border:1px solid var(--border);color:#fff;cursor:pointer;border-radius:20px;font-size:16px;transition:all 0.3s}
+.btn-small:active{transform:scale(0.9)}
+.btn-small.active{border-color:var(--accent);box-shadow:0 0 15px rgba(0,255,204,0.2)}
+
+.panel-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.8);z-index:100;display:none;align-items:center;justify-content:center}
+.panel-overlay.show{display:flex}
+.panel{width:90%;max-width:380px;max-height:70vh;background:rgba(10,10,15,0.97);border:1px solid var(--border);border-radius:20px;overflow:hidden;backdrop-filter:blur(40px)}
+.panel-header{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border)}
+.panel-header h3{font-size:16px;font-weight:700;color:var(--accent)}
+.btn-close{background:rgba(255,255,255,0.1);border:1px solid var(--border);color:#fff;width:34px;height:34px;border-radius:50%;cursor:pointer;font-size:16px}
+.panel-body{max-height:calc(70vh - 60px);overflow-y:auto;padding:12px}
+.panel-body::-webkit-scrollbar{width:3px}
+.panel-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:3px}
+
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%) translateY(120px);background:rgba(0,0,0,0.9);border:1px solid rgba(0,255,204,0.3);color:#fff;padding:10px 22px;border-radius:25px;font-size:11px;z-index:200;transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);font-family:'Cairo',sans-serif}
+.toast.show{transform:translateX(-50%) translateY(0)}
+
+.score-item,.ach-item{display:flex;align-items:center;gap:10px;padding:8px 10px;background:var(--glass);border-radius:12px;margin-bottom:4px;font-size:11px}
+.score-rank{color:var(--accent);font-weight:700;font-size:14px;width:25px;text-align:center}
+.score-pts{color:var(--accent2);font-weight:700;margin-right:auto}
+.ach-icon{font-size:24px;width:35px;text-align:center}
+.ach-info{flex:1}
+.ach-name{font-weight:600;font-size:11px}
+.ach-desc{font-size:8px;color:rgba(255,255,255,0.4)}
+.ach-locked{opacity:0.3;filter:grayscale(1)}
+
+.particle{position:absolute;border-radius:50%;pointer-events:none;z-index:0}
+@keyframes particleFloat{0%,100%{transform:translateY(0) scale(1);opacity:0}20%{opacity:0.8}80%{opacity:0.2}100%{transform:translateY(-100px) scale(0);opacity:0}}

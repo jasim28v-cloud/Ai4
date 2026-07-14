@@ -1,0 +1,271 @@
+let canvas, ctx, gridSize = 16, tileSize, snake = [], dir = {x: 1, y: 0}, nextDir = {x: 1, y: 0}, food = null, fruitType = null, score = 0, combo = 1, isRunning = false, isPaused = false, isGhost = false, gameLoopId = null, speed = 130, goldenCount = 0, poisonFree = 0, speedCount = 0, bestScore = 0;
+
+function initGame() {
+    canvas = document.getElementById('gameCanvas');
+    ctx = canvas.getContext('2d');
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    initParticles();
+    initAudio();
+    bestScore = getBestScore();
+    document.getElementById('bestDisplay').innerText = bestScore;
+    setThemeFromSettings();
+    drawIdle();
+    setupKeyboard();
+}
+
+function resizeCanvas() {
+    const container = canvas.parentElement;
+    const maxW = container.clientWidth - 20;
+    const maxH = container.clientHeight - 20;
+    const size = Math.min(maxW, maxH, 380);
+    canvas.width = size;
+    canvas.height = size;
+    tileSize = size / gridSize;
+    if (!isRunning) drawIdle();
+}
+
+function setupKeyboard() {
+    document.addEventListener('keydown', e => {
+        if (!isRunning || isPaused) return;
+        switch(e.key) {
+            case 'ArrowUp': case 'w': case 'W': changeDir(0, -1); break;
+            case 'ArrowDown': case 's': case 'S': changeDir(0, 1); break;
+            case 'ArrowLeft': case 'a': case 'A': changeDir(-1, 0); break;
+            case 'ArrowRight': case 'd': case 'D': changeDir(1, 0); break;
+            case ' ': e.preventDefault(); togglePause(); break;
+        }
+    });
+}
+
+function changeDir(dx, dy) {
+    if (!isRunning || isPaused) return;
+    if (dx === 0 && dir.y === 0) nextDir = {x: dx, y: dy};
+    if (dy === 0 && dir.x === 0) nextDir = {x: dx, y: dy};
+}
+
+function setThemeFromSettings() {
+    const s = loadSettings();
+    currentTheme = s.theme || 'neon';
+    isGhost = s.ghost || false;
+    if (isGhost) document.getElementById('ghostBtn').classList.add('active');
+    setParticleColors(currentTheme);
+}
+
+function changeTheme() {
+    const themes = Object.keys(THEMES);
+    const idx = themes.indexOf(currentTheme);
+    currentTheme = themes[(idx + 1) % themes.length];
+    saveSettings({ theme: currentTheme, ghost: isGhost });
+    setParticleColors(currentTheme);
+    showToast('🎨 ' + currentTheme);
+    if (!isRunning) drawIdle();
+}
+
+function toggleGhost() {
+    isGhost = !isGhost;
+    saveSettings({ theme: currentTheme, ghost: isGhost });
+    document.getElementById('ghostBtn').classList.toggle('active', isGhost);
+    showToast(isGhost ? '👻 وضع الشبح مفعل' : '👻 وضع الشبح ملغي');
+}
+
+function drawIdle() {
+    const theme = getTheme();
+    ctx.fillStyle = theme.bg;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    drawGrid();
+    ctx.fillStyle = theme.snake;
+    const cx = Math.floor(gridSize / 2);
+    const cy = Math.floor(gridSize / 2);
+    for (let i = 0; i < 4; i++) {
+        ctx.fillRect((cx + i) * tileSize + 1, cy * tileSize + 1, tileSize - 2, tileSize - 2);
+    }
+    ctx.fillStyle = theme.food;
+    ctx.beginPath();
+    ctx.arc((cx - 2) * tileSize + tileSize / 2, cy * tileSize + tileSize / 2, tileSize / 2 - 2, 0, Math.PI * 2);
+    ctx.fill();
+}
+
+function startGame() {
+    snake = [{x: Math.floor(gridSize / 2), y: Math.floor(gridSize / 2)}];
+    dir = {x: 1, y: 0};
+    nextDir = {x: 1, y: 0};
+    score = 0;
+    combo = 1;
+    speed = getSpeed();
+    goldenCount = 0;
+    poisonFree = 0;
+    speedCount = 0;
+    obstacles = spawnObstacles(gridSize);
+    currentLevel = 0;
+    spawnFood();
+    isRunning = true;
+    isPaused = false;
+    document.getElementById('gameOverlay').style.display = 'none';
+    document.getElementById('scoreDisplay').innerText = '0';
+    document.getElementById('levelDisplay').innerText = '1';
+    document.getElementById('comboDisplay').innerText = 'x1';
+    if (gameLoopId) clearInterval(gameLoopId);
+    gameLoopId = setInterval(update, speed);
+    unlockAchievement('first_game');
+}
+
+function spawnFood() {
+    let pos;
+    do {
+        pos = {x: Math.floor(Math.random() * gridSize), y: Math.floor(Math.random() * gridSize)};
+    } while (snake.some(s => s.x === pos.x && s.y === pos.y) || checkObstacle(pos.x, pos.y));
+    food = pos;
+    fruitType = getRandomFruit();
+}
+
+function update() {
+    if (!isRunning || isPaused) return;
+    dir = {...nextDir};
+    const head = {x: snake[0].x + dir.x, y: snake[0].y + dir.y};
+    
+    if (!isGhost) {
+        if (head.x < 0 || head.x >= gridSize || head.y < 0 || head.y >= gridSize) return die();
+        if (snake.some(s => s.x === head.x && s.y === head.y)) return die();
+        if (checkObstacle(head.x, head.y)) return die();
+    } else {
+        if (head.x < 0) head.x = gridSize - 1;
+        if (head.x >= gridSize) head.x = 0;
+        if (head.y < 0) head.y = gridSize - 1;
+        if (head.y >= gridSize) head.y = 0;
+    }
+    
+    snake.unshift(head);
+    
+    if (head.x === food.x && head.y === food.y) {
+        const pts = fruitType.points * combo;
+        score += Math.max(0, pts);
+        
+        if (fruitType.type === 'golden') { goldenCount++; playGolden(); }
+        else if (fruitType.type === 'speed') { speedCount++; speed = Math.max(35, speed - 8); clearInterval(gameLoopId); gameLoopId = setInterval(update, speed); playEat(); }
+        else if (fruitType.type === 'slow') { speed += 5; clearInterval(gameLoopId); gameLoopId = setInterval(update, speed); playEat(); }
+        else if (fruitType.type === 'poison') { combo = 1; playDie(); }
+        else { poisonFree++; playEat(); }
+        
+        if (fruitType.type !== 'poison') { combo = Math.min(combo + 1, 20); }
+        
+        checkScoreAchievements(score, goldenCount, currentLevel + 1, combo, poisonFree, speedCount);
+        
+        if (score >= getRequired() && currentLevel < LEVELS.length - 1) {
+            currentLevel++;
+            speed = getSpeed();
+            clearInterval(gameLoopId);
+            gameLoopId = setInterval(update, speed);
+            obstacles = spawnObstacles(gridSize);
+            showToast('🎉 المستوى ' + LEVELS[currentLevel].name + '!');
+        }
+        spawnFood();
+    } else {
+        snake.pop();
+        combo = Math.max(1, combo - 0.02);
+    }
+    
+    updateUI();
+    draw();
+}
+
+function updateUI() {
+    document.getElementById('scoreDisplay').innerText = score;
+    document.getElementById('levelDisplay').innerText = currentLevel + 1;
+    document.getElementById('comboDisplay').innerText = 'x' + Math.floor(combo);
+    if (score > bestScore) {
+        bestScore = score;
+        document.getElementById('bestDisplay').innerText = bestScore;
+    }
+}
+
+function draw() {
+    const theme = getTheme();
+    ctx.fillStyle = theme.bg;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    drawGrid();
+    
+    obstacles.forEach(o => {
+        ctx.fillStyle = 'rgba(255,255,255,0.08)';
+        ctx.fillRect(o.x * tileSize + 1, o.y * tileSize + 1, tileSize - 2, tileSize - 2);
+    });
+    
+    snake.forEach((s, i) => {
+        ctx.fillStyle = i === 0 ? theme.snake : theme.snake.replace('rgb', 'rgba').replace(')', `,${1 - (i / snake.length) * 0.5})`);
+        ctx.fillRect(s.x * tileSize + 1, s.y * tileSize + 1, tileSize - 2, tileSize - 2);
+        if (i === 0) {
+            ctx.fillStyle = '#000';
+            ctx.fillRect(s.x * tileSize + 4, s.y * tileSize + 4, 3, 3);
+            ctx.fillRect(s.x * tileSize + 9, s.y * tileSize + 4, 3, 3);
+        }
+    });
+    
+    ctx.fillStyle = fruitType.color || theme.food;
+    ctx.shadowColor = fruitType.color || theme.food;
+    ctx.shadowBlur = 15;
+    ctx.beginPath();
+    ctx.arc(food.x * tileSize + tileSize / 2, food.y * tileSize + tileSize / 2, tileSize / 2 - 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.shadowBlur = 0;
+    ctx.fillStyle = '#fff';
+    ctx.font = `${tileSize - 2}px Arial`;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(fruitType.emoji, food.x * tileSize + tileSize / 2, food.y * tileSize + tileSize / 2 + 1);
+}
+
+function drawGrid() {
+    const theme = getTheme();
+    ctx.strokeStyle = theme.grid;
+    ctx.lineWidth = 0.5;
+    for (let i = 0; i < gridSize; i++) {
+        for (let j = 0; j < gridSize; j++) {
+            ctx.strokeRect(i * tileSize, j * tileSize, tileSize, tileSize);
+        }
+    }
+}
+
+function die() {
+    isRunning = false;
+    clearInterval(gameLoopId);
+    playDie();
+    saveScore(score, currentLevel + 1);
+    checkScoreAchievements(score, goldenCount, currentLevel + 1, combo, poisonFree, speedCount);
+    if (score > bestScore) { bestScore = score; document.getElementById('bestDisplay').innerText = bestScore; }
+    if (isGhost && score >= 50) unlockAchievement('ghost_win');
+    
+    const overlay = document.getElementById('gameOverlay');
+    overlay.style.display = 'flex';
+    document.getElementById('overlayIcon').innerText = '💀';
+    document.getElementById('overlayTitle').innerText = 'انتهت اللعبة!';
+    document.getElementById('overlayMsg').innerText = score >= getRequired() ? '🎉 أحسنت! انتقل للمستوى التالي!' : 'حاول مرة أخرى!';
+    document.getElementById('overlayScore').innerText = score;
+    document.getElementById('overlayBtn').innerText = '🔄 العب مرة أخرى';
+    document.getElementById('overlayBtn').onclick = startGame;
+}
+
+function togglePause() {
+    if (!isRunning) return;
+    isPaused = !isPaused;
+    document.getElementById('pauseBtn').classList.toggle('active', isPaused);
+    if (isPaused) {
+        document.getElementById('gameOverlay').style.display = 'flex';
+        document.getElementById('overlayIcon').innerText = '⏸️';
+        document.getElementById('overlayTitle').innerText = 'متوقف';
+        document.getElementById('overlayMsg').innerText = '';
+        document.getElementById('overlayScore').innerText = score;
+        document.getElementById('overlayBtn').innerText = '▶️ استمرار';
+        document.getElementById('overlayBtn').onclick = togglePause;
+    } else {
+        document.getElementById('gameOverlay').style.display = 'none';
+    }
+}
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2000);
+}
+
+initGame();
