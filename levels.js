@@ -1,18 +1,7 @@
-const LEVELS = [
-    { name: 'مبتدئ', speed: 130, obstacles: 0, required: 50, desc: 'المرحلة الأولى - تعلم الأساسيات' },
-    { name: 'سهل', speed: 115, obstacles: 0, required: 100, desc: 'زيادة السرعة قليلاً' },
-    { name: 'متوسط', speed: 100, obstacles: 1, required: 150, desc: 'ظهور أول عائق' },
-    { name: 'متقدم', speed: 90, obstacles: 2, required: 200, desc: 'عائقين في الملعب' },
-    { name: 'صعب', speed: 80, obstacles: 3, required: 250, desc: 'ثلاثة عوائق' },
-    { name: 'محترف', speed: 70, obstacles: 4, required: 300, desc: 'أربعة عوائق' },
-    { name: 'خبير', speed: 60, obstacles: 5, required: 350, desc: 'خمسة عوائق' },
-    { name: 'أسطورة', speed: 50, obstacles: 6, required: 400, desc: 'ستة عوائق - السرعة القصوى' },
-    { name: 'مجنون', speed: 42, obstacles: 8, required: 500, desc: 'الجنون الحقيقي' },
-    { name: 'مستحيل', speed: 35, obstacles: 10, required: 999, desc: 'هل تقبل التحدي؟' }
-];
-let currentLevel = 0, obstacles = [];
-function getLevel() { return LEVELS[currentLevel] || LEVELS[0]; }
-function getSpeed() { return getLevel().speed; }
-function getRequired() { return getLevel().required; }
-function spawnObstacles(gridSize) { obstacles = []; const count = getLevel().obstacles; for (let i = 0; i < count; i++) { let pos; do { pos = { x: Math.floor(Math.random() * gridSize), y: Math.floor(Math.random() * gridSize) }; } while ((pos.x === Math.floor(gridSize/2) && pos.y === Math.floor(gridSize/2)) || obstacles.some(o => o.x === pos.x && o.y === pos.y)); obstacles.push(pos); } return obstacles; }
-function checkObstacle(x, y) { return obstacles.some(o => o.x === x && o.y === y); }
+const LEVELS=[{name:'مبتدئ 🐣',speed:140,obstacles:0,required:40,desc:'المرحلة الأولى'},{name:'سهل 🐍',speed:120,obstacles:0,required:90,desc:'زيادة السرعة'},{name:'متوسط ⚡',speed:105,obstacles:2,required:140,desc:'ظهور عوائق'},{name:'متقدم 🎯',speed:90,obstacles:3,required:190,desc:'3 عوائق'},{name:'صعب 💪',speed:78,obstacles:4,required:240,desc:'4 عوائق'},{name:'محترف 🔥',speed:68,obstacles:5,required:290,desc:'5 عوائق'},{name:'خبير 🌟',speed:58,obstacles:6,required:340,desc:'6 عوائق'},{name:'أسطورة 👑',speed:48,obstacles:8,required:400,desc:'8 عوائق'},{name:'مجنون 🤯',speed:40,obstacles:10,required:500,desc:'10 عوائق'},{name:'مستحيل 💀',speed:32,obstacles:14,required:999,desc:'التحدي النهائي'}];
+let currentLevel=0,obstacles=[];
+function getLevel(){return LEVELS[currentLevel]||LEVELS[0]}
+function getSpeed(){return getLevel().speed}
+function getRequired(){return getLevel().required}
+function spawnObstacles(gs){obstacles=[];const c=getLevel().obstacles;const mx=Math.floor(gs/2),my=Math.floor(gs/2);for(let i=0;i<c;i++){let p;do{p={x:Math.floor(Math.random()*gs),y:Math.floor(Math.random()*gs)}}while((p.x===mx&&p.y===my)||obstacles.some(o=>o.x===p.x&&o.y===p.y)||(Math.abs(p.x-mx)<3&&Math.abs(p.y-my)<3));obstacles.push(p)}return obstacles}
+function checkObstacle(x,y){return obstacles.some(o=>o.x===x&&o.y===y)}

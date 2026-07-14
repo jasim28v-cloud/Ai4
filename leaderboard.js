@@ -1,16 +1,4 @@
-function showLeaderboardList() {
-    const scores = getTopScores();
-    const list = document.getElementById('panelBody');
-    if (!scores.length) { list.innerHTML = '<div style="text-align:center;opacity:0.4;padding:20px">لا توجد نتائج بعد</div>'; return; }
-    list.innerHTML = scores.map((s, i) => `
-        <div class="score-item">
-            <div class="score-rank">#${i + 1}</div>
-            <div>المستوى ${s.level || 1}</div>
-            <div class="score-pts">${s.score} نقطة</div>
-            <div style="font-size:8px;opacity:0.4">${s.date}</div>
-        </div>
-    `).join('');
-}
-function showLeaderboard() { document.getElementById('panelTitle').innerText = '🏆 لوحة الصدارة'; showLeaderboardList(); document.getElementById('panelOverlay').classList.add('show'); }
-function showAchievements() { document.getElementById('panelTitle').innerText = '🎯 الإنجازات'; showAchievementsList(); document.getElementById('panelOverlay').classList.add('show'); }
-function hidePanel() { document.getElementById('panelOverlay').classList.remove('show'); }
+function showLeaderboardList(){const scores=getTopScores();const list=document.getElementById('panelBody');if(!scores.length){list.innerHTML='<div style="text-align:center;opacity:0.4;padding:30px"><div style="font-size:50px;margin-bottom:10px">🏆</div><p>لا توجد نتائج بعد</p><p style="font-size:10px;margin-top:4px">العب أول جولة!</p></div>';return}list.innerHTML=scores.map((s,i)=>`<div class="score-item"><div class="score-rank">${i===0?'👑':i===1?'🥈':i===2?'🥉':'#'+(i+1)}</div><div style="flex:1"><div style="font-weight:600">${s.score} نقطة</div><div style="font-size:9px;opacity:0.4">مستوى ${s.level||1} · ${s.date} ${s.time||''}</div></div><div class="score-pts">🏆</div></div>`).join('')}
+function showLeaderboard(){document.getElementById('panelTitle').innerText='🏆 لوحة الصدارة';showLeaderboardList();document.getElementById('panelOverlay').classList.add('show')}
+function showAchievements(){document.getElementById('panelTitle').innerText='🎯 الإنجازات ('+getAchievements().length+'/'+ACHIEVEMENTS.length+')';showAchievementsList();document.getElementById('panelOverlay').classList.add('show')}
+function hidePanel(){document.getElementById('panelOverlay').classList.remove('show')}
