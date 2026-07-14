@@ -1,7 +1,7 @@
 import os
 
 def create_website_files():
-    """إنشاء Vault X God Mode - الخزنة الأسطورية النهائية"""
+    """إنشاء Vault X RAM Edition - تخزين حقيقي في الذاكرة"""
     
     os.makedirs("www", exist_ok=True)
     
@@ -10,20 +10,18 @@ def create_website_files():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vault X | God Mode</title>
+    <title>Vault X | RAM</title>
     <style>
         :root {
             --bg: #000;
-            --surface: #060606;
+            --surface: #080808;
             --border: #1a1a1a;
             --gold: #c9a84c;
             --gold-light: #e2c97e;
-            --gold-glow: rgba(201,168,76,0.5);
             --accent: #00ff88;
             --accent2: #00aaff;
             --text: #e0d5c0;
             --text-dim: #6b6355;
-            --card: #0a0a0a;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -31,7 +29,7 @@ def create_website_files():
         body {
             background: #000;
             color: var(--text);
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -40,158 +38,113 @@ def create_website_files():
             -webkit-user-select: none;
             -webkit-tap-highlight-color: transparent;
             overflow: hidden;
-            background-image: 
-                radial-gradient(ellipse at 50% 0%, rgba(0,255,136,0.04) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 100%, rgba(201,168,76,0.04) 0%, transparent 50%);
-        }
-
-        .bg-particles {
-            position: fixed; inset: 0; pointer-events: none; z-index: 0;
-        }
-
-        .bg-dot {
-            position: absolute; background: var(--accent);
-            border-radius: 50%; opacity: 0;
-            animation: floatDot 6s ease-in infinite;
-        }
-
-        @keyframes floatDot {
-            0% { transform: translateY(100vh) scale(0); opacity: 0; }
-            10% { opacity: 0.3; }
-            90% { opacity: 0.05; }
-            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
         }
 
         .app {
-            width: 100%; max-width: 480px;
-            height: 100vh; max-height: 860px;
-            display: flex; flex-direction: column;
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            max-height: 860px;
+            display: flex;
+            flex-direction: column;
             background: var(--bg);
             border: 1px solid var(--border);
-            position: relative; z-index: 1;
+            position: relative;
             border-radius: 8px;
-            box-shadow: 0 0 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(255,255,255,0.02) inset;
+            box-shadow: 0 0 80px rgba(0,0,0,0.8);
         }
 
-        /* ==================== LOCK SCREEN ==================== */
+        /* Lock Screen */
         .lock-screen {
-            position: absolute; inset: 0;
+            position: absolute;
+            inset: 0;
             background: #000;
-            display: flex; flex-direction: column;
-            align-items: center; justify-content: center;
-            z-index: 100; transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            transition: all 0.5s;
             padding: 20px;
             background-image: 
-                radial-gradient(ellipse at 50% 20%, rgba(201,168,76,0.08) 0%, transparent 60%),
-                radial-gradient(ellipse at 50% 80%, rgba(0,255,136,0.05) 0%, transparent 60%);
+                radial-gradient(ellipse at 50% 30%, rgba(0,255,136,0.06) 0%, transparent 60%);
         }
 
         .lock-screen.hidden {
-            opacity: 0; pointer-events: none;
-            transform: scale(1.15); filter: blur(10px);
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(1.1);
         }
 
-        .lock-icon-container {
-            position: relative;
-            width: 100px; height: 100px;
-            margin-bottom: 20px;
+        .lock-icon {
+            font-size: 50px;
+            animation: lockFloat 2s ease-in-out infinite;
+            margin-bottom: 16px;
         }
 
-        .lock-ring-outer {
-            position: absolute; inset: -8px;
-            border: 1px solid rgba(0,255,136,0.2);
-            border-radius: 50%;
-            animation: ringSpin 20s linear infinite;
-        }
-
-        .lock-ring-inner {
-            position: absolute; inset: -4px;
-            border: 1px dashed rgba(0,255,136,0.15);
-            border-radius: 50%;
-            animation: ringSpin 15s linear infinite reverse;
-        }
-
-        @keyframes ringSpin { to { transform: rotate(360deg); } }
-
-        .lock-icon-core {
-            width: 100%; height: 100%;
-            background: radial-gradient(circle at 40% 40%, #0a1a0a, #000);
-            border: 2px solid var(--accent);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 40px;
-            box-shadow: 0 0 40px rgba(0,255,136,0.3), 0 0 80px rgba(0,255,136,0.1);
-            animation: iconPulse 3s ease-in-out infinite;
-            position: relative; z-index: 3;
-        }
-
-        @keyframes iconPulse {
-            0%, 100% { box-shadow: 0 0 40px rgba(0,255,136,0.3), 0 0 80px rgba(0,255,136,0.1); }
-            50% { box-shadow: 0 0 60px rgba(0,255,136,0.5), 0 0 100px rgba(0,255,136,0.2); }
-        }
-
-        .lock-spark {
-            position: absolute; width: 3px; height: 3px;
-            background: var(--accent); border-radius: 50%;
-            animation: sparkFloat 2s ease-in-out infinite; z-index: 4;
-        }
-        .lock-spark:nth-child(1) { top: 8px; left: 15px; animation-delay: 0s; }
-        .lock-spark:nth-child(2) { top: 15px; right: 10px; animation-delay: 0.5s; }
-        .lock-spark:nth-child(3) { bottom: 12px; left: 12px; animation-delay: 1s; }
-        .lock-spark:nth-child(4) { bottom: 8px; right: 16px; animation-delay: 1.5s; }
-
-        @keyframes sparkFloat {
-            0%, 100% { opacity: 0.3; transform: scale(1); }
-            50% { opacity: 1; transform: scale(2.5); }
+        @keyframes lockFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
 
         .lock-title {
-            font-size: 26px; font-weight: 900; letter-spacing: 5px;
-            background: linear-gradient(180deg, var(--gold-light), var(--gold), #8b7300);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-size: 22px;
+            font-weight: 900;
+            letter-spacing: 4px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-light), var(--gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             background-clip: text;
-            filter: drop-shadow(0 0 20px var(--gold-glow));
+            margin-bottom: 4px;
         }
 
         .lock-subtitle {
-            font-size: 8px; color: var(--text-dim);
-            letter-spacing: 5px; text-transform: uppercase; margin-bottom: 22px;
+            font-size: 8px;
+            color: var(--text-dim);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
         }
 
         .pin-dots {
-            display: flex; gap: 16px; margin-bottom: 22px;
+            display: flex;
+            gap: 14px;
+            margin-bottom: 20px;
         }
 
         .pin-dot {
-            width: 16px; height: 16px;
+            width: 14px;
+            height: 14px;
             border-radius: 50%;
-            background: #111;
-            border: 2px solid #222;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #1a1a1a;
+            border: 2px solid #333;
+            transition: all 0.3s;
         }
 
         .pin-dot.filled {
             background: var(--accent);
             border-color: var(--accent);
-            box-shadow: 0 0 20px rgba(0,255,136,0.6), 0 0 40px rgba(0,255,136,0.2);
-            transform: scale(1.2);
+            box-shadow: 0 0 15px rgba(0,255,136,0.5);
         }
 
         .pin-dot.error {
-            background: #ff3344; border-color: #ff3344;
-            box-shadow: 0 0 20px rgba(255,51,68,0.6);
-            animation: dotShake 0.5s ease;
+            background: #ff3344;
+            border-color: #ff3344;
+            animation: shake 0.5s ease;
         }
 
-        @keyframes dotShake {
+        @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-6px); }
-            75% { transform: translateX(6px); }
+            25% { transform: translateX(-8px); }
+            75% { transform: translateX(8px); }
         }
 
         .keypad {
-            display: grid; grid-template-columns: repeat(3, 1fr);
-            gap: 10px; max-width: 260px; width: 100%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 260px;
+            width: 100%;
         }
 
         .key-btn {
@@ -200,103 +153,116 @@ def create_website_files():
             border: 1px solid #1a1a1a;
             color: var(--text);
             cursor: pointer;
-            border-radius: 18px;
-            font-size: 20px; font-weight: 700;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 16px;
+            font-size: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
             font-family: inherit;
-            position: relative; overflow: hidden;
-        }
-
-        .key-btn::after {
-            content: ''; position: absolute; inset: 0;
-            background: radial-gradient(circle at center, rgba(0,255,136,0.2), transparent);
-            opacity: 0; transition: opacity 0.3s;
         }
 
         .key-btn:active {
+            background: rgba(0,255,136,0.15);
             border-color: var(--accent);
-            transform: scale(0.85);
-            box-shadow: 0 0 25px rgba(0,255,136,0.3);
+            transform: scale(0.9);
+            box-shadow: 0 0 20px rgba(0,255,136,0.2);
         }
-        .key-btn:active::after { opacity: 1; }
 
         .key-del { color: #ff4444; }
         .key-empty { background: transparent; border: none; pointer-events: none; }
 
         .lock-error {
-            font-size: 9px; letter-spacing: 2px;
-            margin-top: 10px; height: 16px;
-            transition: all 0.3s;
+            font-size: 9px;
+            letter-spacing: 2px;
+            margin-top: 10px;
+            height: 16px;
         }
 
-        /* ==================== MAIN APP ==================== */
+        /* Main App */
         .main-app {
-            flex: 1; display: flex; flex-direction: column; overflow: hidden;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
         }
 
         .header {
-            padding: 12px 16px;
-            background: rgba(6,6,6,0.95);
+            padding: 10px 14px;
+            background: #0a0a0a;
             border-bottom: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: space-between;
-            z-index: 10; backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 10;
         }
 
         .header-title {
-            font-size: 14px; font-weight: 900; letter-spacing: 4px;
+            font-size: 13px;
+            font-weight: 900;
+            letter-spacing: 3px;
             color: var(--accent);
-            display: flex; align-items: center; gap: 8px;
-            text-shadow: 0 0 15px rgba(0,255,136,0.4);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            text-shadow: 0 0 10px rgba(0,255,136,0.3);
         }
 
         .header-actions { display: flex; gap: 6px; }
 
         .header-btn {
-            padding: 7px 12px;
+            padding: 6px 12px;
             background: rgba(0,255,136,0.06);
             border: 1px solid rgba(0,255,136,0.2);
             color: var(--accent);
-            cursor: pointer; border-radius: 20px;
-            font-size: 8px; letter-spacing: 2px;
-            font-family: inherit; transition: all 0.3s;
+            cursor: pointer;
+            border-radius: 20px;
+            font-size: 8px;
+            letter-spacing: 1px;
+            font-family: inherit;
+            transition: all 0.3s;
         }
 
-        .header-btn:hover { background: rgba(0,255,136,0.12); }
         .header-btn.lock-btn {
             background: rgba(255,51,68,0.06);
-            border-color: rgba(255,51,68,0.2); color: #ff4444;
+            border-color: rgba(255,51,68,0.2);
+            color: #ff4444;
         }
 
-        /* Stats Bar */
-        .stats-bar {
-            display: flex; gap: 6px;
+        /* RAM Status */
+        .ram-status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             padding: 8px 14px;
             background: #050505;
             border-bottom: 1px solid var(--border);
+            font-size: 8px;
+            letter-spacing: 1px;
         }
 
-        .stat-item {
-            flex: 1; text-align: center;
-            padding: 6px; background: #0a0a0a;
-            border: 1px solid #1a1a1a; border-radius: 8px;
+        .ram-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: ramPulse 1s ease-in-out infinite;
         }
 
-        .stat-val {
-            font-size: 14px; font-weight: 900;
-            color: var(--accent); display: block;
-            text-shadow: 0 0 8px rgba(0,255,136,0.3);
+        @keyframes ramPulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(0,255,136,0.5); }
+            50% { opacity: 0.5; box-shadow: 0 0 2px rgba(0,255,136,0.2); }
         }
 
-        .stat-lbl {
-            font-size: 7px; color: #444;
-            letter-spacing: 2px; text-transform: uppercase;
-        }
+        .ram-text { color: var(--accent); }
+        .ram-size { color: #666; margin-left: auto; }
 
         /* Toolbar */
         .toolbar {
-            display: flex; gap: 5px;
-            padding: 10px 14px;
+            display: flex;
+            gap: 4px;
+            padding: 8px 12px;
             background: #050505;
             border-bottom: 1px solid var(--border);
             overflow-x: auto;
@@ -305,252 +271,205 @@ def create_website_files():
         .toolbar::-webkit-scrollbar { height: 0; }
 
         .tool-btn {
-            padding: 9px 14px;
+            padding: 8px 12px;
             background: #0a0a0a;
             border: 1px solid #1a1a1a;
-            color: #666; cursor: pointer;
-            border-radius: 25px; font-size: 9px;
-            white-space: nowrap; letter-spacing: 1px;
-            transition: all 0.3s; font-family: inherit;
-            display: flex; align-items: center; gap: 5px;
+            color: #666;
+            cursor: pointer;
+            border-radius: 20px;
+            font-size: 9px;
+            white-space: nowrap;
+            letter-spacing: 1px;
+            transition: all 0.3s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
 
         .tool-btn:hover { border-color: #333; color: #999; }
         .tool-btn.active {
-            border-color: var(--accent); color: var(--accent);
+            border-color: var(--accent);
+            color: var(--accent);
             background: rgba(0,255,136,0.08);
             box-shadow: 0 0 15px rgba(0,255,136,0.1);
         }
 
-        .tool-btn .count {
-            background: rgba(0,255,136,0.15);
-            padding: 2px 6px; border-radius: 10px;
-            font-size: 8px;
-        }
-
         /* Content */
         .content-area {
-            flex: 1; overflow-y: auto;
-            padding: 12px; display: flex;
-            flex-direction: column; gap: 10px;
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
             background: #000;
-            scroll-behavior: smooth;
         }
 
         .content-area::-webkit-scrollbar { width: 3px; }
         .content-area::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 3px; }
 
-        /* Grid Mode */
-        .content-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-        }
-
-        .content-grid .file-card {
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            padding: 16px 10px;
-        }
-
-        .content-grid .file-icon { font-size: 36px; margin-bottom: 6px; }
-        .content-grid .file-actions { margin-top: 6px; }
-
-        /* List Mode */
-        .content-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
         .file-card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            padding: 14px;
+            background: #0a0a0a;
+            border: 1px solid #1a1a1a;
+            border-radius: 12px;
+            padding: 12px;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            margin-bottom: 8px;
             transition: all 0.3s;
-            animation: cardSlide 0.4s ease;
-            position: relative;
-            overflow: hidden;
+            animation: cardIn 0.3s ease;
         }
 
-        @keyframes cardSlide {
-            from { opacity: 0; transform: translateX(-20px); }
-            to { opacity: 1; transform: translateX(0); }
-        }
-
-        .file-card::before {
-            content: ''; position: absolute; left: 0; top: 10%; bottom: 10%; width: 2px;
-            background: linear-gradient(180deg, transparent, var(--accent), transparent);
-            opacity: 0; transition: opacity 0.3s;
-            border-radius: 0 2px 2px 0;
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .file-card:hover { border-color: #2a2a2a; background: #0d0d0d; }
-        .file-card:hover::before { opacity: 0.5; }
         .file-card:active { transform: scale(0.98); }
 
         .file-icon {
-            font-size: 32px; flex-shrink: 0;
-            width: 48px; height: 48px;
-            display: flex; align-items: center; justify-content: center;
-            background: rgba(0,255,136,0.04);
-            border-radius: 12px;
+            font-size: 28px;
+            flex-shrink: 0;
+            width: 44px;
+            text-align: center;
         }
 
         .file-info { flex: 1; min-width: 0; }
 
         .file-name {
-            font-size: 12px; font-weight: 600;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-            letter-spacing: 0.5px;
+            font-size: 12px;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .file-meta {
-            font-size: 8px; color: var(--text-dim);
-            letter-spacing: 1px; margin-top: 3px;
-            display: flex; gap: 8px; align-items: center;
+            font-size: 8px;
+            color: var(--text-dim);
+            letter-spacing: 1px;
+            margin-top: 2px;
+            display: flex;
+            gap: 6px;
+            align-items: center;
         }
 
         .file-type-badge {
-            padding: 2px 8px; border-radius: 10px;
-            font-size: 7px; letter-spacing: 1px;
+            padding: 2px 6px;
+            border-radius: 8px;
+            font-size: 7px;
+            letter-spacing: 1px;
             text-transform: uppercase;
         }
 
-        .badge-image { background: rgba(0,170,255,0.1); color: #00aaff; border: 1px solid rgba(0,170,255,0.2); }
-        .badge-video { background: rgba(255,136,0,0.1); color: #ff8800; border: 1px solid rgba(255,136,0,0.2); }
-        .badge-audio { background: rgba(170,0,255,0.1); color: #aa00ff; border: 1px solid rgba(170,0,255,0.2); }
-        .badge-text { background: rgba(0,255,136,0.1); color: #00ff88; border: 1px solid rgba(0,255,136,0.2); }
-        .badge-password { background: rgba(255,51,68,0.1); color: #ff3344; border: 1px solid rgba(255,51,68,0.2); }
-        .badge-link { background: rgba(201,168,76,0.1); color: #c9a84c; border: 1px solid rgba(201,168,76,0.2); }
+        .badge-image { background: rgba(0,170,255,0.1); color: #00aaff; }
+        .badge-video { background: rgba(255,136,0,0.1); color: #ff8800; }
+        .badge-audio { background: rgba(170,0,255,0.1); color: #aa00ff; }
+        .badge-text { background: rgba(0,255,136,0.1); color: #00ff88; }
+        .badge-password { background: rgba(255,51,68,0.1); color: #ff3344; }
+        .badge-link { background: rgba(201,168,76,0.1); color: #c9a84c; }
 
-        .file-actions { display: flex; gap: 4px; }
+        .file-actions { display: flex; gap: 3px; }
 
         .file-btn {
-            width: 30px; height: 30px;
-            background: #111; border: 1px solid #1a1a1a;
-            color: #777; cursor: pointer;
-            border-radius: 10px; font-size: 12px;
-            display: flex; align-items: center; justify-content: center;
+            width: 28px;
+            height: 28px;
+            background: #111;
+            border: 1px solid #1a1a1a;
+            color: #777;
+            cursor: pointer;
+            border-radius: 8px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.3s;
         }
 
         .file-btn:hover { border-color: #444; color: #fff; background: #1a1a1a; }
         .file-btn.danger:hover { border-color: #ff4444; color: #ff4444; background: rgba(255,68,68,0.1); }
 
-        /* Previews */
-        .card-preview {
-            width: 100%; margin-top: 8px;
-            border-radius: 10px; border: 1px solid #1a1a1a;
-            overflow: hidden;
-        }
-
         .card-preview img {
-            width: 100%; max-height: 140px;
-            object-fit: cover; display: block;
-            cursor: pointer; transition: all 0.3s;
+            width: 100%;
+            max-height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 6px;
+            cursor: pointer;
         }
 
-        .card-preview img:hover { transform: scale(1.02); }
-
-        .card-preview video {
-            width: 100%; max-height: 120px;
-            border-radius: 10px; background: #000;
-        }
-
-        .card-preview audio {
-            width: 100%; height: 36px;
-            border-radius: 20px; background: #0a0a0a;
-        }
-
-        /* View Mode Toggle */
-        .view-toggle {
-            display: flex; gap: 4px;
-            padding: 6px 14px; justify-content: flex-end;
-        }
-
-        .view-btn {
-            padding: 5px 10px;
-            background: #0a0a0a; border: 1px solid #1a1a1a;
-            color: #555; cursor: pointer; border-radius: 8px;
-            font-size: 14px; transition: all 0.3s;
-        }
-
-        .view-btn.active {
-            border-color: var(--accent); color: var(--accent);
-            background: rgba(0,255,136,0.05);
-        }
-
-        /* Empty State */
         .empty-state {
-            text-align: center; color: #111;
-            margin-top: 50px; padding: 20px;
+            text-align: center;
+            color: #111;
+            margin-top: 50px;
         }
 
-        .empty-state .icon {
-            font-size: 50px; display: block;
-            margin-bottom: 10px; opacity: 0.4;
-            animation: emptyFloat 3s ease-in-out infinite;
-        }
-
-        @keyframes emptyFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        .empty-state .text {
-            font-size: 10px; letter-spacing: 3px; text-transform: uppercase;
-        }
+        .empty-state .icon { font-size: 40px; display: block; margin-bottom: 8px; opacity: 0.4; }
+        .empty-state .text { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
 
         /* Input */
         .input-area {
-            padding: 12px 14px;
-            background: rgba(6,6,6,0.95);
+            padding: 10px 14px;
+            background: #0a0a0a;
             border-top: 1px solid var(--border);
-            display: flex; gap: 8px; align-items: flex-end;
-            backdrop-filter: blur(10px);
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
         }
 
-        .input-area input {
-            flex: 1; padding: 12px 16px;
-            background: #000; border: 1px solid var(--border);
-            color: var(--text); font-size: 12px;
-            border-radius: 25px; font-family: inherit;
-            outline: none; transition: all 0.3s;
+        .input-area input[type="text"] {
+            flex: 1;
+            padding: 10px 14px;
+            background: #000;
+            border: 1px solid var(--border);
+            color: var(--text);
+            font-size: 12px;
+            border-radius: 20px;
+            font-family: inherit;
+            outline: none;
+            transition: all 0.3s;
         }
 
-        .input-area input:focus {
+        .input-area input[type="text"]:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 4px rgba(0,255,136,0.08);
+            box-shadow: 0 0 0 3px rgba(0,255,136,0.08);
         }
 
-        .input-area input::placeholder { color: #1a1a1a; }
+        .input-area input[type="text"]::placeholder { color: #1a1a1a; }
 
         .add-btn {
-            width: 42px; height: 42px;
+            width: 38px;
+            height: 38px;
             background: linear-gradient(135deg, #00ff88, #00cc66);
-            border: none; color: #000;
-            cursor: pointer; border-radius: 50%;
-            font-size: 18px; display: flex;
-            align-items: center; justify-content: center;
-            flex-shrink: 0; transition: all 0.3s;
+            border: none;
+            color: #000;
+            cursor: pointer;
+            border-radius: 50%;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s;
             box-shadow: 0 4px 15px rgba(0,255,136,0.3);
         }
 
-        .add-btn:active { transform: scale(0.85); box-shadow: 0 2px 10px rgba(0,255,136,0.2); }
+        .add-btn:active { transform: scale(0.85); }
 
         .upload-btn {
-            width: 42px; height: 42px;
-            background: #0a0a0a; border: 1px solid var(--accent2);
-            color: var(--accent2); cursor: pointer;
-            border-radius: 50%; font-size: 16px;
-            display: flex; align-items: center; justify-content: center;
-            flex-shrink: 0; transition: all 0.3s;
+            width: 38px;
+            height: 38px;
+            background: #0a0a0a;
+            border: 1px solid var(--accent2);
+            color: var(--accent2);
+            cursor: pointer;
+            border-radius: 50%;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.3s;
         }
 
         .upload-btn:active { background: rgba(0,170,255,0.1); }
@@ -559,81 +478,78 @@ def create_website_files():
 
         /* Viewer */
         .viewer-overlay {
-            display: none; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.97); z-index: 200;
-            align-items: center; justify-content: center;
-            flex-direction: column; backdrop-filter: blur(20px);
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.97);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
         }
 
         .viewer-overlay.show { display: flex; }
 
         .viewer-content {
-            max-width: 95%; max-height: 80%;
-            border-radius: 16px;
-            box-shadow: 0 0 60px rgba(0,0,0,0.8);
+            max-width: 95%;
+            max-height: 80%;
+            border-radius: 12px;
         }
 
         .viewer-close {
-            position: absolute; top: 20px; right: 20px;
-            width: 44px; height: 44px;
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
             background: rgba(255,255,255,0.06);
             border: 1px solid rgba(255,255,255,0.15);
-            color: #fff; cursor: pointer;
-            border-radius: 50%; font-size: 20px;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.3s;
-        }
-
-        .viewer-close:hover { background: rgba(255,255,255,0.12); }
-
-        .viewer-info {
-            color: #888; font-size: 10px;
-            letter-spacing: 2px; margin-top: 12px;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 50%;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Toast */
         .toast {
-            position: fixed; bottom: 40px; left: 50%;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
             transform: translateX(-50%) translateY(120px);
-            background: #0a0a0a; border: 1px solid var(--accent);
-            color: var(--accent); padding: 14px 28px;
-            border-radius: 30px; font-size: 11px;
-            letter-spacing: 2px; z-index: 300;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 15px 40px rgba(0,0,0,0.9), 0 0 30px rgba(0,255,136,0.2);
-            text-align: center;
+            background: #0a0a0a;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 10px 24px;
+            border-radius: 20px;
+            font-size: 10px;
+            letter-spacing: 2px;
+            z-index: 300;
+            transition: transform 0.4s;
         }
 
         .toast.show { transform: translateX(-50%) translateY(0); }
 
         .footer {
-            text-align: center; padding: 4px;
-            font-size: 7px; color: #0a0a0a; letter-spacing: 2px;
-            background: #000; border-top: 1px solid var(--border);
+            text-align: center;
+            padding: 4px;
+            font-size: 7px;
+            color: #0a0a0a;
+            letter-spacing: 2px;
+            background: #000;
+            border-top: 1px solid var(--border);
         }
-        .footer span { color: var(--accent); }
     </style>
 </head>
 <body>
-    <!-- Background -->
-    <div class="bg-particles" id="bgParticles"></div>
-
     <div class="app">
-        <!-- ==================== LOCK SCREEN ==================== -->
+        <!-- Lock Screen -->
         <div class="lock-screen" id="lockScreen">
-            <div class="lock-icon-container">
-                <div class="lock-ring-outer"></div>
-                <div class="lock-ring-inner"></div>
-                <div class="lock-icon-core">
-                    🔐
-                    <span class="lock-spark"></span>
-                    <span class="lock-spark"></span>
-                    <span class="lock-spark"></span>
-                    <span class="lock-spark"></span>
-                </div>
-            </div>
+            <div class="lock-icon">🔐</div>
             <div class="lock-title">VAULT X</div>
-            <div class="lock-subtitle">✦ God Mode ✦</div>
+            <div class="lock-subtitle">✦ RAM Mode ✦</div>
             
             <div class="pin-dots">
                 <div class="pin-dot" id="dot1"></div>
@@ -660,84 +576,47 @@ def create_website_files():
             <p class="lock-error" id="lockError"></p>
         </div>
 
-        <!-- ==================== MAIN APP ==================== -->
+        <!-- Main App -->
         <div class="main-app" id="mainApp">
             <div class="header">
                 <span class="header-title">🔐 VAULT X</span>
                 <div class="header-actions">
-                    <button class="header-btn" onclick="exportAll()">📤 Export</button>
-                    <button class="header-btn lock-btn" onclick="lockVault()">🔒 Lock</button>
+                    <button class="header-btn" onclick="exportAll()">📤</button>
+                    <button class="header-btn lock-btn" onclick="lockVault()">🔒</button>
                 </div>
             </div>
 
-            <!-- Stats -->
-            <div class="stats-bar">
-                <div class="stat-item">
-                    <span class="stat-val" id="statTotal">0</span>
-                    <span class="stat-lbl">Files</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-val" id="statSize">0KB</span>
-                    <span class="stat-lbl">Storage</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-val" id="statTypes">0</span>
-                    <span class="stat-lbl">Types</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-val" id="statEncrypted">🔒</span>
-                    <span class="stat-lbl">Secure</span>
-                </div>
+            <div class="ram-status">
+                <span class="ram-dot"></span>
+                <span class="ram-text">⚡ RAM Active</span>
+                <span class="ram-size" id="ramSize">0 KB used</span>
             </div>
 
-            <!-- View Toggle -->
-            <div class="view-toggle">
-                <button class="view-btn active" onclick="setView('list', this)">📋</button>
-                <button class="view-btn" onclick="setView('grid', this)">🔲</button>
-            </div>
-
-            <!-- Toolbar -->
             <div class="toolbar" id="toolbar">
-                <button class="tool-btn active" data-type="all" onclick="filterType('all', this)">
-                    📂 All <span class="count" id="countAll">0</span>
-                </button>
-                <button class="tool-btn" data-type="image" onclick="filterType('image', this)">
-                    🖼️ Images
-                </button>
-                <button class="tool-btn" data-type="video" onclick="filterType('video', this)">
-                    🎥 Video
-                </button>
-                <button class="tool-btn" data-type="audio" onclick="filterType('audio', this)">
-                    🎵 Audio
-                </button>
-                <button class="tool-btn" data-type="text" onclick="filterType('text', this)">
-                    📝 Text
-                </button>
-                <button class="tool-btn" data-type="password" onclick="filterType('password', this)">
-                    🔑 Pass
-                </button>
-                <button class="tool-btn" data-type="link" onclick="filterType('link', this)">
-                    🔗 Links
-                </button>
+                <button class="tool-btn active" data-type="all" onclick="filterType('all', this)">📂 All</button>
+                <button class="tool-btn" data-type="image" onclick="filterType('image', this)">🖼️</button>
+                <button class="tool-btn" data-type="video" onclick="filterType('video', this)">🎥</button>
+                <button class="tool-btn" data-type="audio" onclick="filterType('audio', this)">🎵</button>
+                <button class="tool-btn" data-type="text" onclick="filterType('text', this)">📝</button>
+                <button class="tool-btn" data-type="password" onclick="filterType('password', this)">🔑</button>
+                <button class="tool-btn" data-type="link" onclick="filterType('link', this)">🔗</button>
             </div>
 
-            <!-- Content -->
-            <div class="content-area content-list" id="contentArea">
+            <div class="content-area" id="contentArea">
                 <div class="empty-state" id="emptyState">
                     <span class="icon">🔐</span>
                     <span class="text">Vault is empty</span>
                 </div>
             </div>
 
-            <!-- Input -->
             <div class="input-area">
-                <input type="text" id="textInput" placeholder="Add note, link, or pass:xxx..." onkeypress="if(event.key==='Enter')addText()">
+                <input type="text" id="textInput" placeholder="Add text, link, or pass:xxx..." onkeypress="if(event.key==='Enter')addText()">
                 <input type="file" id="fileInput" onchange="addFile()" multiple accept="*/*">
                 <button class="upload-btn" onclick="document.getElementById('fileInput').click()">📎</button>
                 <button class="add-btn" onclick="addText()">+</button>
             </div>
 
-            <div class="footer"><span>◆</span> VAULT X GOD MODE <span>•</span> ENCRYPTED <span>◆</span></div>
+            <div class="footer">VAULT X • RAM MODE • ENCRYPTED</div>
         </div>
     </div>
 
@@ -746,68 +625,141 @@ def create_website_files():
         <button class="viewer-close" onclick="closeViewer()">✕</button>
         <img class="viewer-content" id="viewerImage" style="display:none">
         <video class="viewer-content" id="viewerVideo" controls style="display:none"></video>
-        <span class="viewer-info" id="viewerInfo"></span>
     </div>
 
     <!-- Toast -->
     <div class="toast" id="toast"></div>
 
     <script>
-        // ==================== PARTICLES ====================
-        (function() {
-            const c = document.getElementById('bgParticles');
-            for (let i = 0; i < 25; i++) {
-                const d = document.createElement('div');
-                d.className = 'bg-dot';
-                d.style.left = Math.random() * 100 + '%';
-                const s = Math.random() * 2 + 1;
-                d.style.width = s + 'px'; d.style.height = s + 'px';
-                d.style.animationDuration = (Math.random() * 8 + 4) + 's';
-                d.style.animationDelay = (Math.random() * 6) + 's';
-                c.appendChild(d);
-            }
-        })();
+        // ==================== DATABASE (IndexedDB + RAM) ====================
+        const DB_NAME = 'VaultX_RAM_DB';
+        const DB_VERSION = 1;
+        const STORE_NAME = 'vault_files';
+        let db = null;
 
-        // ==================== CONSTANTS ====================
+        // RAM Memory Store (holds all data in memory)
+        const RAMStore = {
+            files: [],
+            totalSize: 0,
+
+            add(file) {
+                this.files.unshift(file);
+                this.totalSize += file.size || 0;
+                this.updateUI();
+            },
+
+            remove(id) {
+                const idx = this.files.findIndex(f => f.id === id);
+                if (idx > -1) {
+                    this.totalSize -= this.files[idx].size || 0;
+                    this.files.splice(idx, 1);
+                }
+                this.updateUI();
+            },
+
+            getAll() {
+                return this.files;
+            },
+
+            getByType(type) {
+                return type === 'all' ? this.files : this.files.filter(f => f.type === type);
+            },
+
+            clear() {
+                this.files = [];
+                this.totalSize = 0;
+                this.updateUI();
+            },
+
+            updateUI() {
+                const sizeKB = (this.totalSize / 1024).toFixed(1);
+                const sizeStr = this.totalSize > 1048576 ? (this.totalSize / 1048576).toFixed(1) + ' MB' : sizeKB + ' KB';
+                document.getElementById('ramSize').textContent = sizeStr + ' used';
+            }
+        };
+
+        // IndexedDB for persistent backup
+        function openDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+                
+                request.onupgradeneeded = function(e) {
+                    const db = e.target.result;
+                    if (!db.objectStoreNames.contains(STORE_NAME)) {
+                        db.createObjectStore(STORE_NAME, { keyPath: 'id' });
+                    }
+                };
+
+                request.onsuccess = function(e) {
+                    db = e.target.result;
+                    resolve(db);
+                };
+
+                request.onerror = function(e) {
+                    console.error('IndexedDB error:', e.target.error);
+                    reject(e.target.error);
+                };
+            });
+        }
+
+        async function saveToDB(file) {
+            if (!db) return;
+            try {
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                const store = tx.objectStore(STORE_NAME);
+                store.put(file);
+                return new Promise(resolve => { tx.oncomplete = resolve; });
+            } catch(e) {
+                console.error('Save error:', e);
+            }
+        }
+
+        async function deleteFromDB(id) {
+            if (!db) return;
+            try {
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                const store = tx.objectStore(STORE_NAME);
+                store.delete(id);
+                return new Promise(resolve => { tx.oncomplete = resolve; });
+            } catch(e) {}
+        }
+
+        async function loadAllFromDB() {
+            if (!db) return [];
+            try {
+                const tx = db.transaction(STORE_NAME, 'readonly');
+                const store = tx.objectStore(STORE_NAME);
+                const request = store.getAll();
+                return new Promise((resolve) => {
+                    request.onsuccess = () => resolve(request.result || []);
+                    request.onerror = () => resolve([]);
+                });
+            } catch(e) {
+                return [];
+            }
+        }
+
+        async function clearDB() {
+            if (!db) return;
+            try {
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                const store = tx.objectStore(STORE_NAME);
+                store.clear();
+            } catch(e) {}
+        }
+
+        // ==================== PIN ====================
         const CORRECT_PIN = '1235';
         let pinInput = '';
         let isUnlocked = false;
-        let currentFilter = 'all';
-        let currentView = 'list';
-        let vaultFiles = [];
         let failedAttempts = 0;
-        let lockTimeout = null;
-        const AUTO_LOCK_TIME = 180000;
+        let currentFilter = 'all';
 
-        // ==================== ENCRYPTION ====================
-        function encrypt(text) {
-            let result = '';
-            const key = CORRECT_PIN + 'vaultx_salt';
-            for (let i = 0; i < text.length; i++) {
-                result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
-            }
-            return btoa(btoa(result));
-        }
-
-        function decrypt(encrypted) {
-            try {
-                const step1 = atob(encrypted);
-                const text = atob(step1);
-                let result = '';
-                const key = CORRECT_PIN + 'vaultx_salt';
-                for (let i = 0; i < text.length; i++) {
-                    result += String.fromCharCode(text.charCodeAt(i) ^ key.charCodeAt(i % key.length));
-                }
-                return result;
-            } catch(e) { return ''; }
-        }
-
-        // ==================== PIN PAD ====================
         function pressKey(num) {
             if (pinInput.length >= 4) return;
             pinInput += num;
             updateDots();
-            if (pinInput.length === 4) setTimeout(checkPin, 250);
+            if (pinInput.length === 4) setTimeout(checkPin, 200);
         }
 
         function deleteKey() {
@@ -819,8 +771,7 @@ def create_website_files():
 
         function updateDots() {
             for (let i = 1; i <= 4; i++) {
-                const dot = document.getElementById('dot' + i);
-                dot.classList.toggle('filled', i <= pinInput.length);
+                document.getElementById('dot' + i).classList.toggle('filled', i <= pinInput.length);
             }
         }
 
@@ -830,48 +781,45 @@ def create_website_files():
             } else {
                 failedAttempts++;
                 document.querySelectorAll('.pin-dot').forEach(d => d.classList.add('error'));
-                const err = document.getElementById('lockError');
-                err.textContent = '❌ Wrong PIN! ' + Math.max(0, 3 - failedAttempts) + ' tries left';
-                err.style.color = '#ff4444';
+                document.getElementById('lockError').textContent = '❌ Wrong! ' + (3 - failedAttempts) + ' tries';
+                document.getElementById('lockError').style.color = '#ff4444';
                 if (failedAttempts >= 3) {
-                    err.textContent = '⏳ Locked for 30 seconds...';
+                    document.getElementById('lockError').textContent = '⏳ Locked 30s';
                     document.querySelectorAll('.key-btn').forEach(b => b.style.pointerEvents = 'none');
                     setTimeout(() => {
-                        failedAttempts = 0; pinInput = ''; updateDots();
+                        failedAttempts = 0;
                         document.querySelectorAll('.key-btn').forEach(b => b.style.pointerEvents = 'auto');
-                        err.textContent = ''; err.style.color = '';
+                        document.getElementById('lockError').textContent = '';
+                        document.getElementById('lockError').style.color = '';
                     }, 30000);
                 }
-                setTimeout(() => { pinInput = ''; updateDots(); }, 600);
+                setTimeout(() => { pinInput = ''; updateDots(); }, 500);
             }
         }
 
-        function unlockVault() {
+        async function unlockVault() {
             isUnlocked = true;
             document.getElementById('lockScreen').classList.add('hidden');
             document.getElementById('lockError').textContent = '';
             pinInput = ''; failedAttempts = 0;
             updateDots();
-            loadVault();
-            resetAutoLock();
-            showToast('✅ Vault Unlocked');
+
+            // Load from IndexedDB to RAM
+            if (!db) await openDB();
+            const savedFiles = await loadAllFromDB();
+            RAMStore.files = savedFiles;
+            RAMStore.totalSize = savedFiles.reduce((s, f) => s + (f.size || 0), 0);
+            RAMStore.updateUI();
+            renderFiles();
+            showToast('✅ RAM Active • ' + savedFiles.length + ' files loaded');
         }
 
         function lockVault() {
             isUnlocked = false;
             document.getElementById('lockScreen').classList.remove('hidden');
-            if (lockTimeout) clearTimeout(lockTimeout);
-            saveVault();
+            renderFiles();
             showToast('🔒 Vault Locked');
         }
-
-        function resetAutoLock() {
-            if (lockTimeout) clearTimeout(lockTimeout);
-            lockTimeout = setTimeout(() => { if (isUnlocked) lockVault(); }, AUTO_LOCK_TIME);
-        }
-
-        document.addEventListener('click', () => { if (isUnlocked) resetAutoLock(); });
-        document.addEventListener('touchstart', () => { if (isUnlocked) resetAutoLock(); });
 
         // ==================== FILES ====================
         function addText() {
@@ -883,17 +831,19 @@ def create_website_files():
             if (text.startsWith('http')) type = 'link';
             else if (text.startsWith('pass:')) type = 'password';
 
-            vaultFiles.unshift({
+            const file = {
                 id: Date.now(),
                 name: text.substring(0, 40).replace(/pass:/, '••••'),
                 type, content: text,
                 size: new Blob([text]).size,
                 date: new Date().toLocaleString()
-            });
+            };
 
+            RAMStore.add(file);
+            saveToDB(file);
             input.value = '';
-            saveVault(); renderFiles();
-            resetAutoLock(); showToast('✅ Added');
+            renderFiles();
+            showToast('✅ Added to RAM');
         }
 
         function addFile() {
@@ -901,6 +851,7 @@ def create_website_files():
             const files = input.files;
             if (!files.length) return;
 
+            let count = 0;
             Array.from(files).forEach(f => {
                 const reader = new FileReader();
                 reader.onload = function(e) {
@@ -909,48 +860,49 @@ def create_website_files():
                     else if (f.type.startsWith('video/')) type = 'video';
                     else if (f.type.startsWith('audio/')) type = 'audio';
 
-                    vaultFiles.unshift({
+                    const fileObj = {
                         id: Date.now() + Math.random(),
                         name: f.name, type, mimeType: f.type,
                         content: e.target.result, size: f.size,
                         date: new Date().toLocaleString()
-                    });
+                    };
 
-                    saveVault(); renderFiles();
-                    resetAutoLock();
+                    RAMStore.add(fileObj);
+                    saveToDB(fileObj);
+                    count++;
+                    if (count === files.length) {
+                        renderFiles();
+                        showToast('📎 ' + count + ' file(s) in RAM');
+                    }
                 };
                 reader.readAsDataURL(f);
             });
 
             input.value = '';
-            showToast('📎 Files added');
         }
 
         function deleteFile(id) {
-            vaultFiles = vaultFiles.filter(f => f.id !== id);
-            saveVault(); renderFiles();
-            showToast('🗑 Deleted');
-            resetAutoLock();
+            RAMStore.remove(id);
+            deleteFromDB(id);
+            renderFiles();
+            showToast('🗑 Deleted from RAM');
         }
 
         function viewFile(file) {
-            resetAutoLock();
             if (file.type === 'image') {
                 document.getElementById('viewerImage').src = file.content;
                 document.getElementById('viewerImage').style.display = 'block';
                 document.getElementById('viewerVideo').style.display = 'none';
-                document.getElementById('viewerInfo').textContent = file.name;
                 document.getElementById('viewerOverlay').classList.add('show');
             } else if (file.type === 'video') {
                 document.getElementById('viewerVideo').src = file.content;
                 document.getElementById('viewerVideo').style.display = 'block';
                 document.getElementById('viewerImage').style.display = 'none';
-                document.getElementById('viewerInfo').textContent = file.name;
                 document.getElementById('viewerOverlay').classList.add('show');
                 document.getElementById('viewerVideo').play();
             } else if (file.type === 'audio') {
                 new Audio(file.content).play();
-                showToast('🎵 Playing: ' + file.name);
+                showToast('🎵 Playing from RAM');
             } else if (file.type === 'link') {
                 window.open(file.content, '_blank');
             } else {
@@ -970,7 +922,6 @@ def create_website_files():
             a.download = file.name;
             a.click();
             showToast('📥 Downloading...');
-            resetAutoLock();
         }
 
         function filterType(type, btn) {
@@ -978,61 +929,12 @@ def create_website_files():
             document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             renderFiles();
-            resetAutoLock();
-        }
-
-        function setView(view, btn) {
-            currentView = view;
-            document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            const area = document.getElementById('contentArea');
-            area.className = view === 'grid' ? 'content-area content-grid' : 'content-area content-list';
-            renderFiles();
-            resetAutoLock();
-        }
-
-        // ==================== STORAGE ====================
-        function saveVault() {
-            try {
-                const json = JSON.stringify(vaultFiles);
-                const encrypted = encrypt(json);
-                localStorage.setItem('vaultx_god', encrypted);
-                sessionStorage.setItem('vaultx_god_ram', json);
-            } catch(e) {
-                showToast('⚠️ Storage full!');
-            }
-        }
-
-        function loadVault() {
-            try {
-                const encrypted = localStorage.getItem('vaultx_god');
-                if (encrypted) {
-                    const decrypted = decrypt(encrypted);
-                    if (decrypted) vaultFiles = JSON.parse(decrypted);
-                }
-                if (!vaultFiles.length) {
-                    const ram = sessionStorage.getItem('vaultx_god_ram');
-                    if (ram) vaultFiles = JSON.parse(ram);
-                }
-            } catch(e) { vaultFiles = []; }
-            renderFiles();
         }
 
         function renderFiles() {
             const area = document.getElementById('contentArea');
             const empty = document.getElementById('emptyState');
-            
-            const filtered = currentFilter === 'all' 
-                ? vaultFiles 
-                : vaultFiles.filter(f => f.type === currentFilter);
-
-            // Update stats
-            const totalSize = vaultFiles.reduce((s, f) => s + (f.size || 0), 0);
-            const types = new Set(vaultFiles.map(f => f.type));
-            document.getElementById('statTotal').textContent = vaultFiles.length;
-            document.getElementById('statSize').textContent = totalSize > 1048576 ? (totalSize/1048576).toFixed(1)+'MB' : (totalSize/1024).toFixed(1)+'KB';
-            document.getElementById('statTypes').textContent = types.size;
-            document.getElementById('countAll').textContent = vaultFiles.length;
+            const filtered = RAMStore.getByType(currentFilter);
 
             if (filtered.length === 0) {
                 empty.style.display = 'block';
@@ -1050,12 +952,8 @@ def create_website_files():
                     const badgeClass = 'badge-' + f.type;
 
                     let preview = '';
-                    if (f.type === 'image' && currentView === 'list') {
-                        preview = `<div class="card-preview"><img src="${f.content}" onclick="viewFile(vaultFiles.find(x=>x.id===${f.id}))" loading="lazy"></div>`;
-                    } else if (f.type === 'video' && currentView === 'list') {
-                        preview = `<div class="card-preview"><video src="${f.content}" controls></video></div>`;
-                    } else if (f.type === 'audio' && currentView === 'list') {
-                        preview = `<div class="card-preview"><audio src="${f.content}" controls></audio></div>`;
+                    if (f.type === 'image') {
+                        preview = `<div class="card-preview"><img src="${f.content}" onclick="viewFile(RAMStore.getAll().find(x=>x.id===${f.id}))"></div>`;
                     }
 
                     return `
@@ -1071,8 +969,8 @@ def create_website_files():
                                 ${preview}
                             </div>
                             <div class="file-actions">
-                                <button class="file-btn" onclick="viewFile(vaultFiles.find(x=>x.id===${f.id}))">👁</button>
-                                <button class="file-btn" onclick="downloadFile(vaultFiles.find(x=>x.id===${f.id}))">⬇</button>
+                                <button class="file-btn" onclick="viewFile(RAMStore.getAll().find(x=>x.id===${f.id}))">👁</button>
+                                <button class="file-btn" onclick="downloadFile(RAMStore.getAll().find(x=>x.id===${f.id}))">⬇</button>
                                 <button class="file-btn danger" onclick="deleteFile(${f.id})">🗑</button>
                             </div>
                         </div>
@@ -1088,19 +986,16 @@ def create_website_files():
         }
 
         // ==================== EXPORT ====================
-        function exportAll() {
+        async function exportAll() {
             if (!isUnlocked) return;
-            const pw = prompt('Set export password:');
-            if (!pw) return;
-            const json = JSON.stringify(vaultFiles, null, 2);
-            const enc = encrypt(json);
-            const blob = new Blob([enc], {type:'text/plain'});
+            const files = RAMStore.getAll();
+            const json = JSON.stringify(files, null, 2);
+            const blob = new Blob([json], {type:'application/json'});
             const a = document.createElement('a');
             a.href = URL.createObjectURL(blob);
-            a.download = 'vaultx-god-'+Date.now()+'.enc';
+            a.download = 'vaultx-ram-' + Date.now() + '.json';
             a.click();
-            showToast('📤 Encrypted export');
-            resetAutoLock();
+            showToast('📤 ' + files.length + ' files exported');
         }
 
         // ==================== TOAST ====================
@@ -1119,8 +1014,12 @@ def create_website_files():
         });
 
         // ==================== INIT ====================
-        updateDots();
-        loadVault();
+        async function init() {
+            await openDB();
+            updateDots();
+            RAMStore.updateUI();
+        }
+        init();
     </script>
 </body>
 </html>'''
@@ -1129,25 +1028,20 @@ def create_website_files():
         f.write(html_content)
 
     print("╔══════════════════════════════════════════╗")
-    print("║  👑 Vault X - GOD MODE EDITION         ║")
-    print("║  🔐 تم الإنشاء بنجاح                   ║")
+    print("║  ⚡ Vault X - RAM Edition              ║")
+    print("║  🧠 تم الإنشاء بنجاح                   ║")
     print("╚══════════════════════════════════════════╝")
     print(f"📁 www/index.html")
     print(f"💾 حجم الملف: {os.path.getsize('www/index.html')/1024:.1f} KB")
     print("")
-    print("👑 المميزات الإلهية:")
-    print("  ✨ جسيمات ذهبية متحركة")
-    print("  💫 حلقات دائرية حول أيقونة القفل")
-    print("  ⚡ بريق متحرك حول الأيقونة")
-    print("  📊 شريط إحصائيات (ملفات، حجم، أنواع)")
-    print("  🔲 عرضين: قائمة وشبكة")
-    print("  🏷️ شارات ملونة لكل نوع ملف")
-    print("  🎨 تدرجات ذهبية وخضراء")
-    print("  🔐 تشفير مزدوج (Double Base64 + XOR)")
-    print("  📤 تصدير مشفر")
-    print("  📥 رفع وتحميل جميع الملفات")
-    print("  👁️ عارض كامل الشاشة")
-    print("  ⏱️ Auto-lock 3 دقائق")
+    print("🧠 نظام التخزين الجديد:")
+    print("  ⚡ RAM Store - JavaScript Object في الذاكرة")
+    print("  💾 IndexedDB - تخزين دائم احتياطي")
+    print("  📊 مؤشر RAM حي (الحجم المستخدم)")
+    print("  🔄 تحميل تلقائي من IndexedDB للـ RAM")
+    print("  💚 نقطة RAM نابضة خضراء")
+    print("")
+    print("🔢 PIN: 1235")
 
 if __name__ == "__main__":
     create_website_files()
