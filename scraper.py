@@ -1,7 +1,7 @@
 import os
 
 def create_website_files():
-    """إنشاء Vault X RAM Edition - تخزين حقيقي في الذاكرة"""
+    """إنشاء Recipe Book Pro Ultimate - كتاب الطبخ الفاخر"""
     
     os.makedirs("www", exist_ok=True)
     
@@ -10,187 +10,64 @@ def create_website_files():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Vault X | RAM</title>
+    <title>Recipe Book Pro | Ultimate</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #000;
-            --surface: #080808;
-            --border: #1a1a1a;
+            --bg: #fafafa;
+            --surface: #ffffff;
+            --border: #f0f0f0;
+            --border2: #e8e8e8;
             --gold: #c9a84c;
-            --gold-light: #e2c97e;
-            --accent: #00ff88;
-            --accent2: #00aaff;
-            --text: #e0d5c0;
-            --text-dim: #6b6355;
+            --gold-light: #f5e6c8;
+            --text: #1a1a1a;
+            --text2: #555555;
+            --text3: #999999;
+            --accent: #2d8a4e;
+            --accent-light: #e8f5e9;
+            --red: #e74c3c;
+            --red-light: #fdeaea;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+            --shadow: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
+            --shadow-xl: 0 20px 60px rgba(0,0,0,0.12);
+            --radius-sm: 10px;
+            --radius: 16px;
+            --radius-lg: 20px;
+            --radius-xl: 24px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: #000;
+            background: #f0f2f0;
             color: var(--text);
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            user-select: none;
-            -webkit-user-select: none;
             -webkit-tap-highlight-color: transparent;
-            overflow: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
         .app {
             width: 100%;
             max-width: 480px;
             height: 100vh;
-            max-height: 860px;
+            max-height: 900px;
             display: flex;
             flex-direction: column;
             background: var(--bg);
-            border: 1px solid var(--border);
+            box-shadow: var(--shadow-xl);
             position: relative;
-            border-radius: 8px;
-            box-shadow: 0 0 80px rgba(0,0,0,0.8);
-        }
-
-        /* Lock Screen */
-        .lock-screen {
-            position: absolute;
-            inset: 0;
-            background: #000;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            transition: all 0.5s;
-            padding: 20px;
-            background-image: 
-                radial-gradient(ellipse at 50% 30%, rgba(0,255,136,0.06) 0%, transparent 60%);
-        }
-
-        .lock-screen.hidden {
-            opacity: 0;
-            pointer-events: none;
-            transform: scale(1.1);
-        }
-
-        .lock-icon {
-            font-size: 50px;
-            animation: lockFloat 2s ease-in-out infinite;
-            margin-bottom: 16px;
-        }
-
-        @keyframes lockFloat {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-
-        .lock-title {
-            font-size: 22px;
-            font-weight: 900;
-            letter-spacing: 4px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-light), var(--gold));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 4px;
-        }
-
-        .lock-subtitle {
-            font-size: 8px;
-            color: var(--text-dim);
-            letter-spacing: 4px;
-            text-transform: uppercase;
-            margin-bottom: 20px;
-        }
-
-        .pin-dots {
-            display: flex;
-            gap: 14px;
-            margin-bottom: 20px;
-        }
-
-        .pin-dot {
-            width: 14px;
-            height: 14px;
-            border-radius: 50%;
-            background: #1a1a1a;
-            border: 2px solid #333;
-            transition: all 0.3s;
-        }
-
-        .pin-dot.filled {
-            background: var(--accent);
-            border-color: var(--accent);
-            box-shadow: 0 0 15px rgba(0,255,136,0.5);
-        }
-
-        .pin-dot.error {
-            background: #ff3344;
-            border-color: #ff3344;
-            animation: shake 0.5s ease;
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-8px); }
-            75% { transform: translateX(8px); }
-        }
-
-        .keypad {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            max-width: 260px;
-            width: 100%;
-        }
-
-        .key-btn {
-            aspect-ratio: 1;
-            background: #0a0a0a;
-            border: 1px solid #1a1a1a;
-            color: var(--text);
-            cursor: pointer;
-            border-radius: 16px;
-            font-size: 20px;
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.2s;
-            font-family: inherit;
-        }
-
-        .key-btn:active {
-            background: rgba(0,255,136,0.15);
-            border-color: var(--accent);
-            transform: scale(0.9);
-            box-shadow: 0 0 20px rgba(0,255,136,0.2);
-        }
-
-        .key-del { color: #ff4444; }
-        .key-empty { background: transparent; border: none; pointer-events: none; }
-
-        .lock-error {
-            font-size: 9px;
-            letter-spacing: 2px;
-            margin-top: 10px;
-            height: 16px;
-        }
-
-        /* Main App */
-        .main-app {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
             overflow: hidden;
         }
 
+        /* ==================== HEADER ==================== */
         .header {
-            padding: 10px 14px;
-            background: #0a0a0a;
+            padding: 14px 20px;
+            background: var(--surface);
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
@@ -198,828 +75,928 @@ def create_website_files():
             z-index: 10;
         }
 
-        .header-title {
-            font-size: 13px;
-            font-weight: 900;
-            letter-spacing: 3px;
-            color: var(--accent);
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            text-shadow: 0 0 10px rgba(0,255,136,0.3);
-        }
-
-        .header-actions { display: flex; gap: 6px; }
-
-        .header-btn {
-            padding: 6px 12px;
-            background: rgba(0,255,136,0.06);
-            border: 1px solid rgba(0,255,136,0.2);
-            color: var(--accent);
-            cursor: pointer;
-            border-radius: 20px;
-            font-size: 8px;
-            letter-spacing: 1px;
-            font-family: inherit;
-            transition: all 0.3s;
-        }
-
-        .header-btn.lock-btn {
-            background: rgba(255,51,68,0.06);
-            border-color: rgba(255,51,68,0.2);
-            color: #ff4444;
-        }
-
-        /* RAM Status */
-        .ram-status {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            padding: 8px 14px;
-            background: #050505;
-            border-bottom: 1px solid var(--border);
-            font-size: 8px;
-            letter-spacing: 1px;
-        }
-
-        .ram-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: var(--accent);
-            animation: ramPulse 1s ease-in-out infinite;
-        }
-
-        @keyframes ramPulse {
-            0%, 100% { opacity: 1; box-shadow: 0 0 8px rgba(0,255,136,0.5); }
-            50% { opacity: 0.5; box-shadow: 0 0 2px rgba(0,255,136,0.2); }
-        }
-
-        .ram-text { color: var(--accent); }
-        .ram-size { color: #666; margin-left: auto; }
-
-        /* Toolbar */
-        .toolbar {
-            display: flex;
-            gap: 4px;
-            padding: 8px 12px;
-            background: #050505;
-            border-bottom: 1px solid var(--border);
-            overflow-x: auto;
-        }
-
-        .toolbar::-webkit-scrollbar { height: 0; }
-
-        .tool-btn {
-            padding: 8px 12px;
-            background: #0a0a0a;
-            border: 1px solid #1a1a1a;
-            color: #666;
-            cursor: pointer;
-            border-radius: 20px;
-            font-size: 9px;
-            white-space: nowrap;
-            letter-spacing: 1px;
-            transition: all 0.3s;
-            font-family: inherit;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .tool-btn:hover { border-color: #333; color: #999; }
-        .tool-btn.active {
-            border-color: var(--accent);
-            color: var(--accent);
-            background: rgba(0,255,136,0.08);
-            box-shadow: 0 0 15px rgba(0,255,136,0.1);
-        }
-
-        /* Content */
-        .content-area {
-            flex: 1;
-            overflow-y: auto;
-            padding: 10px;
-            background: #000;
-        }
-
-        .content-area::-webkit-scrollbar { width: 3px; }
-        .content-area::-webkit-scrollbar-thumb { background: #1a1a1a; border-radius: 3px; }
-
-        .file-card {
-            background: #0a0a0a;
-            border: 1px solid #1a1a1a;
-            border-radius: 12px;
-            padding: 12px;
+        .header-left {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 8px;
-            transition: all 0.3s;
-            animation: cardIn 0.3s ease;
         }
 
-        @keyframes cardIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .file-card:hover { border-color: #2a2a2a; background: #0d0d0d; }
-        .file-card:active { transform: scale(0.98); }
-
-        .file-icon {
-            font-size: 28px;
-            flex-shrink: 0;
-            width: 44px;
-            text-align: center;
-        }
-
-        .file-info { flex: 1; min-width: 0; }
-
-        .file-name {
-            font-size: 12px;
-            font-weight: 600;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .file-meta {
-            font-size: 8px;
-            color: var(--text-dim);
-            letter-spacing: 1px;
-            margin-top: 2px;
-            display: flex;
-            gap: 6px;
-            align-items: center;
-        }
-
-        .file-type-badge {
-            padding: 2px 6px;
-            border-radius: 8px;
-            font-size: 7px;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-        }
-
-        .badge-image { background: rgba(0,170,255,0.1); color: #00aaff; }
-        .badge-video { background: rgba(255,136,0,0.1); color: #ff8800; }
-        .badge-audio { background: rgba(170,0,255,0.1); color: #aa00ff; }
-        .badge-text { background: rgba(0,255,136,0.1); color: #00ff88; }
-        .badge-password { background: rgba(255,51,68,0.1); color: #ff3344; }
-        .badge-link { background: rgba(201,168,76,0.1); color: #c9a84c; }
-
-        .file-actions { display: flex; gap: 3px; }
-
-        .file-btn {
-            width: 28px;
-            height: 28px;
-            background: #111;
-            border: 1px solid #1a1a1a;
-            color: #777;
-            cursor: pointer;
-            border-radius: 8px;
-            font-size: 11px;
+        .logo-icon {
+            width: 42px;
+            height: 42px;
+            background: linear-gradient(135deg, #2d8a4e, #3cb371);
+            border-radius: 13px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(45,138,78,0.2);
         }
 
-        .file-btn:hover { border-color: #444; color: #fff; background: #1a1a1a; }
-        .file-btn.danger:hover { border-color: #ff4444; color: #ff4444; background: rgba(255,68,68,0.1); }
+        .header-title {
+            font-size: 18px;
+            font-weight: 800;
+            color: #1a1a1a;
+            letter-spacing: -0.3px;
+        }
 
-        .card-preview img {
-            width: 100%;
-            max-height: 120px;
-            object-fit: cover;
-            border-radius: 8px;
-            margin-top: 6px;
+        .header-sub {
+            font-size: 10px;
+            color: #999;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .header-btn {
+            width: 38px;
+            height: 38px;
+            background: #f8f8f8;
+            border: 1px solid var(--border);
+            color: #666;
             cursor: pointer;
+            border-radius: 12px;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.25s;
+            position: relative;
         }
 
-        .empty-state {
-            text-align: center;
-            color: #111;
-            margin-top: 50px;
+        .header-btn:hover { background: #f0f0f0; color: #333; }
+        .header-btn.active {
+            background: var(--red-light);
+            border-color: var(--red);
+            color: var(--red);
         }
 
-        .empty-state .icon { font-size: 40px; display: block; margin-bottom: 8px; opacity: 0.4; }
-        .empty-state .text { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; }
+        .fav-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            width: 18px;
+            height: 18px;
+            background: var(--red);
+            color: #fff;
+            font-size: 9px;
+            font-weight: 700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            display: none;
+        }
 
-        /* Input */
-        .input-area {
-            padding: 10px 14px;
-            background: #0a0a0a;
-            border-top: 1px solid var(--border);
+        .fav-badge.show { display: flex; }
+
+        /* ==================== STATS BAR ==================== */
+        .stats-bar {
             display: flex;
             gap: 8px;
-            align-items: flex-end;
+            padding: 10px 20px;
+            background: var(--surface);
+            border-bottom: 1px solid var(--border);
         }
 
-        .input-area input[type="text"] {
+        .stat-card {
             flex: 1;
-            padding: 10px 14px;
-            background: #000;
+            padding: 8px;
+            background: #f8faf8;
             border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            text-align: center;
+        }
+
+        .stat-num {
+            font-size: 15px;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .stat-lbl {
+            font-size: 8px;
+            color: #999;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-top: 1px;
+        }
+
+        /* ==================== SEARCH ==================== */
+        .search-section {
+            padding: 0 20px 10px;
+            background: var(--surface);
+        }
+
+        .search-wrapper {
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 11px 14px 11px 40px;
+            background: #f5f7f5;
+            border: 1.5px solid var(--border);
             color: var(--text);
             font-size: 12px;
-            border-radius: 20px;
+            border-radius: var(--radius-sm);
             font-family: inherit;
             outline: none;
             transition: all 0.3s;
         }
 
-        .input-area input[type="text"]:focus {
+        .search-input:focus {
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(0,255,136,0.08);
+            background: #fff;
+            box-shadow: 0 0 0 4px rgba(45,138,78,0.06);
         }
 
-        .input-area input[type="text"]::placeholder { color: #1a1a1a; }
+        .search-input::placeholder { color: #c0c0c0; }
 
-        .add-btn {
-            width: 38px;
-            height: 38px;
-            background: linear-gradient(135deg, #00ff88, #00cc66);
+        .search-icon {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: #bbb;
+            pointer-events: none;
+        }
+
+        /* ==================== CUISINE FILTER ==================== */
+        .cuisine-scroll {
+            display: flex;
+            gap: 6px;
+            padding: 0 20px 12px;
+            background: var(--surface);
+            overflow-x: auto;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .cuisine-scroll::-webkit-scrollbar { height: 0; }
+
+        .cuisine-chip {
+            padding: 9px 15px;
+            background: #f8f8f8;
+            border: 1.5px solid var(--border);
+            color: #888;
+            cursor: pointer;
+            border-radius: 25px;
+            font-size: 10px;
+            font-weight: 600;
+            white-space: nowrap;
+            letter-spacing: 0.3px;
+            transition: all 0.3s;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .cuisine-chip .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #ccc;
+            transition: all 0.3s;
+        }
+
+        .cuisine-chip:hover { background: #f0f0f0; color: #555; }
+        .cuisine-chip.active {
+            background: #fff;
+            border-color: var(--accent);
+            color: var(--accent);
+            font-weight: 700;
+            box-shadow: 0 2px 8px rgba(45,138,78,0.1);
+        }
+        .cuisine-chip.active .dot { background: var(--accent); }
+
+        .chip-italian.active { border-color: #e74c3c; color: #e74c3c; background: #fff5f5; }
+        .chip-italian.active .dot { background: #e74c3c; }
+        .chip-indian.active { border-color: #f39c12; color: #f39c12; background: #fffdf5; }
+        .chip-indian.active .dot { background: #f39c12; }
+        .chip-chinese.active { border-color: #e74c3c; color: #c0392b; background: #fff5f5; }
+        .chip-chinese.active .dot { background: #c0392b; }
+        .chip-mexican.active { border-color: #2ecc71; color: #27ae60; background: #f5fff8; }
+        .chip-mexican.active .dot { background: #27ae60; }
+        .chip-arabic.active { border-color: #8e44ad; color: #8e44ad; background: #fdf5ff; }
+        .chip-arabic.active .dot { background: #8e44ad; }
+        .chip-american.active { border-color: #3498db; color: #2980b9; background: #f5faff; }
+        .chip-american.active .dot { background: #2980b9; }
+
+        /* ==================== CONTENT ==================== */
+        .content-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 14px 16px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            align-content: start;
+        }
+
+        .content-area::-webkit-scrollbar { width: 4px; }
+        .content-area::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
+
+        /* ==================== RECIPE CARD ==================== */
+        .recipe-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm);
+            animation: cardIn 0.5s ease;
+            position: relative;
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .recipe-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .recipe-card:active { transform: scale(0.96); }
+
+        .card-image {
+            width: 100%;
+            aspect-ratio: 1.35;
+            background: linear-gradient(135deg, #f8f6f0, #f0ece0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 40%;
+            background: linear-gradient(to top, rgba(0,0,0,0.03), transparent);
+        }
+
+        .card-time-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 5px 10px;
+            background: rgba(255,255,255,0.95);
+            color: #555;
+            font-size: 9px;
+            font-weight: 700;
+            border-radius: 20px;
+            letter-spacing: 0.3px;
+            box-shadow: var(--shadow-sm);
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .card-fav-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.95);
             border: none;
-            color: #000;
+            color: #ccc;
+            cursor: pointer;
+            border-radius: 50%;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            box-shadow: var(--shadow-sm);
+            z-index: 2;
+        }
+
+        .card-fav-btn:hover { transform: scale(1.1); }
+        .card-fav-btn.liked { color: #e74c3c; background: #fff; }
+
+        .card-body { padding: 12px 14px 14px; }
+
+        .card-cuisine-tag {
+            display: inline-block;
+            padding: 3px 8px;
+            background: #f8faf8;
+            border-radius: 6px;
+            font-size: 8px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--accent);
+            margin-bottom: 6px;
+        }
+
+        .card-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a1a1a;
+            line-height: 1.35;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .card-stars { color: #f0a500; font-size: 10px; letter-spacing: 1px; }
+        .card-difficulty {
+            font-size: 9px;
+            color: #999;
+            font-weight: 600;
+        }
+
+        .card-difficulty.easy { color: #2d8a4e; }
+        .card-difficulty.medium { color: #f39c12; }
+        .card-difficulty.hard { color: #e74c3c; }
+
+        /* ==================== MODAL ==================== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 100;
+            align-items: flex-end;
+            justify-content: center;
+            backdrop-filter: blur(2px);
+        }
+
+        .modal-overlay.show { display: flex; }
+
+        .modal {
+            background: #fff;
+            border-radius: 28px 28px 0 0;
+            width: 100%;
+            max-width: 480px;
+            max-height: 88vh;
+            overflow-y: auto;
+            animation: slideUp 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 -15px 50px rgba(0,0,0,0.2);
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal::-webkit-scrollbar { width: 3px; }
+        .modal::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+
+        .modal-handle {
+            width: 36px;
+            height: 4px;
+            background: #ddd;
+            border-radius: 2px;
+            margin: 10px auto 0;
+        }
+
+        .modal-image {
+            width: 100%;
+            aspect-ratio: 1.6;
+            background: linear-gradient(135deg, #f8f6f0, #f0ece0);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            position: relative;
+            margin-top: 8px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 14px;
+            left: 14px;
+            width: 36px;
+            height: 36px;
+            background: rgba(255,255,255,0.95);
+            border: none;
+            color: #333;
             cursor: pointer;
             border-radius: 50%;
             font-size: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
+            z-index: 5;
+            box-shadow: var(--shadow);
             transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0,255,136,0.3);
         }
 
-        .add-btn:active { transform: scale(0.85); }
+        .modal-close:hover { background: #fff; transform: scale(1.05); }
 
-        .upload-btn {
-            width: 38px;
-            height: 38px;
-            background: #0a0a0a;
-            border: 1px solid var(--accent2);
-            color: var(--accent2);
-            cursor: pointer;
-            border-radius: 50%;
-            font-size: 14px;
+        .modal-body { padding: 22px 20px 30px; }
+
+        .modal-header {
             display: flex;
             align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            transition: all 0.3s;
+            gap: 8px;
+            margin-bottom: 6px;
         }
 
-        .upload-btn:active { background: rgba(0,170,255,0.1); }
+        .modal-cuisine {
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
 
-        input[type="file"] { display: none; }
+        .modal-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #1a1a1a;
+            margin-bottom: 14px;
+            line-height: 1.3;
+            letter-spacing: -0.3px;
+        }
 
-        /* Viewer */
-        .viewer-overlay {
-            display: none;
-            position: fixed;
-            inset: 0;
-            background: rgba(0,0,0,0.97);
-            z-index: 200;
+        .modal-info-row {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+        }
+
+        .info-pill {
+            display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: #f8faf8;
+            border-radius: 25px;
+            font-size: 11px;
+            font-weight: 600;
+            color: #555;
+            border: 1px solid #f0f0f0;
+        }
+
+        .info-pill .icon { font-size: 15px; }
+
+        .modal-section { margin-bottom: 22px; }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #f0f0f0;
+        }
+
+        .ingredient-list {
+            list-style: none;
+            display: flex;
             flex-direction: column;
+            gap: 6px;
         }
 
-        .viewer-overlay.show { display: flex; }
-
-        .viewer-content {
-            max-width: 95%;
-            max-height: 80%;
+        .ingredient-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 12px;
+            color: #444;
+            padding: 10px 14px;
+            background: #fafafa;
             border-radius: 12px;
+            border: 1px solid #f5f5f5;
+            transition: all 0.3s;
         }
 
-        .viewer-close {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            width: 40px;
-            height: 40px;
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.15);
-            color: #fff;
-            cursor: pointer;
+        .ingredient-item:hover { background: #f5faf5; border-color: #e0e8e0; }
+
+        .ingredient-check {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #ddd;
             border-radius: 50%;
-            font-size: 18px;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .ingredient-check.checked {
+            background: var(--accent);
+            border-color: var(--accent);
+            position: relative;
+        }
+
+        .ingredient-check.checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 9px;
+            color: #fff;
+            font-weight: 700;
+        }
+
+        .step-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+
+        .step-item {
+            display: flex;
+            gap: 14px;
+            font-size: 12px;
+            color: #444;
+            line-height: 1.6;
+        }
+
+        .step-num {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--accent), #3cb371);
+            color: #fff;
+            font-weight: 700;
+            font-size: 11px;
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 50%;
+            flex-shrink: 0;
+            box-shadow: 0 3px 8px rgba(45,138,78,0.2);
         }
 
-        /* Toast */
+        .btn-fav {
+            width: 100%;
+            padding: 13px;
+            background: #fafafa;
+            border: 1.5px solid #f0f0f0;
+            color: #666;
+            cursor: pointer;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            transition: all 0.3s;
+            font-family: inherit;
+            margin-top: 6px;
+        }
+
+        .btn-fav:hover { background: #fff5f5; border-color: #e74c3c; color: #e74c3c; }
+        .btn-fav.liked { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+
+        /* ==================== EMPTY STATE ==================== */
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .empty-icon {
+            font-size: 55px;
+            display: block;
+            margin-bottom: 12px;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #999;
+            margin-bottom: 4px;
+        }
+
+        .empty-sub {
+            font-size: 11px;
+            color: #bbb;
+            letter-spacing: 0.5px;
+        }
+
+        /* ==================== TOAST ==================== */
         .toast {
             position: fixed;
             bottom: 30px;
             left: 50%;
             transform: translateX(-50%) translateY(120px);
-            background: #0a0a0a;
-            border: 1px solid var(--accent);
-            color: var(--accent);
-            padding: 10px 24px;
-            border-radius: 20px;
-            font-size: 10px;
-            letter-spacing: 2px;
+            background: #1a1a1a;
+            color: #fff;
+            padding: 12px 22px;
+            border-radius: 30px;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
             z-index: 300;
-            transition: transform 0.4s;
+            transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
         }
 
         .toast.show { transform: translateX(-50%) translateY(0); }
-
-        .footer {
-            text-align: center;
-            padding: 4px;
-            font-size: 7px;
-            color: #0a0a0a;
-            letter-spacing: 2px;
-            background: #000;
-            border-top: 1px solid var(--border);
-        }
     </style>
 </head>
 <body>
     <div class="app">
-        <!-- Lock Screen -->
-        <div class="lock-screen" id="lockScreen">
-            <div class="lock-icon">🔐</div>
-            <div class="lock-title">VAULT X</div>
-            <div class="lock-subtitle">✦ RAM Mode ✦</div>
-            
-            <div class="pin-dots">
-                <div class="pin-dot" id="dot1"></div>
-                <div class="pin-dot" id="dot2"></div>
-                <div class="pin-dot" id="dot3"></div>
-                <div class="pin-dot" id="dot4"></div>
-            </div>
-
-            <div class="keypad">
-                <button class="key-btn" onclick="pressKey('1')">1</button>
-                <button class="key-btn" onclick="pressKey('2')">2</button>
-                <button class="key-btn" onclick="pressKey('3')">3</button>
-                <button class="key-btn" onclick="pressKey('4')">4</button>
-                <button class="key-btn" onclick="pressKey('5')">5</button>
-                <button class="key-btn" onclick="pressKey('6')">6</button>
-                <button class="key-btn" onclick="pressKey('7')">7</button>
-                <button class="key-btn" onclick="pressKey('8')">8</button>
-                <button class="key-btn" onclick="pressKey('9')">9</button>
-                <button class="key-btn key-empty"></button>
-                <button class="key-btn" onclick="pressKey('0')">0</button>
-                <button class="key-btn key-del" onclick="deleteKey()">⌫</button>
-            </div>
-
-            <p class="lock-error" id="lockError"></p>
-        </div>
-
-        <!-- Main App -->
-        <div class="main-app" id="mainApp">
-            <div class="header">
-                <span class="header-title">🔐 VAULT X</span>
-                <div class="header-actions">
-                    <button class="header-btn" onclick="exportAll()">📤</button>
-                    <button class="header-btn lock-btn" onclick="lockVault()">🔒</button>
+        <!-- ==================== HEADER ==================== -->
+        <div class="header">
+            <div class="header-left">
+                <div class="logo-icon">🍳</div>
+                <div>
+                    <div class="header-title">Recipe Book</div>
+                    <div class="header-sub">World Cuisines</div>
                 </div>
             </div>
-
-            <div class="ram-status">
-                <span class="ram-dot"></span>
-                <span class="ram-text">⚡ RAM Active</span>
-                <span class="ram-size" id="ramSize">0 KB used</span>
+            <div class="header-actions">
+                <button class="header-btn" id="favFilterBtn" onclick="toggleFavFilter()">
+                    ❤️
+                    <span class="fav-badge" id="favBadge">0</span>
+                </button>
             </div>
-
-            <div class="toolbar" id="toolbar">
-                <button class="tool-btn active" data-type="all" onclick="filterType('all', this)">📂 All</button>
-                <button class="tool-btn" data-type="image" onclick="filterType('image', this)">🖼️</button>
-                <button class="tool-btn" data-type="video" onclick="filterType('video', this)">🎥</button>
-                <button class="tool-btn" data-type="audio" onclick="filterType('audio', this)">🎵</button>
-                <button class="tool-btn" data-type="text" onclick="filterType('text', this)">📝</button>
-                <button class="tool-btn" data-type="password" onclick="filterType('password', this)">🔑</button>
-                <button class="tool-btn" data-type="link" onclick="filterType('link', this)">🔗</button>
-            </div>
-
-            <div class="content-area" id="contentArea">
-                <div class="empty-state" id="emptyState">
-                    <span class="icon">🔐</span>
-                    <span class="text">Vault is empty</span>
-                </div>
-            </div>
-
-            <div class="input-area">
-                <input type="text" id="textInput" placeholder="Add text, link, or pass:xxx..." onkeypress="if(event.key==='Enter')addText()">
-                <input type="file" id="fileInput" onchange="addFile()" multiple accept="*/*">
-                <button class="upload-btn" onclick="document.getElementById('fileInput').click()">📎</button>
-                <button class="add-btn" onclick="addText()">+</button>
-            </div>
-
-            <div class="footer">VAULT X • RAM MODE • ENCRYPTED</div>
         </div>
+
+        <!-- ==================== STATS ==================== -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-num" id="statTotal">12</div>
+                <div class="stat-lbl">Recipes</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" id="statCuisines">6</div>
+                <div class="stat-lbl">Cuisines</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" id="statFavs">0</div>
+                <div class="stat-lbl">Favorites</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num">⭐</div>
+                <div class="stat-lbl">Quality</div>
+            </div>
+        </div>
+
+        <!-- ==================== SEARCH ==================== -->
+        <div class="search-section">
+            <div class="search-wrapper">
+                <input type="text" class="search-input" placeholder="Search recipes, ingredients..." id="searchInput" oninput="renderRecipes()">
+                <span class="search-icon">🔍</span>
+            </div>
+        </div>
+
+        <!-- ==================== CUISINE FILTER ==================== -->
+        <div class="cuisine-scroll" id="cuisineFilter">
+            <button class="cuisine-chip active" data-cuisine="all" onclick="filterCuisine('all', this)">
+                <span class="dot"></span> All
+            </button>
+            <button class="cuisine-chip chip-italian" data-cuisine="italian" onclick="filterCuisine('italian', this)">
+                <span class="dot"></span> Italian
+            </button>
+            <button class="cuisine-chip chip-indian" data-cuisine="indian" onclick="filterCuisine('indian', this)">
+                <span class="dot"></span> Indian
+            </button>
+            <button class="cuisine-chip chip-chinese" data-cuisine="chinese" onclick="filterCuisine('chinese', this)">
+                <span class="dot"></span> Chinese
+            </button>
+            <button class="cuisine-chip chip-mexican" data-cuisine="mexican" onclick="filterCuisine('mexican', this)">
+                <span class="dot"></span> Mexican
+            </button>
+            <button class="cuisine-chip chip-arabic" data-cuisine="arabic" onclick="filterCuisine('arabic', this)">
+                <span class="dot"></span> Arabic
+            </button>
+            <button class="cuisine-chip chip-american" data-cuisine="american" onclick="filterCuisine('american', this)">
+                <span class="dot"></span> American
+            </button>
+        </div>
+
+        <!-- ==================== CONTENT ==================== -->
+        <div class="content-area" id="contentArea"></div>
     </div>
 
-    <!-- Viewer -->
-    <div class="viewer-overlay" id="viewerOverlay">
-        <button class="viewer-close" onclick="closeViewer()">✕</button>
-        <img class="viewer-content" id="viewerImage" style="display:none">
-        <video class="viewer-content" id="viewerVideo" controls style="display:none"></video>
+    <!-- ==================== MODAL ==================== -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modal"></div>
     </div>
 
-    <!-- Toast -->
+    <!-- ==================== TOAST ==================== -->
     <div class="toast" id="toast"></div>
 
     <script>
-        // ==================== DATABASE (IndexedDB + RAM) ====================
-        const DB_NAME = 'VaultX_RAM_DB';
-        const DB_VERSION = 1;
-        const STORE_NAME = 'vault_files';
-        let db = null;
+        // ==================== DATABASE ====================
+        const recipes = [
+            { id:1, title:'Spaghetti Carbonara', cuisine:'italian', time:'25 min', difficulty:'Easy', servings:4, stars:5, image:'🍝', ingredients:['400g spaghetti','200g guanciale','4 egg yolks','100g Pecorino','Black pepper','Salt'], steps:['Boil pasta in salted water until al dente.','Fry guanciale until crispy and golden.','Mix egg yolks with cheese and pepper.','Toss hot pasta with guanciale, remove from heat.','Add egg mixture and stir vigorously.','Serve immediately with extra cheese.'] },
+            { id:2, title:'Chicken Tikka Masala', cuisine:'indian', time:'45 min', difficulty:'Medium', servings:4, stars:5, image:'🍛', ingredients:['500g chicken breast','1 cup yogurt','3 tbsp tikka paste','2 onions','400g tomatoes','200ml cream','Garam masala','Ginger garlic paste'], steps:['Marinate chicken in yogurt and spices for 1 hour.','Grill chicken pieces until slightly charred.','Sauté onions until golden brown.','Add tomatoes, spices, and simmer for 15 minutes.','Add cream and stir well.','Add grilled chicken and cook 10 minutes.','Garnish with cilantro and serve with naan.'] },
+            { id:3, title:'Kung Pao Chicken', cuisine:'chinese', time:'30 min', difficulty:'Medium', servings:3, stars:4, image:'🥡', ingredients:['400g chicken thighs','Roasted peanuts','Dried red chilies','Soy sauce','Rice vinegar','Sesame oil','Green onions','Garlic','Ginger'], steps:['Dice chicken and marinate in soy sauce and cornstarch.','Stir-fry in hot wok until golden.','Remove chicken and set aside.','Fry chilies, garlic, and ginger.','Add sauce mixture and bring to boil.','Return chicken, add peanuts, toss well.','Garnish with green onions.'] },
+            { id:4, title:'Beef Tacos', cuisine:'mexican', time:'20 min', difficulty:'Easy', servings:6, stars:5, image:'🌮', ingredients:['500g ground beef','12 taco shells','Iceberg lettuce','Roma tomatoes','Cheddar cheese','Sour cream','Taco seasoning','Lime'], steps:['Brown beef in a skillet with taco seasoning.','Drain excess fat.','Warm taco shells in oven.','Chop lettuce and dice tomatoes.','Grate cheese finely.','Assemble tacos with meat and toppings.','Finish with sour cream and lime juice.'] },
+            { id:5, title:'Hummus bil Tahina', cuisine:'arabic', time:'15 min', difficulty:'Easy', servings:4, stars:5, image:'🫒', ingredients:['400g canned chickpeas','3 tbsp tahini paste','2 lemons (juiced)','2 garlic cloves','Extra virgin olive oil','Paprika','Cumin','Salt'], steps:['Drain and rinse chickpeas thoroughly.','Blend chickpeas with tahini and lemon juice.','Add crushed garlic and blend until smooth.','Add ice water for creamy texture.','Season with salt and cumin.','Plate and drizzle with olive oil.','Sprinkle paprika and serve with pita.'] },
+            { id:6, title:'Classic Cheeseburger', cuisine:'american', time:'20 min', difficulty:'Easy', servings:4, stars:4, image:'🍔', ingredients:['500g ground beef (80/20)','4 burger buns','Cheddar cheese slices','Lettuce','Tomato','Red onion','Ketchup','Mustard','Pickles'], steps:['Divide beef into 4 equal patties.','Season generously with salt and pepper.','Grill on high heat 4 minutes per side.','Add cheese and cover to melt.','Toast buns lightly on grill.','Assemble with lettuce, tomato, onion.','Add ketchup, mustard, and pickles.'] },
+            { id:7, title:'Margherita Pizza', cuisine:'italian', time:'40 min', difficulty:'Medium', servings:2, stars:5, image:'🍕', ingredients:['250g pizza dough','San Marzano tomatoes','Fresh mozzarella (200g)','Fresh basil leaves','Extra virgin olive oil','Sea salt'], steps:['Preheat oven to maximum (250°C/480°F).','Stretch dough into thin round shape.','Crush tomatoes and spread on dough.','Tear mozzarella and distribute evenly.','Drizzle with olive oil.','Bake for 8-10 minutes until bubbly.','Top with fresh basil and serve immediately.'] },
+            { id:8, title:'Butter Chicken', cuisine:'indian', time:'50 min', difficulty:'Medium', servings:4, stars:5, image:'🧈', ingredients:['500g chicken thighs','50g butter','200ml heavy cream','1 cup tomato puree','Garam masala','Fenugreek leaves','Ginger garlic paste','Cashew paste'], steps:['Marinate chicken in yogurt and spices.','Grill or bake chicken until cooked.','Melt butter in a large pan.','Add ginger garlic paste and sauté.','Add tomato puree and spices, simmer 20 min.','Add cream and cashew paste, stir well.','Add chicken pieces and fenugreek.','Simmer 10 minutes and serve with rice.'] },
+            { id:9, title:'Spring Rolls', cuisine:'chinese', time:'35 min', difficulty:'Medium', servings:8, stars:4, image:'🥟', ingredients:['Spring roll wrappers','Shredded cabbage','Julienned carrots','Bean sprouts','Soy sauce','Sesame oil','Oil for frying','Sweet chili sauce'], steps:['Mix all vegetables in a bowl.','Season with soy sauce and sesame oil.','Place filling on wrapper corner.','Fold sides and roll tightly.','Seal edges with flour paste.','Deep fry at 180°C until golden.','Drain on paper towels.','Serve with sweet chili sauce.'] },
+            { id:10, title:'Guacamole', cuisine:'mexican', time:'10 min', difficulty:'Easy', servings:4, stars:4, image:'🥑', ingredients:['3 ripe avocados','1 lime (juiced)','1 Roma tomato','½ red onion','Fresh cilantro','Jalapeño pepper','Salt'], steps:['Cut avocados and remove pits.','Mash with fork to desired consistency.','Dice tomato and onion finely.','Mince jalapeño and cilantro.','Fold all ingredients together.','Add lime juice and salt.','Serve immediately with tortilla chips.'] },
+            { id:11, title:'Chicken Shawarma', cuisine:'arabic', time:'40 min', difficulty:'Medium', servings:6, stars:5, image:'🥙', ingredients:['500g chicken thighs','Shawarma spice mix','Garlic sauce (toum)','Pickled turnips','Pita bread','Tahini sauce','Sumac'], steps:['Marinate chicken in spices overnight.','Stack chicken on vertical skewer.','Roast at 200°C for 35 minutes.','Slice thinly from the outside.','Warm pita bread.','Spread garlic sauce on pita.','Add chicken, pickles, and tahini.','Roll tightly and serve.'] },
+            { id:12, title:'Fluffy Pancakes', cuisine:'american', time:'15 min', difficulty:'Easy', servings:4, stars:5, image:'🥞', ingredients:['2 cups all-purpose flour','2 large eggs','1½ cups milk','3 tbsp sugar','2 tsp baking powder','Butter','Maple syrup','Fresh berries'], steps:['Mix flour, sugar, and baking powder.','Whisk eggs and milk separately.','Combine wet and dry ingredients.','Do not overmix; lumps are fine.','Heat griddle and melt butter.','Pour batter in circles.','Flip when bubbles appear on surface.','Stack, top with butter, syrup, and berries.'] }
+        ];
 
-        // RAM Memory Store (holds all data in memory)
-        const RAMStore = {
-            files: [],
-            totalSize: 0,
+        let favorites = JSON.parse(localStorage.getItem('recipe_favs_v2') || '[]');
+        let currentCuisine = 'all';
+        let showFavsOnly = false;
 
-            add(file) {
-                this.files.unshift(file);
-                this.totalSize += file.size || 0;
-                this.updateUI();
-            },
-
-            remove(id) {
-                const idx = this.files.findIndex(f => f.id === id);
-                if (idx > -1) {
-                    this.totalSize -= this.files[idx].size || 0;
-                    this.files.splice(idx, 1);
-                }
-                this.updateUI();
-            },
-
-            getAll() {
-                return this.files;
-            },
-
-            getByType(type) {
-                return type === 'all' ? this.files : this.files.filter(f => f.type === type);
-            },
-
-            clear() {
-                this.files = [];
-                this.totalSize = 0;
-                this.updateUI();
-            },
-
-            updateUI() {
-                const sizeKB = (this.totalSize / 1024).toFixed(1);
-                const sizeStr = this.totalSize > 1048576 ? (this.totalSize / 1048576).toFixed(1) + ' MB' : sizeKB + ' KB';
-                document.getElementById('ramSize').textContent = sizeStr + ' used';
-            }
-        };
-
-        // IndexedDB for persistent backup
-        function openDB() {
-            return new Promise((resolve, reject) => {
-                const request = indexedDB.open(DB_NAME, DB_VERSION);
-                
-                request.onupgradeneeded = function(e) {
-                    const db = e.target.result;
-                    if (!db.objectStoreNames.contains(STORE_NAME)) {
-                        db.createObjectStore(STORE_NAME, { keyPath: 'id' });
-                    }
-                };
-
-                request.onsuccess = function(e) {
-                    db = e.target.result;
-                    resolve(db);
-                };
-
-                request.onerror = function(e) {
-                    console.error('IndexedDB error:', e.target.error);
-                    reject(e.target.error);
-                };
-            });
-        }
-
-        async function saveToDB(file) {
-            if (!db) return;
-            try {
-                const tx = db.transaction(STORE_NAME, 'readwrite');
-                const store = tx.objectStore(STORE_NAME);
-                store.put(file);
-                return new Promise(resolve => { tx.oncomplete = resolve; });
-            } catch(e) {
-                console.error('Save error:', e);
-            }
-        }
-
-        async function deleteFromDB(id) {
-            if (!db) return;
-            try {
-                const tx = db.transaction(STORE_NAME, 'readwrite');
-                const store = tx.objectStore(STORE_NAME);
-                store.delete(id);
-                return new Promise(resolve => { tx.oncomplete = resolve; });
-            } catch(e) {}
-        }
-
-        async function loadAllFromDB() {
-            if (!db) return [];
-            try {
-                const tx = db.transaction(STORE_NAME, 'readonly');
-                const store = tx.objectStore(STORE_NAME);
-                const request = store.getAll();
-                return new Promise((resolve) => {
-                    request.onsuccess = () => resolve(request.result || []);
-                    request.onerror = () => resolve([]);
-                });
-            } catch(e) {
-                return [];
-            }
-        }
-
-        async function clearDB() {
-            if (!db) return;
-            try {
-                const tx = db.transaction(STORE_NAME, 'readwrite');
-                const store = tx.objectStore(STORE_NAME);
-                store.clear();
-            } catch(e) {}
-        }
-
-        // ==================== PIN ====================
-        const CORRECT_PIN = '1235';
-        let pinInput = '';
-        let isUnlocked = false;
-        let failedAttempts = 0;
-        let currentFilter = 'all';
-
-        function pressKey(num) {
-            if (pinInput.length >= 4) return;
-            pinInput += num;
-            updateDots();
-            if (pinInput.length === 4) setTimeout(checkPin, 200);
-        }
-
-        function deleteKey() {
-            pinInput = pinInput.slice(0, -1);
-            updateDots();
-            document.getElementById('lockError').textContent = '';
-            document.querySelectorAll('.pin-dot').forEach(d => d.classList.remove('error'));
-        }
-
-        function updateDots() {
-            for (let i = 1; i <= 4; i++) {
-                document.getElementById('dot' + i).classList.toggle('filled', i <= pinInput.length);
-            }
-        }
-
-        function checkPin() {
-            if (pinInput === CORRECT_PIN) {
-                unlockVault();
-            } else {
-                failedAttempts++;
-                document.querySelectorAll('.pin-dot').forEach(d => d.classList.add('error'));
-                document.getElementById('lockError').textContent = '❌ Wrong! ' + (3 - failedAttempts) + ' tries';
-                document.getElementById('lockError').style.color = '#ff4444';
-                if (failedAttempts >= 3) {
-                    document.getElementById('lockError').textContent = '⏳ Locked 30s';
-                    document.querySelectorAll('.key-btn').forEach(b => b.style.pointerEvents = 'none');
-                    setTimeout(() => {
-                        failedAttempts = 0;
-                        document.querySelectorAll('.key-btn').forEach(b => b.style.pointerEvents = 'auto');
-                        document.getElementById('lockError').textContent = '';
-                        document.getElementById('lockError').style.color = '';
-                    }, 30000);
-                }
-                setTimeout(() => { pinInput = ''; updateDots(); }, 500);
-            }
-        }
-
-        async function unlockVault() {
-            isUnlocked = true;
-            document.getElementById('lockScreen').classList.add('hidden');
-            document.getElementById('lockError').textContent = '';
-            pinInput = ''; failedAttempts = 0;
-            updateDots();
-
-            // Load from IndexedDB to RAM
-            if (!db) await openDB();
-            const savedFiles = await loadAllFromDB();
-            RAMStore.files = savedFiles;
-            RAMStore.totalSize = savedFiles.reduce((s, f) => s + (f.size || 0), 0);
-            RAMStore.updateUI();
-            renderFiles();
-            showToast('✅ RAM Active • ' + savedFiles.length + ' files loaded');
-        }
-
-        function lockVault() {
-            isUnlocked = false;
-            document.getElementById('lockScreen').classList.remove('hidden');
-            renderFiles();
-            showToast('🔒 Vault Locked');
-        }
-
-        // ==================== FILES ====================
-        function addText() {
-            const input = document.getElementById('textInput');
-            const text = input.value.trim();
-            if (!text) return;
-
-            let type = 'text';
-            if (text.startsWith('http')) type = 'link';
-            else if (text.startsWith('pass:')) type = 'password';
-
-            const file = {
-                id: Date.now(),
-                name: text.substring(0, 40).replace(/pass:/, '••••'),
-                type, content: text,
-                size: new Blob([text]).size,
-                date: new Date().toLocaleString()
-            };
-
-            RAMStore.add(file);
-            saveToDB(file);
-            input.value = '';
-            renderFiles();
-            showToast('✅ Added to RAM');
-        }
-
-        function addFile() {
-            const input = document.getElementById('fileInput');
-            const files = input.files;
-            if (!files.length) return;
-
-            let count = 0;
-            Array.from(files).forEach(f => {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    let type = 'file';
-                    if (f.type.startsWith('image/')) type = 'image';
-                    else if (f.type.startsWith('video/')) type = 'video';
-                    else if (f.type.startsWith('audio/')) type = 'audio';
-
-                    const fileObj = {
-                        id: Date.now() + Math.random(),
-                        name: f.name, type, mimeType: f.type,
-                        content: e.target.result, size: f.size,
-                        date: new Date().toLocaleString()
-                    };
-
-                    RAMStore.add(fileObj);
-                    saveToDB(fileObj);
-                    count++;
-                    if (count === files.length) {
-                        renderFiles();
-                        showToast('📎 ' + count + ' file(s) in RAM');
-                    }
-                };
-                reader.readAsDataURL(f);
-            });
-
-            input.value = '';
-        }
-
-        function deleteFile(id) {
-            RAMStore.remove(id);
-            deleteFromDB(id);
-            renderFiles();
-            showToast('🗑 Deleted from RAM');
-        }
-
-        function viewFile(file) {
-            if (file.type === 'image') {
-                document.getElementById('viewerImage').src = file.content;
-                document.getElementById('viewerImage').style.display = 'block';
-                document.getElementById('viewerVideo').style.display = 'none';
-                document.getElementById('viewerOverlay').classList.add('show');
-            } else if (file.type === 'video') {
-                document.getElementById('viewerVideo').src = file.content;
-                document.getElementById('viewerVideo').style.display = 'block';
-                document.getElementById('viewerImage').style.display = 'none';
-                document.getElementById('viewerOverlay').classList.add('show');
-                document.getElementById('viewerVideo').play();
-            } else if (file.type === 'audio') {
-                new Audio(file.content).play();
-                showToast('🎵 Playing from RAM');
-            } else if (file.type === 'link') {
-                window.open(file.content, '_blank');
-            } else {
-                navigator.clipboard.writeText(file.content).then(() => showToast('📋 Copied!'));
-            }
-        }
-
-        function closeViewer() {
-            document.getElementById('viewerOverlay').classList.remove('show');
-            const vid = document.getElementById('viewerVideo');
-            vid.pause(); vid.src = '';
-        }
-
-        function downloadFile(file) {
-            const a = document.createElement('a');
-            a.href = file.content;
-            a.download = file.name;
-            a.click();
-            showToast('📥 Downloading...');
-        }
-
-        function filterType(type, btn) {
-            currentFilter = type;
-            document.querySelectorAll('.tool-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderFiles();
-        }
-
-        function renderFiles() {
+        // ==================== RENDER ====================
+        function renderRecipes() {
             const area = document.getElementById('contentArea');
-            const empty = document.getElementById('emptyState');
-            const filtered = RAMStore.getByType(currentFilter);
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            
+            let filtered = recipes;
+            if (currentCuisine !== 'all') filtered = filtered.filter(r => r.cuisine === currentCuisine);
+            if (showFavsOnly) filtered = filtered.filter(r => favorites.includes(r.id));
+            if (search) {
+                filtered = filtered.filter(r => 
+                    r.title.toLowerCase().includes(search) ||
+                    r.cuisine.toLowerCase().includes(search) ||
+                    r.ingredients.some(i => i.toLowerCase().includes(search))
+                );
+            }
+
+            updateStats();
 
             if (filtered.length === 0) {
-                empty.style.display = 'block';
-                area.innerHTML = '';
-                area.appendChild(empty);
-            } else {
-                empty.style.display = 'none';
-                area.innerHTML = filtered.map(f => {
-                    const icons = {
-                        image: '🖼️', video: '🎥', audio: '🎵',
-                        text: '📝', password: '🔑', link: '🔗', file: '📄'
-                    };
-                    const icon = icons[f.type] || '📄';
-                    const sizeStr = f.size > 1048576 ? (f.size/1048576).toFixed(1)+'MB' : f.size > 1024 ? (f.size/1024).toFixed(1)+'KB' : f.size+'B';
-                    const badgeClass = 'badge-' + f.type;
+                area.innerHTML = `
+                    <div class="empty-state">
+                        <span class="empty-icon">🍽️</span>
+                        <div class="empty-title">No recipes found</div>
+                        <div class="empty-sub">Try a different search or filter</div>
+                    </div>`;
+                return;
+            }
 
-                    let preview = '';
-                    if (f.type === 'image') {
-                        preview = `<div class="card-preview"><img src="${f.content}" onclick="viewFile(RAMStore.getAll().find(x=>x.id===${f.id}))"></div>`;
-                    }
-
-                    return `
-                        <div class="file-card">
-                            <div class="file-icon">${icon}</div>
-                            <div class="file-info">
-                                <div class="file-name">${escapeHtml(f.name)}</div>
-                                <div class="file-meta">
-                                    <span class="file-type-badge ${badgeClass}">${f.type}</span>
-                                    <span>${sizeStr}</span>
-                                    <span>${f.date}</span>
-                                </div>
-                                ${preview}
-                            </div>
-                            <div class="file-actions">
-                                <button class="file-btn" onclick="viewFile(RAMStore.getAll().find(x=>x.id===${f.id}))">👁</button>
-                                <button class="file-btn" onclick="downloadFile(RAMStore.getAll().find(x=>x.id===${f.id}))">⬇</button>
-                                <button class="file-btn danger" onclick="deleteFile(${f.id})">🗑</button>
+            area.innerHTML = filtered.map(r => {
+                const isFav = favorites.includes(r.id);
+                const stars = '⭐'.repeat(r.stars);
+                return `
+                    <div class="recipe-card" onclick="openRecipe(${r.id})">
+                        <div class="card-image">
+                            <span style="font-size:42px">${r.image}</span>
+                            <div class="card-time-badge">⏱ ${r.time}</div>
+                            <button class="card-fav-btn ${isFav ? 'liked' : ''}" 
+                                onclick="event.stopPropagation();toggleFav(${r.id})">
+                                ${isFav ? '❤️' : '🤍'}
+                            </button>
+                        </div>
+                        <div class="card-body">
+                            <span class="card-cuisine-tag">${r.cuisine}</span>
+                            <div class="card-title">${r.title}</div>
+                            <div class="card-footer">
+                                <span class="card-stars">${stars}</span>
+                                <span class="card-difficulty ${r.difficulty.toLowerCase()}">${r.difficulty}</span>
                             </div>
                         </div>
-                    `;
-                }).join('');
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function updateStats() {
+            document.getElementById('statFavs').textContent = favorites.length;
+            document.getElementById('favBadge').textContent = favorites.length;
+            document.getElementById('favBadge').classList.toggle('show', favorites.length > 0);
+        }
+
+        // ==================== FILTERS ====================
+        function filterCuisine(cuisine, btn) {
+            currentCuisine = cuisine;
+            document.querySelectorAll('.cuisine-chip').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            renderRecipes();
+        }
+
+        function toggleFavFilter() {
+            showFavsOnly = !showFavsOnly;
+            document.getElementById('favFilterBtn').classList.toggle('active', showFavsOnly);
+            renderRecipes();
+            showToast(showFavsOnly ? '❤️ Showing favorites' : '🌍 Showing all recipes');
+        }
+
+        function toggleFav(id) {
+            if (favorites.includes(id)) {
+                favorites = favorites.filter(f => f !== id);
+            } else {
+                favorites.push(id);
             }
+            localStorage.setItem('recipe_favs_v2', JSON.stringify(favorites));
+            updateStats();
+            renderRecipes();
         }
 
-        function escapeHtml(t) {
-            const d = document.createElement('div');
-            d.textContent = t;
-            return d.innerHTML;
+        // ==================== MODAL ====================
+        function openRecipe(id) {
+            const r = recipes.find(x => x.id === id);
+            if (!r) return;
+            const isFav = favorites.includes(r.id);
+
+            const cuisineColors = {
+                italian: { bg: '#fff5f5', color: '#e74c3c' },
+                indian: { bg: '#fffdf5', color: '#f39c12' },
+                chinese: { bg: '#fff5f5', color: '#c0392b' },
+                mexican: { bg: '#f5fff8', color: '#27ae60' },
+                arabic: { bg: '#fdf5ff', color: '#8e44ad' },
+                american: { bg: '#f5faff', color: '#2980b9' }
+            };
+            const cc = cuisineColors[r.cuisine] || { bg: '#f8faf8', color: '#2d8a4e' };
+
+            document.getElementById('modal').innerHTML = `
+                <div class="modal-handle"></div>
+                <div class="modal-image">
+                    <span style="font-size:65px">${r.image}</span>
+                    <button class="modal-close" onclick="closeModal()">✕</button>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-header">
+                        <span class="modal-cuisine" style="background:${cc.bg};color:${cc.color}">${r.cuisine}</span>
+                        ${isFav ? '<span style="font-size:12px">❤️ Saved</span>' : ''}
+                    </div>
+                    <div class="modal-title">${r.title}</div>
+                    
+                    <div class="modal-info-row">
+                        <div class="info-pill"><span class="icon">⏱</span> ${r.time}</div>
+                        <div class="info-pill"><span class="icon">📊</span> ${r.difficulty}</div>
+                        <div class="info-pill"><span class="icon">🍽️</span> ${r.servings} servings</div>
+                        <div class="info-pill"><span class="icon">⭐</span> ${r.stars}/5</div>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <div class="section-title">🛒 Ingredients</div>
+                        <ul class="ingredient-list">
+                            ${r.ingredients.map(i => `
+                                <li class="ingredient-item">
+                                    <span class="ingredient-check" onclick="this.classList.toggle('checked')"></span>
+                                    ${i}
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                    
+                    <div class="modal-section">
+                        <div class="section-title">👨‍🍳 Instructions</div>
+                        <ul class="step-list">
+                            ${r.steps.map((s, idx) => `
+                                <li class="step-item">
+                                    <span class="step-num">${idx + 1}</span>
+                                    <span>${s}</span>
+                                </li>
+                            `).join('')}
+                        </ul>
+                    </div>
+                    
+                    <button class="btn-fav ${isFav ? 'liked' : ''}" onclick="toggleFav(${r.id});closeModal();showToast('${isFav ? '💔 Removed' : '❤️ Added'} to favorites')">
+                        ${isFav ? '❤️ Remove from Favorites' : '🤍 Add to Favorites'}
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('modalOverlay').classList.add('show');
         }
 
-        // ==================== EXPORT ====================
-        async function exportAll() {
-            if (!isUnlocked) return;
-            const files = RAMStore.getAll();
-            const json = JSON.stringify(files, null, 2);
-            const blob = new Blob([json], {type:'application/json'});
-            const a = document.createElement('a');
-            a.href = URL.createObjectURL(blob);
-            a.download = 'vaultx-ram-' + Date.now() + '.json';
-            a.click();
-            showToast('📤 ' + files.length + ' files exported');
+        function closeModal() {
+            document.getElementById('modalOverlay').classList.remove('show');
         }
+
+        document.getElementById('modalOverlay').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
 
         // ==================== TOAST ====================
-        function showToast(m) {
+        function showToast(msg) {
             const t = document.getElementById('toast');
-            t.textContent = m; t.classList.add('show');
+            t.textContent = msg;
+            t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 2000);
         }
 
-        // ==================== KEYBOARD ====================
-        document.addEventListener('keydown', e => {
-            if (!isUnlocked) {
-                if (e.key >= '0' && e.key <= '9') pressKey(e.key);
-                if (e.key === 'Backspace') deleteKey();
-            }
-        });
-
         // ==================== INIT ====================
-        async function init() {
-            await openDB();
-            updateDots();
-            RAMStore.updateUI();
-        }
-        init();
+        updateStats();
+        renderRecipes();
     </script>
 </body>
 </html>'''
@@ -1028,20 +1005,26 @@ def create_website_files():
         f.write(html_content)
 
     print("╔══════════════════════════════════════════╗")
-    print("║  ⚡ Vault X - RAM Edition              ║")
-    print("║  🧠 تم الإنشاء بنجاح                   ║")
+    print("║  🍳 Recipe Book Pro - ULTIMATE LUXURY  ║")
+    print("║  🤍 تم الإنشاء بنجاح                   ║")
     print("╚══════════════════════════════════════════╝")
     print(f"📁 www/index.html")
     print(f"💾 حجم الملف: {os.path.getsize('www/index.html')/1024:.1f} KB")
     print("")
-    print("🧠 نظام التخزين الجديد:")
-    print("  ⚡ RAM Store - JavaScript Object في الذاكرة")
-    print("  💾 IndexedDB - تخزين دائم احتياطي")
-    print("  📊 مؤشر RAM حي (الحجم المستخدم)")
-    print("  🔄 تحميل تلقائي من IndexedDB للـ RAM")
-    print("  💚 نقطة RAM نابضة خضراء")
-    print("")
-    print("🔢 PIN: 1235")
+    print("👑 المميزات الفاخرة الجديدة:")
+    print("  🤍 تصميم أبيض فاخر مع تدرجات")
+    print("  📊 شريط إحصائيات (وصفات، مطابخ، مفضلة)")
+    print("  🎨 6 ألوان مختلفة للمطابخ")
+    print("  💚 لمسات خضراء أنيقة")
+    print("  🔍 بحث متقدم مع أيقونة")
+    print("  ❤️ مفضلة مع عداد وشارة")
+    print("  📱 مودال أنيق مع مقبض سحب")
+    print("  ✅ قائمة مشتريات تفاعلية")
+    print("  🔢 خطوات مرقمة بتدرج أخضر")
+    print("  ⭐ تقييمات بنجوم ذهبية")
+    print("  🏷️ شارات صعوبة ملونة")
+    print("  💳 بطاقات بتأثيرات hover")
+    print("  🎯 فلتر 6 مطابخ عالمية")
 
 if __name__ == "__main__":
     create_website_files()
