@@ -1,8 +1,9 @@
+#!/usr/bin/env python3
 """
 ╔══════════════════════════════════════════════════════════════╗
-║         🎵 MUSIC PLAYER 2044 - Builder Script 🎵           ║
-║            Generate App Files - Professional               ║
-║              Made with ♥️ for my friend                     ║
+║     🎵 MUSIC PLAYER 2044 - Ultimate App Generator 🎵       ║
+║              All-in-One Professional Builder                ║
+║                Made with ♥️ for my friend                   ║
 ╚══════════════════════════════════════════════════════════════╝
 """
 
@@ -11,8 +12,10 @@ import json
 import shutil
 from pathlib import Path
 from datetime import datetime
+from typing import Dict, List, Tuple
 
-class Colors:
+# ==================== Colors ====================
+class C:
     HEADER = '\033[95m'
     CYAN = '\033[96m'
     GREEN = '\033[92m'
@@ -22,32 +25,30 @@ class Colors:
     BOLD = '\033[1m'
     RESET = '\033[0m'
 
-def create_app_files():
-    """
-    إنشاء جميع ملفات التطبيق
-    Music Player 2044 - Future Edition
-    """
+# ==================== Banner ====================
+BANNER = f"""
+{C.CYAN}
+╔══════════════════════════════════════════════════════════════╗
+║                                                              ║
+║   ███╗   ███╗██╗   ██╗███████╗██╗ ██████╗     ██████╗  ██████╗ ██╗  ██╗ ██╗
+║   ████╗ ████║██║   ██║██╔════╝██║██╔════╝     ╚════██╗██╔═████╗██║  ██║███║
+║   ██╔████╔██║██║   ██║███████╗██║██║          █████╔╝██║██╔██║███████║╚██║
+║   ██║╚██╔╝██║██║   ██║╚════██║██║██║         ██╔═══╝ ████╔╝██║╚════██║ ██║
+║   ██║ ╚═╝ ██║╚██████╔╝███████║██║╚██████╗    ███████╗╚██████╔╝     ██║ ██║
+║   ╚═╝     ╚═╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝    ╚══════╝ ╚═════╝      ╚═╝ ╚═╝
+║                                                              ║
+║           🎵 MUSIC PLAYER 2044 - APP GENERATOR 🎵            ║
+║                  Professional Builder v2.0.44                ║
+║                                                              ║
+╚══════════════════════════════════════════════════════════════╝
+{C.RESET}
+"""
+
+# ==================== جميع ملفات التطبيق ====================
+APP_FILES = {
     
-    # ==================== إنشاء المجلدات ====================
-    dirs = [
-        "app/src/main/assets/www",
-        "app/src/main/res/values",
-        "app/src/main/res/drawable",
-        "app/src/main/res/mipmap-hdpi",
-        "app/src/main/res/xml",
-        "app/src/main/java/com/musicplayer2044/app",
-        "gradle/wrapper"
-    ]
-    
-    for d in dirs:
-        Path(d).mkdir(parents=True, exist_ok=True)
-    
-    print(f"{Colors.CYAN}📁 Folders created successfully!{Colors.RESET}")
-    
-    # ==================== ملفات Gradle ====================
-    
-    # build.gradle (Project)
-    build_gradle = """// Top-level build file
+    # ========== BUILD FILES ==========
+    "build.gradle": """// Music Player 2044 - Project Build File
 buildscript {
     repositories {
         google()
@@ -68,13 +69,43 @@ allprojects {
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
-"""
-    
-    with open("build.gradle", "w", encoding="utf-8") as f:
-        f.write(build_gradle)
-    
-    # app/build.gradle
-    app_build_gradle = """plugins {
+""",
+
+    "settings.gradle": """pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "MusicPlayer2044"
+include ':app'
+""",
+
+    "gradle.properties": """org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+android.useAndroidX=true
+android.nonTransitiveRClass=true
+android.enableJetifier=true
+""",
+
+    "gradle/wrapper/gradle-wrapper.properties": """distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+distributionUrl=https\\://services.gradle.org/distributions/gradle-8.5-bin.zip
+networkTimeout=10000
+validateDistributionUrl=true
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+""",
+
+    # ========== APP BUILD FILE ==========
+    "app/build.gradle": """plugins {
     id 'com.android.application'
 }
 
@@ -93,7 +124,10 @@ android {
     buildTypes {
         release {
             minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            debuggable true
         }
     }
     
@@ -107,53 +141,23 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'androidx.webkit:webkit:1.8.0'
 }
-"""
-    
-    with open("app/build.gradle", "w", encoding="utf-8") as f:
-        f.write(app_build_gradle)
-    
-    # settings.gradle
-    settings_gradle = """pluginManagement {
-    repositories {
-        google()
-        mavenCentral()
-        gradlePluginPortal()
-    }
-}
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-rootProject.name = "MusicPlayer2044"
-include ':app'
-"""
-    
-    with open("settings.gradle", "w", encoding="utf-8") as f:
-        f.write(settings_gradle)
-    
-    # gradle.properties
-    gradle_properties = """org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
-android.useAndroidX=true
-android.nonTransitiveRClass=true
-"""
-    
-    with open("gradle.properties", "w", encoding="utf-8") as f:
-        f.write(gradle_properties)
-    
-    print(f"{Colors.GREEN}✓ Gradle files created{Colors.RESET}")
-    
-    # ==================== AndroidManifest.xml ====================
-    manifest = """<?xml version="1.0" encoding="utf-8"?>
+""",
+
+    "app/proguard-rules.pro": """# Music Player 2044 ProGuard Rules
+-keep class com.musicplayer2044.app.** { *; }
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+-dontwarn javax.annotation.**
+""",
+
+    # ========== ANDROID MANIFEST ==========
+    "app/src/main/AndroidManifest.xml": """<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
 
     <application
@@ -164,13 +168,15 @@ android.nonTransitiveRClass=true
         android:supportsRtl="true"
         android:theme="@style/Theme.MusicPlayer2044"
         android:usesCleartextTraffic="true"
+        android:hardwareAccelerated="true"
         tools:targetApi="34">
         
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -178,13 +184,10 @@ android.nonTransitiveRClass=true
         </activity>
     </application>
 </manifest>
-"""
-    
-    with open("app/src/main/AndroidManifest.xml", "w", encoding="utf-8") as f:
-        f.write(manifest)
-    
-    # ==================== MainActivity.java ====================
-    main_activity = """package com.musicplayer2044.app;
+""",
+
+    # ========== MAIN ACTIVITY ==========
+    "app/src/main/java/com/musicplayer2044/app/MainActivity.java": r'''package com.musicplayer2044.app;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -194,7 +197,6 @@ import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
 import android.view.WindowManager;
 import android.view.View;
-import android.content.pm.ActivityInfo;
 import android.os.Build;
 
 public class MainActivity extends Activity {
@@ -204,20 +206,14 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         
-        // Full Screen
+        // Full Screen Mode
         getWindow().setFlags(
             WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
         
-        // Hide navigation bar
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                View.SYSTEM_UI_FLAG_FULLSCREEN
-            );
-        }
+        // Immersive Mode
+        hideSystemUI();
         
         webView = new WebView(this);
         setContentView(webView);
@@ -243,8 +239,21 @@ public class MainActivity extends Activity {
         webView.setWebViewClient(new WebViewClient());
         webView.setWebChromeClient(new WebChromeClient());
         
-        // Load the app
+        // Load the Music Player
         webView.loadUrl("file:///android_asset/www/index.html");
+    }
+    
+    private void hideSystemUI() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
+                View.SYSTEM_UI_FLAG_FULLSCREEN |
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+            );
+        }
     }
     
     @Override
@@ -259,26 +268,21 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
-                View.SYSTEM_UI_FLAG_FULLSCREEN
-            );
+        hideSystemUI();
+    }
+    
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            hideSystemUI();
         }
     }
 }
-"""
-    
-    with open("app/src/main/java/com/musicplayer2044/app/MainActivity.java", "w", encoding="utf-8") as f:
-        f.write(main_activity)
-    
-    print(f"{Colors.GREEN}✓ Android files created{Colors.RESET}")
-    
-    # ==================== ملفات Android Resources ====================
-    
-    # styles.xml
-    styles = """<?xml version="1.0" encoding="utf-8"?>
+''',
+
+    # ========== RESOURCES ==========
+    "app/src/main/res/values/styles.xml": """<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.MusicPlayer2044" parent="android:Theme.Material.NoActionBar">
         <item name="android:windowFullscreen">true</item>
@@ -290,25 +294,24 @@ public class MainActivity extends Activity {
         <item name="android:windowBackground">#FF0A0A0F</item>
     </style>
 </resources>
-"""
-    
-    with open("app/src/main/res/values/styles.xml", "w", encoding="utf-8") as f:
-        f.write(styles)
-    
-    # colors.xml
-    colors = """<?xml version="1.0" encoding="utf-8"?>
+""",
+
+    "app/src/main/res/values/colors.xml": """<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary">#FF00FFCC</color>
     <color name="secondary">#FFFF44AA</color>
+    <color name="accent">#FFFFAA00</color>
     <color name="background">#FF0A0A0F</color>
 </resources>
-"""
-    
-    with open("app/src/main/res/values/colors.xml", "w", encoding="utf-8") as f:
-        f.write(colors)
-    
-    # network_security_config.xml
-    network_config = """<?xml version="1.0" encoding="utf-8"?>
+""",
+
+    "app/src/main/res/values/strings.xml": """<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Music 2044</string>
+</resources>
+""",
+
+    "app/src/main/res/xml/network_security_config.xml": """<?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <base-config cleartextTrafficPermitted="true">
         <trust-anchors>
@@ -316,15 +319,38 @@ public class MainActivity extends Activity {
         </trust-anchors>
     </base-config>
 </network-security-config>
-"""
-    
-    with open("app/src/main/res/xml/network_security_config.xml", "w", encoding="utf-8") as f:
-        f.write(network_config)
-    
-    print(f"{Colors.GREEN}✓ Resource files created{Colors.RESET}")
-    
-    # ==================== ملف HTML الرئيسي ====================
-    html_content = r'''<!DOCTYPE html>
+""",
+
+    "app/src/main/res/drawable/ic_launcher_foreground.xml": """<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Outer Ring -->
+    <path
+        android:fillColor="#FF00FFCC"
+        android:pathData="M54,54m-40,0a40,40 0,1 1,80 0a40,40 0,1 1,-80 0"/>
+    <!-- Inner Circle -->
+    <path
+        android:fillColor="#FF0A0A0F"
+        android:pathData="M54,54m-20,0a20,20 0,1 1,40 0a20,20 0,1 1,-40 0"/>
+    <!-- Center Dot -->
+    <path
+        android:fillColor="#FFFF44AA"
+        android:pathData="M54,54m-8,0a8,8 0,1 1,16 0a8,8 0,1 1,-16 0"/>
+</vector>
+""",
+
+    "app/src/main/res/mipmap-hdpi/ic_launcher.xml": """<?xml version="1.0" encoding="utf-8"?>
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+    <background android:drawable="@color/background"/>
+    <foreground android:drawable="@drawable/ic_launcher_foreground"/>
+</adaptive-icon>
+""",
+
+    # ========== MUSIC PLAYER HTML ==========
+    "app/src/main/assets/www/index.html": r'''<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
@@ -358,7 +384,6 @@ public class MainActivity extends Activity {
             direction: rtl;
         }
 
-        /* Mesh Gradient Background */
         .bg-mesh {
             position: fixed;
             inset: 0;
@@ -400,7 +425,7 @@ public class MainActivity extends Activity {
             padding: 12px;
         }
 
-        /* ==================== HEADER ==================== */
+        /* HEADER */
         .header {
             display: flex;
             align-items: center;
@@ -440,38 +465,7 @@ public class MainActivity extends Activity {
             letter-spacing: 2px;
         }
 
-        .vault-badge {
-            background: rgba(0,255,204,0.1);
-            border: 1px solid rgba(0,255,204,0.3);
-            color: #00ffcc;
-            padding: 4px 10px;
-            border-radius: 20px;
-            font-size: 8px;
-            font-weight: 600;
-        }
-
-        .btn-glass {
-            width: 40px;
-            height: 40px;
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            color: var(--text);
-            cursor: pointer;
-            border-radius: 14px;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            backdrop-filter: blur(20px);
-            box-shadow: var(--neumorph);
-            transition: all 0.3s;
-        }
-        .btn-glass:active {
-            transform: scale(0.9);
-            box-shadow: inset 4px 4px 8px rgba(0,0,0,0.4);
-        }
-
-        /* ==================== NOW PLAYING ==================== */
+        /* NOW PLAYING */
         .now-playing {
             text-align: center;
             padding: 20px 0;
@@ -544,7 +538,7 @@ public class MainActivity extends Activity {
             letter-spacing: 1px;
         }
 
-        /* ==================== PROGRESS ==================== */
+        /* PROGRESS */
         .progress-section {
             padding: 0 8px 12px;
         }
@@ -572,7 +566,7 @@ public class MainActivity extends Activity {
             margin-top: 6px;
         }
 
-        /* ==================== CONTROLS ==================== */
+        /* CONTROLS */
         .controls-section {
             display: flex;
             align-items: center;
@@ -625,7 +619,7 @@ public class MainActivity extends Activity {
             transform: scale(0.9);
         }
 
-        /* ==================== VISUALIZER ==================== */
+        /* VISUALIZER */
         .viz-container {
             display: flex;
             align-items: center;
@@ -652,7 +646,7 @@ public class MainActivity extends Activity {
         .viz-ring:nth-child(4) { animation-delay: 0.6s; border-color: #ff44aa; }
         .viz-ring:nth-child(5) { animation-delay: 0.8s; border-color: #ffaa00; }
 
-        /* ==================== PLAYLIST ==================== */
+        /* PLAYLIST */
         .playlist-header {
             display: flex;
             justify-content: space-between;
@@ -736,6 +730,7 @@ public class MainActivity extends Activity {
             cursor: pointer;
             opacity: 0.5;
             transition: 0.3s;
+            padding: 5px;
         }
         .song-card .s-del:hover {
             opacity: 1;
@@ -792,7 +787,7 @@ public class MainActivity extends Activity {
                     <span>✦ Future Edition ✦</span>
                 </div>
             </div>
-            <div class="vault-badge">💾 APK</div>
+            <button class="btn-glass">⚡</button>
         </div>
 
         <div class="now-playing">
@@ -999,67 +994,73 @@ public class MainActivity extends Activity {
     </script>
 </body>
 </html>'''
+}
+
+# ==================== Main Function ====================
+def create_project():
+    """إنشاء جميع ملفات المشروع"""
     
-    with open("app/src/main/assets/www/index.html", "w", encoding="utf-8") as f:
-        f.write(html_content)
+    print(BANNER)
+    print(f"{C.CYAN}🚀 Starting Music Player 2044 App Generator...{C.RESET}\n")
     
-    # ==================== gradle-wrapper.properties ====================
-    gradle_wrapper_props = """distributionBase=GRADLE_USER_HOME
-distributionPath=wrapper/dists
-distributionUrl=https\://services.gradle.org/distributions/gradle-8.5-bin.zip
-networkTimeout=10000
-validateDistributionUrl=true
-zipStoreBase=GRADLE_USER_HOME
-zipStorePath=wrapper/dists
-"""
+    files_created = 0
+    total_size = 0
     
-    with open("gradle/wrapper/gradle-wrapper.properties", "w", encoding="utf-8") as f:
-        f.write(gradle_wrapper_props)
-    
-    # ==================== إنشاء أيقونة Launcher ====================
-    # أيقونة بسيطة (نقطة ملونة)
-    icon_svg = """<?xml version="1.0" encoding="utf-8"?>
-<vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="108dp"
-    android:height="108dp"
-    android:viewportWidth="108"
-    android:viewportHeight="108">
-    <path
-        android:fillColor="#FF00FFCC"
-        android:pathData="M54,54m-40,0a40,40 0,1 1,80 0a40,40 0,1 1,-80 0"/>
-    <path
-        android:fillColor="#FF0A0A0F"
-        android:pathData="M54,54m-20,0a20,20 0,1 1,40 0a20,20 0,1 1,-40 0"/>
-    <path
-        android:fillColor="#FFFF44AA"
-        android:pathData="M54,54m-8,0a8,8 0,1 1,16 0a8,8 0,1 1,-16 0"/>
-</vector>
-"""
-    
-    with open("app/src/main/res/drawable/ic_launcher_foreground.xml", "w", encoding="utf-8") as f:
-        f.write(icon_svg)
-    
-    # ==================== proguard-rules.pro ====================
-    proguard = """# Music Player 2044 ProGuard Rules
--keep class com.musicplayer2044.app.** { *; }
--keepattributes *Annotation*
--keepattributes SourceFile,LineNumberTable
-"""
-    
-    with open("app/proguard-rules.pro", "w", encoding="utf-8") as f:
-        f.write(proguard)
+    for file_path, content in APP_FILES.items():
+        # إنشاء المجلدات إذا لم تكن موجودة
+        full_path = Path(file_path)
+        full_path.parent.mkdir(parents=True, exist_ok=True)
+        
+        # كتابة الملف
+        with open(full_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+        
+        file_size = len(content.encode('utf-8'))
+        total_size += file_size
+        files_created += 1
+        
+        print(f"{C.GREEN}  ✓{C.RESET} {file_path} {C.PURPLE}({file_size/1024:.1f} KB){C.RESET}")
     
     # ==================== إحصائيات ====================
-    total_files = sum(1 for _ in Path(".").rglob("*") if _.is_file())
-    total_size = sum(f.stat().st_size for f in Path(".").rglob("*") if f.is_file())
+    print(f"\n{C.BOLD}{C.CYAN}{'═' * 55}{C.RESET}")
+    print(f"{C.BOLD}{C.PURPLE}  🎵 Music Player 2044 - Build Complete!{C.RESET}")
+    print(f"{C.BOLD}{C.CYAN}{'═' * 55}{C.RESET}")
+    print(f"  {C.GREEN}📁 Files Created:{C.RESET} {files_created}")
+    print(f"  {C.GREEN}📦 Total Size:{C.RESET} {total_size/1024:.1f} KB")
+    print(f"  {C.CYAN}🎯 Package:{C.RESET} com.musicplayer2044.app")
+    print(f"  {C.CYAN}📱 Min SDK:{C.RESET} 21 (Android 5.0)")
+    print(f"  {C.CYAN}📱 Target SDK:{C.RESET} 34 (Android 14)")
+    print(f"  {C.YELLOW}✅ Ready for APK Build!{C.RESET}")
+    print(f"{C.BOLD}{C.CYAN}{'═' * 55}{C.RESET}\n")
     
-    print(f"\n{Colors.BOLD}{Colors.CYAN}{'═' * 50}{Colors.RESET}")
-    print(f"{Colors.BOLD}{Colors.PURPLE}  🎵 Music Player 2044 - Build Complete!{Colors.RESET}")
-    print(f"{Colors.GREEN}  ✓ Total Files: {total_files}{Colors.RESET}")
-    print(f"{Colors.GREEN}  ✓ Total Size: {total_size/1024:.1f} KB{Colors.RESET}")
-    print(f"{Colors.CYAN}  ✓ Ready for APK Build!{Colors.RESET}")
-    print(f"{Colors.BOLD}{Colors.CYAN}{'═' * 50}{Colors.RESET}\n")
+    # إنشاء ملف info.json
+    info = {
+        "app_name": "Music Player 2044",
+        "package": "com.musicplayer2044.app",
+        "version": "1.0.0",
+        "version_code": 1,
+        "min_sdk": 21,
+        "target_sdk": 34,
+        "files_count": files_created,
+        "total_size_kb": round(total_size/1024, 1),
+        "build_date": datetime.now().isoformat(),
+        "features": [
+            "🎵 Music Player with Glass Morphism UI",
+            "💾 Auto-save uploaded songs",
+            "📂 Multiple file upload support",
+            "🔀 Shuffle & Repeat modes",
+            "🎨 2044 Future Edition Design",
+            "📱 Full Android APK support"
+        ]
+    }
+    
+    with open("app-info.json", "w", encoding="utf-8") as f:
+        json.dump(info, f, indent=2, ensure_ascii=False)
+    
+    print(f"{C.GREEN}  ✓ app-info.json created{C.RESET}")
+    
+    return files_created
 
 
 if __name__ == "__main__":
-    create_app_files()
+    create_project()
