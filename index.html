@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>طبّاخ برو</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #fafaf8;
@@ -19,23 +19,27 @@
             --text: #1a1a1a;
             --text2: #555;
             --text3: #999;
-            --shadow: 0 2px 8px rgba(0,0,0,0.04);
-            --shadow-lg: 0 8px 24px rgba(0,0,0,0.07);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+            --shadow: 0 2px 10px rgba(0,0,0,0.05);
+            --shadow-lg: 0 8px 25px rgba(0,0,0,0.08);
+            --radius-sm: 10px;
             --radius: 14px;
             --radius-lg: 18px;
+            --radius-xl: 24px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: #f2f0eb;
+            background: linear-gradient(180deg, #f5f3ee 0%, #f0ede6 100%);
             color: var(--text);
-            font-family: 'Cairo', 'Tajawal', sans-serif;
+            font-family: 'Cairo', sans-serif;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             -webkit-tap-highlight-color: transparent;
+            -webkit-font-smoothing: antialiased;
             direction: rtl;
         }
 
@@ -47,13 +51,14 @@
             display: flex;
             flex-direction: column;
             background: var(--bg);
-            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
             overflow: hidden;
+            border-radius: 4px;
         }
 
         /* ==================== HEADER ==================== */
         .header {
-            padding: 12px 16px;
+            padding: 14px 18px;
             background: #fff;
             border-bottom: 1px solid var(--border);
             display: flex;
@@ -62,101 +67,112 @@
             z-index: 10;
         }
 
-        .brand { display: flex; align-items: center; gap: 10px; }
+        .brand { display: flex; align-items: center; gap: 12px; }
 
         .logo-icon {
-            width: 40px; height: 40px;
+            width: 44px; height: 44px;
             background: linear-gradient(135deg, var(--red), #c0392b);
-            border-radius: 12px;
+            border-radius: 13px;
             display: flex; align-items: center; justify-content: center;
-            font-size: 18px;
-            box-shadow: 0 3px 10px rgba(231,76,60,0.2);
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(231,76,60,0.25);
+            position: relative;
         }
 
-        .brand-text h1 { font-size: 16px; font-weight: 800; color: #1a1a1a; }
-        .brand-text span { font-size: 8px; color: #999; font-weight: 600; }
+        .logo-dot {
+            position: absolute; top: -3px; right: -3px;
+            width: 8px; height: 8px; background: #f39c12;
+            border-radius: 50%; animation: dotPulse 2s ease-in-out infinite;
+        }
 
-        .header-actions { display: flex; gap: 6px; }
+        @keyframes dotPulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.8); opacity: 1; }
+        }
+
+        .brand-text h1 { font-size: 18px; font-weight: 800; color: #1a1a1a; line-height: 1; }
+        .brand-text span { font-size: 8px; color: #999; font-weight: 600; letter-spacing: 0.5px; }
+
+        .header-actions { display: flex; gap: 8px; }
 
         .btn-icon {
-            width: 38px; height: 38px;
+            width: 40px; height: 40px;
             background: #f8f7f4; border: 1px solid var(--border);
             color: #888; cursor: pointer; border-radius: 12px;
-            font-size: 14px; display: flex; align-items: center; justify-content: center;
+            font-size: 15px; display: flex; align-items: center; justify-content: center;
             transition: all 0.25s; position: relative;
         }
 
-        .btn-icon:hover { background: #f0ede8; }
+        .btn-icon:hover { background: #f0ede8; color: #555; }
         .btn-icon.active { background: var(--red-light); border-color: var(--red); color: var(--red); }
 
         .badge {
-            position: absolute; top: -5px; right: -5px;
-            width: 18px; height: 18px; background: var(--red); color: #fff;
-            font-size: 8px; font-weight: 700; border-radius: 50%;
+            position: absolute; top: -6px; right: -6px;
+            width: 20px; height: 20px; background: var(--red); color: #fff;
+            font-size: 9px; font-weight: 700; border-radius: 50%;
             display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 6px rgba(231,76,60,0.3);
             display: none;
         }
         .badge.show { display: flex; }
 
         /* ==================== STATS ==================== */
         .stats-row {
-            display: flex; gap: 6px; padding: 8px 14px;
+            display: flex; gap: 8px; padding: 10px 16px;
             background: #fff; border-bottom: 1px solid var(--border);
         }
 
-        .stat-item {
-            flex: 1; padding: 8px; border-radius: 10px; text-align: center;
-        }
-        .stat-item:nth-child(1) { background: #fdfaf3; border: 1px solid #f5eed8; }
-        .stat-item:nth-child(2) { background: #fef5f5; border: 1px solid #fce4e4; }
-        .stat-item:nth-child(3) { background: #f5fdf8; border: 1px solid #d5f5e3; }
+        .stat-box { flex: 1; padding: 10px 8px; border-radius: var(--radius-sm); text-align: center; }
+        .stat-box:nth-child(1) { background: #fdfaf3; border: 1px solid #f5eed8; }
+        .stat-box:nth-child(2) { background: #fef5f5; border: 1px solid #fce4e4; }
+        .stat-box:nth-child(3) { background: #f5fdf8; border: 1px solid #d5f5e3; }
 
-        .stat-num { font-size: 14px; font-weight: 800; display: block; }
-        .stat-item:nth-child(1) .stat-num { color: #b8860b; }
-        .stat-item:nth-child(2) .stat-num { color: #e74c3c; }
-        .stat-item:nth-child(3) .stat-num { color: #27ae60; }
-
-        .stat-lbl { font-size: 7px; color: #999; margin-top: 1px; }
+        .stat-num { font-size: 16px; font-weight: 800; display: block; }
+        .stat-box:nth-child(1) .stat-num { color: #b8860b; }
+        .stat-box:nth-child(2) .stat-num { color: #e74c3c; }
+        .stat-box:nth-child(3) .stat-num { color: #27ae60; }
+        .stat-lbl { font-size: 7px; color: #999; margin-top: 2px; letter-spacing: 0.5px; }
 
         /* ==================== SEARCH ==================== */
         .search-bar {
-            padding: 10px 14px; background: #fff;
+            padding: 10px 16px; background: #fff;
             border-bottom: 1px solid var(--border);
             display: flex; gap: 8px;
         }
 
         .search-input {
-            flex: 1; padding: 10px 14px;
+            flex: 1; padding: 11px 16px;
             background: #f8f7f4; border: 1.5px solid var(--border);
-            color: var(--text); font-size: 11px; border-radius: 12px;
+            color: var(--text); font-size: 11px; border-radius: 14px;
             font-family: 'Cairo', sans-serif; outline: none; transition: all 0.3s;
         }
 
         .search-input:focus {
             border-color: var(--gold); background: #fff;
-            box-shadow: 0 0 0 3px rgba(201,168,76,0.06);
+            box-shadow: 0 0 0 4px rgba(201,168,76,0.06);
         }
-        .search-input::placeholder { color: #ccc; font-family: 'Cairo', sans-serif; }
+        .search-input::placeholder { color: #ccc; }
 
         .search-btn {
-            padding: 10px 16px; background: var(--gold); color: #fff;
-            border: none; cursor: pointer; border-radius: 12px;
+            padding: 11px 18px; background: var(--gold); color: #fff;
+            border: none; cursor: pointer; border-radius: 14px;
             font-size: 11px; font-family: 'Cairo', sans-serif; font-weight: 700;
             white-space: nowrap; transition: all 0.3s;
+            box-shadow: 0 3px 10px rgba(201,168,76,0.2);
         }
         .search-btn:hover { background: var(--gold-dark); }
 
         /* ==================== CATEGORIES ==================== */
         .cat-scroll {
-            display: flex; gap: 5px; padding: 0 14px 10px;
+            display: flex; gap: 6px; padding: 0 16px 12px;
             background: #fff; overflow-x: auto; border-bottom: 1px solid var(--border);
         }
         .cat-scroll::-webkit-scrollbar { height: 0; }
 
         .cat-chip {
-            padding: 7px 12px; background: #f8f6f2;
+            padding: 8px 14px; background: #f8f6f2;
             border: 1.5px solid var(--border); color: #888;
-            cursor: pointer; border-radius: 20px;
+            cursor: pointer; border-radius: 22px;
             font-size: 9px; font-weight: 700; white-space: nowrap;
             transition: all 0.3s; font-family: 'Cairo', sans-serif;
         }
@@ -164,206 +180,262 @@
         .cat-chip:hover { background: #f0ede8; }
         .cat-chip.active {
             background: #fff; border-color: var(--gold); color: var(--gold-dark);
-            font-weight: 800; box-shadow: 0 2px 6px rgba(201,168,76,0.1);
+            font-weight: 800; box-shadow: 0 2px 8px rgba(201,168,76,0.12);
         }
 
         /* ==================== CONTENT ==================== */
         .content {
-            flex: 1; overflow-y: auto; padding: 10px 14px;
-            display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+            flex: 1; overflow-y: auto; padding: 12px 14px;
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px;
             align-content: start;
         }
-        .content::-webkit-scrollbar { width: 3px; }
-        .content::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+        .content::-webkit-scrollbar { width: 4px; }
+        .content::-webkit-scrollbar-thumb { background: #e0ddd8; border-radius: 4px; }
 
         /* ==================== CARD ==================== */
         .card {
             background: #fff; border: 1px solid var(--border);
             border-radius: var(--radius-lg); overflow: hidden; cursor: pointer;
-            transition: all 0.3s; box-shadow: var(--shadow);
-            animation: fadeUp 0.4s ease;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm); animation: fadeUp 0.5s ease;
         }
-        @keyframes fadeUp { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
 
-        .card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
         .card:active { transform: scale(0.97); }
 
         .card-img {
-            width: 100%; aspect-ratio: 1.3;
+            width: 100%; height: 145px;
             background: linear-gradient(135deg, #faf7f0, #f2ece0);
             display: flex; align-items: center; justify-content: center;
-            font-size: 50px; position: relative; overflow: hidden;
+            position: relative; overflow: hidden;
         }
 
         .card-img img {
-            width: 100%; height: 100%; object-fit: cover;
-            display: block;
+            width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;
+            transition: transform 0.5s;
         }
 
-        .card-time {
-            position: absolute; top: 8px; right: 8px;
-            padding: 4px 8px; background: rgba(255,255,255,0.95);
-            color: #666; font-size: 8px; font-weight: 700;
-            border-radius: 15px; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        .card:hover .card-img img { transform: scale(1.05); }
+
+        .card-img .emoji-placeholder {
+            font-size: 48px; position: absolute;
         }
 
-        .card-fav {
-            position: absolute; top: 8px; left: 8px;
-            width: 28px; height: 28px; background: rgba(255,255,255,0.95);
-            border: none; color: #ddd; cursor: pointer; border-radius: 50%;
-            font-size: 12px; display: flex; align-items: center; justify-content: center;
-            transition: all 0.3s; box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+        .card-badge-time {
+            position: absolute; top: 10px; right: 10px;
+            padding: 5px 10px; background: rgba(255,255,255,0.95);
+            color: #555; font-size: 8px; font-weight: 700;
+            border-radius: 20px; box-shadow: var(--shadow-sm);
+            display: flex; align-items: center; gap: 4px; z-index: 2;
         }
-        .card-fav.liked { color: var(--red); }
 
-        .card-body { padding: 10px 12px 12px; }
+        .card-btn-fav {
+            position: absolute; top: 10px; left: 10px;
+            width: 30px; height: 30px; background: rgba(255,255,255,0.95);
+            border: none; color: #ccc; cursor: pointer; border-radius: 50%;
+            font-size: 13px; display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s; box-shadow: var(--shadow-sm); z-index: 2;
+        }
+
+        .card-btn-fav:hover { transform: scale(1.1); }
+        .card-btn-fav.liked { color: var(--red); }
+
+        .card-body { padding: 12px 14px 14px; }
 
         .card-tag {
-            display: inline-block; padding: 2px 7px;
+            display: inline-block; padding: 3px 8px;
             background: var(--gold-light); color: var(--gold-dark);
-            font-size: 7px; font-weight: 700; border-radius: 5px; margin-bottom: 5px;
+            font-size: 7px; font-weight: 700; border-radius: 6px;
+            letter-spacing: 0.5px; margin-bottom: 6px;
         }
 
         .card-title {
-            font-size: 12px; font-weight: 700; color: #1a1a1a;
-            line-height: 1.35; margin-bottom: 6px;
+            font-size: 13px; font-weight: 700; color: #1a1a1a;
+            line-height: 1.35; margin-bottom: 8px;
             display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
         }
 
         .card-footer { display: flex; align-items: center; justify-content: space-between; }
         .card-area { font-size: 9px; color: #999; font-weight: 600; }
-        .card-stars { color: #f0a500; font-size: 9px; }
+        .card-rate { color: #f0a500; font-size: 9px; }
 
         /* ==================== MODAL ==================== */
         .modal-overlay {
             display: none; position: fixed; inset: 0;
-            background: rgba(0,0,0,0.45); z-index: 100;
+            background: rgba(0,0,0,0.5); z-index: 100;
             align-items: flex-end; justify-content: center;
+            backdrop-filter: blur(4px);
         }
         .modal-overlay.show { display: flex; }
 
         .modal {
-            background: #fff; border-radius: 24px 24px 0 0;
+            background: #fff; border-radius: 28px 28px 0 0;
             width: 100%; max-width: 480px; max-height: 88vh;
-            overflow-y: auto; animation: slideUp 0.4s ease;
-            box-shadow: 0 -15px 40px rgba(0,0,0,0.2);
+            overflow-y: auto; animation: slideUp 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 -20px 60px rgba(0,0,0,0.25);
         }
+
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+
         .modal::-webkit-scrollbar { width: 3px; }
         .modal::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
 
-        .modal-handle { width: 36px; height: 4px; background: #e0ddd8; border-radius: 2px; margin: 10px auto 0; }
+        .modal-handle {
+            width: 40px; height: 5px; background: #e0ddd8;
+            border-radius: 3px; margin: 12px auto 0;
+        }
 
         .modal-hero {
-            width: 100%; aspect-ratio: 1.5;
+            width: 100%; height: 230px;
             background: linear-gradient(135deg, #faf7f0, #f2ece0);
             display: flex; align-items: center; justify-content: center;
-            font-size: 65px; position: relative; margin-top: 6px; overflow: hidden;
+            position: relative; overflow: hidden; margin-top: 8px;
         }
 
         .modal-hero img {
-            width: 100%; height: 100%; object-fit: cover;
-            display: block;
+            width: 100%; height: 100%; object-fit: cover; object-position: center; display: block;
         }
 
-        .modal-close {
-            position: absolute; top: 12px; right: 12px;
-            width: 34px; height: 34px; background: rgba(255,255,255,0.95);
+        .modal-hero .emoji-placeholder { font-size: 65px; position: absolute; }
+
+        .modal-close-btn {
+            position: absolute; top: 14px; right: 14px;
+            width: 38px; height: 38px; background: rgba(255,255,255,0.95);
             border: none; color: #333; cursor: pointer; border-radius: 50%;
-            font-size: 15px; display: flex; align-items: center; justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            font-size: 16px; display: flex; align-items: center; justify-content: center;
+            z-index: 5; box-shadow: var(--shadow); transition: all 0.3s;
         }
 
-        .modal-body { padding: 18px 16px 28px; }
+        .modal-close-btn:hover { background: #fff; transform: scale(1.05); }
+
+        .modal-content { padding: 22px 18px 32px; }
+
+        .modal-meta-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
 
         .modal-tag {
-            display: inline-block; padding: 4px 10px;
+            display: inline-block; padding: 5px 12px;
             background: var(--gold-light); color: var(--gold-dark);
-            font-size: 9px; font-weight: 700; border-radius: 20px; margin-bottom: 6px;
+            font-size: 9px; font-weight: 700; border-radius: 20px;
         }
 
-        .modal-title { font-size: 20px; font-weight: 800; color: #1a1a1a; margin-bottom: 10px; line-height: 1.3; }
+        .modal-title {
+            font-size: 22px; font-weight: 800; color: #1a1a1a;
+            margin-bottom: 12px; line-height: 1.3;
+        }
 
-        .modal-info { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+        .modal-info-pills { display: flex; gap: 8px; margin-bottom: 22px; flex-wrap: wrap; }
 
         .info-pill {
-            display: flex; align-items: center; gap: 4px;
-            padding: 6px 10px; background: #faf8f4; border-radius: 20px;
+            display: flex; align-items: center; gap: 5px;
+            padding: 8px 14px; background: #faf8f4; border-radius: 25px;
             font-size: 10px; font-weight: 600; color: #666; border: 1px solid #f0ede8;
         }
 
-        .section { margin-bottom: 18px; }
-        .section-title {
-            font-size: 12px; font-weight: 700; color: #1a1a1a;
-            margin-bottom: 8px; display: flex; align-items: center; gap: 6px;
+        .info-pill .pill-icon { font-size: 15px; }
+
+        .modal-section { margin-bottom: 22px; }
+
+        .section-heading {
+            font-size: 13px; font-weight: 700; color: #1a1a1a;
+            margin-bottom: 10px; display: flex; align-items: center; gap: 8px;
         }
 
-        .ingredient-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
-        .ingredient-item {
-            display: flex; align-items: center; gap: 8px;
-            font-size: 10px; color: #444; padding: 8px 10px;
-            background: #fafaf8; border-radius: 8px; border: 1px solid #f5f2ec;
+        .section-heading::after { content: ''; flex: 1; height: 1px; background: #f0ede8; }
+
+        .ingredients-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+
+        .ingredient-row {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 11px; color: #444; padding: 10px 14px;
+            background: #fafaf8; border-radius: 10px; border: 1px solid #f5f2ec;
+            transition: all 0.2s;
         }
-        .ingredient-dot { width: 5px; height: 5px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
 
-        .instructions { font-size: 11px; color: #444; line-height: 1.8; white-space: pre-line; }
+        .ingredient-row:hover { background: #fdfaf3; border-color: #f0e8d0; }
+        .ingredient-bullet { width: 6px; height: 6px; background: var(--gold); border-radius: 50%; flex-shrink: 0; }
 
-        .btn-fav {
-            width: 100%; padding: 12px;
+        .instructions-text { font-size: 11px; color: #444; line-height: 1.9; white-space: pre-line; }
+
+        .btn-row { display: flex; flex-direction: column; gap: 8px; margin-top: 8px; }
+
+        .btn-favorite {
+            width: 100%; padding: 13px;
             background: #fafaf8; border: 1.5px solid #f0ede8;
             color: #666; cursor: pointer; border-radius: 14px;
-            font-size: 11px; font-weight: 700; transition: all 0.3s;
-            font-family: 'Cairo', sans-serif; margin-top: 6px;
+            font-size: 12px; font-weight: 700; transition: all 0.3s;
+            font-family: 'Cairo', sans-serif;
         }
-        .btn-fav.liked { background: var(--red); color: #fff; border-color: var(--red); }
 
-        .btn-yt {
-            width: 100%; padding: 12px; background: #ff0000; color: #fff;
+        .btn-favorite:hover { background: #fdf5f5; border-color: var(--red); color: var(--red); }
+        .btn-favorite.liked { background: var(--red); color: #fff; border-color: var(--red); }
+
+        .btn-youtube-link {
+            width: 100%; padding: 13px; background: #ff0000; color: #fff;
             border: none; cursor: pointer; border-radius: 14px;
-            font-size: 11px; font-weight: 700; font-family: 'Cairo', sans-serif;
-            margin-top: 6px; display: flex; align-items: center; justify-content: center; gap: 6px;
-            text-decoration: none;
+            font-size: 12px; font-weight: 700; font-family: 'Cairo', sans-serif;
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            text-decoration: none; transition: all 0.3s;
         }
+
+        .btn-youtube-link:hover { background: #cc0000; }
 
         /* ==================== STATES ==================== */
-        .loading-box { grid-column: 1 / -1; text-align: center; padding: 40px; color: #bbb; }
-        .spinner {
-            width: 36px; height: 36px; border: 3px solid #f0ede8;
-            border-top-color: var(--gold); border-radius: 50%;
-            animation: spin 0.8s linear infinite; margin: 0 auto 10px;
+        .loading-state {
+            grid-column: 1 / -1; text-align: center; padding: 50px 20px; color: #bbb;
         }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        .loading-text { font-family: 'Cairo', sans-serif; font-size: 11px; }
 
-        .empty-box { grid-column: 1 / -1; text-align: center; padding: 40px; color: #ccc; }
-        .empty-icon { font-size: 40px; display: block; margin-bottom: 6px; }
-        .empty-text { font-size: 11px; font-weight: 600; font-family: 'Cairo', sans-serif; }
+        .loading-ring {
+            width: 42px; height: 42px; border: 3px solid #f0ede8;
+            border-top-color: var(--gold); border-radius: 50%;
+            animation: spin 0.8s linear infinite; margin: 0 auto 12px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-text { font-family: 'Cairo', sans-serif; font-size: 11px; font-weight: 600; }
+
+        .empty-state { grid-column: 1 / -1; text-align: center; padding: 50px 20px; }
+
+        .empty-icon { font-size: 50px; display: block; margin-bottom: 10px; opacity: 0.4; }
+        .empty-title { font-size: 13px; font-weight: 700; color: #999; margin-bottom: 4px; }
+        .empty-sub { font-size: 10px; color: #bbb; }
 
         /* ==================== TOAST ==================== */
         .toast {
             position: fixed; bottom: 30px; left: 50%;
             transform: translateX(-50%) translateY(120px);
-            background: #1a1a1a; color: #fff; padding: 10px 20px;
-            border-radius: 25px; font-size: 10px; font-weight: 600;
-            z-index: 300; transition: transform 0.4s;
+            background: #1a1a1a; color: #fff; padding: 12px 24px;
+            border-radius: 30px; font-size: 10px; font-weight: 600;
+            z-index: 300; transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
             font-family: 'Cairo', sans-serif; white-space: nowrap;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
+
         .toast.show { transform: translateX(-50%) translateY(0); }
 
         .refresh-bar {
-            text-align: center; padding: 6px; background: #fdfaf3;
+            text-align: center; padding: 8px; background: #fdfaf3;
             color: var(--gold-dark); font-size: 9px; font-weight: 700;
             cursor: pointer; border-bottom: 1px solid var(--border);
-            font-family: 'Cairo', sans-serif;
+            font-family: 'Cairo', sans-serif; transition: all 0.3s;
         }
         .refresh-bar:hover { background: #faf5e6; }
+        .refresh-bar:active { background: #f5ecd0; }
     </style>
 </head>
 <body>
     <div class="app">
         <div class="header">
             <div class="brand">
-                <div class="logo-icon">🍳</div>
+                <div class="logo-icon">
+                    🍳
+                    <span class="logo-dot"></span>
+                </div>
                 <div class="brand-text">
                     <h1>طبّاخ برو</h1>
                     <span>وصفات عربية وعالمية</span>
@@ -378,12 +450,12 @@
         </div>
 
         <div class="stats-row">
-            <div class="stat-item"><span class="stat-num" id="statTotal">-</span><span class="stat-lbl">وصفة</span></div>
-            <div class="stat-item"><span class="stat-num" id="statFavs">0</span><span class="stat-lbl">مفضلة</span></div>
-            <div class="stat-item"><span class="stat-num">🌐</span><span class="stat-lbl">مباشر</span></div>
+            <div class="stat-box"><span class="stat-num" id="statTotal">-</span><span class="stat-lbl">وصفة</span></div>
+            <div class="stat-box"><span class="stat-num" id="statFavs">0</span><span class="stat-lbl">مفضلة</span></div>
+            <div class="stat-box"><span class="stat-num">🌐</span><span class="stat-lbl">مباشر</span></div>
         </div>
 
-        <div class="refresh-bar" onclick="fetchRecipes()">🔄 اضغط للتحديث وجلب وصفات جديدة</div>
+        <div class="refresh-bar" onclick="fetchRecipes()">🔄 اسحب للتحديث وجلب وصفات جديدة</div>
 
         <div class="search-bar">
             <input type="text" class="search-input" placeholder="ابحث عن وصفة..." id="searchInput" onkeypress="if(event.key==='Enter')searchRecipes()">
@@ -400,7 +472,7 @@
         </div>
 
         <div class="content" id="contentArea">
-            <div class="loading-box"><div class="spinner"></div><div class="loading-text">جاري تحميل الوصفات...</div></div>
+            <div class="loading-state"><div class="loading-ring"></div><div class="loading-text">جاري تحميل الوصفات...</div></div>
         </div>
     </div>
 
@@ -409,36 +481,30 @@
 
     <script>
         let allRecipes = [];
-        let favorites = JSON.parse(localStorage.getItem('tbakh_final_favs') || '[]');
+        let favorites = JSON.parse(localStorage.getItem('tbakh_pro_favs') || '[]');
         let showFavs = false;
         let currentCat = 'all';
 
         const arabicRecipes = [
-            { id:'ar1', title:'كبسة الدجاج السعودية', cat:'rice', area:'سعودي', time:'90 د', img:'🍗', yt:'', ings:['دجاجة كاملة','3 أكواب أرز بسمتي','2 بصل','4 طماطم','بهارات كبسة','زبيب ولوز'], steps:'حمّر الدجاج حتى يصبح ذهبياً.\nأضف البصل وقلّب حتى يذبل.\nأضف الطماطم والبهارات واطبخ 10 دقائق.\nأضف 4 أكواب ماء واتركه يغلي.\nأضف الأرز واتركه على نار هادئة 30 دقيقة.\nزيّن بالزبيب واللوز المحمص.' },
-            { id:'ar2', title:'مندي اللحم', cat:'rice', area:'يمني', time:'180 د', img:'🥩', yt:'', ings:['2 كيلو لحم غنم','3 أكواب أرز بسمتي','بهارات المندي','فحم للتدخين','زعفران','مكسرات'], steps:'تبّل اللحم بالبهارات واتركه ساعتين.\nاطبخ اللحم في قدر الضغط 45 دقيقة.\nاسلق الأرز في مرق اللحم.\nضع الفحم المشتعل في ورق قصدير مع زيت.\nغطّ القدر واتركه يتدخن 10 دقائق.\nقدّم مع المكسرات.' },
-            { id:'ar3', title:'شاورما الدجاج', cat:'main', area:'عربي', time:'40 د', img:'🌯', yt:'', ings:['صدر دجاج','بهارات شاورما','ثومية','مخلل خيار','بطاطس مقلية','خبز صاج'], steps:'قطّع الدجاج شرائح رفيعة.\nتبّل بالبهارات واتركه 30 دقيقة.\nاقلي الدجاج على نار عالية.\nادهن الخبز بالثومية.\nأضف الدجاج والبطاطس والمخلل.\nلفّ الشاورما بإحكام وقدّمها.' },
-            { id:'ar4', title:'مقلوبة فلسطينية', cat:'rice', area:'فلسطيني', time:'90 د', img:'🍲', yt:'', ings:['دجاجة كاملة','2 كوب أرز','باذنجان مقلي','قرنبيط مقلي','بطاطا مقلية','بهارات مشكلة'], steps:'اسلق الدجاج مع البهارات.\nاقلي الخضار كل على حدة.\nضع طبقة خضار في القدر ثم الأرز.\nاسكب المرق واطبخ 30 دقيقة.\nاقلب القدر على صينية التقديم.\nزيّن بالمكسرات المحمصة.' },
-            { id:'ar5', title:'المنسف الأردني', cat:'main', area:'أردني', time:'120 د', img:'🍖', yt:'', ings:['2 كيلو لحم غنم','جميد','3 أكواب أرز','خبز شراك','صنوبر ولوز','بهارات'], steps:'انقع الجميد في الماء ليلة كاملة.\nاطبخ اللحم في قدر الضغط ساعة.\nحضّر الأرز بالشعيرية.\nسخّن الجميد واخفقه حتى يصبح ناعماً.\nضع الخبز في الطبق ثم الأرز.\nاسكب اللحم والجميد وزين بالمكسرات.' },
-            { id:'ar6', title:'حمص بيروتي', cat:'appetizer', area:'لبناني', time:'15 د', img:'🫒', yt:'', ings:['400g حمص حب','3 ملاعق طحينة','عصير ليمونتين','2 فص ثوم','زيت زيتون','كمون وبابريكا'], steps:'اسلق الحمص حتى يصبح طرياً.\nاهرسه مع الطحينة والليمون.\nأضف الثوم المهروس والملح.\nاسكب في طبق وزين بزيت الزيتون.\nرش الكمون والبابريكا على الوجه.' },
-            { id:'ar7', title:'متبل الباذنجان', cat:'appetizer', area:'شامي', time:'25 د', img:'🍆', yt:'', ings:['2 باذنجان كبير','3 ملاعق طحينة','عصير ليمونة','2 فص ثوم','زيت زيتون','بقدونس'], steps:'اشوِ الباذنجان على النار حتى يحترق القشر.\nقشّر الباذنجان واهرسه جيداً.\nأضف الطحينة والليمون والثوم.\nاخلط جيداً حتى يصبح كريمياً.\nزيّن بزيت الزيتون والبقدونس.' },
-            { id:'ar8', title:'الكنافة النابلسية', cat:'sweet', area:'فلسطيني', time:'60 د', img:'🧀', yt:'', ings:['500g عجينة كنافة','500g جبن عكاوي','2 كوب قطر','سمن بلدي','فستق حلبي'], steps:'انقع الجبن في الماء لتخفيف الملح.\nفتّت عجينة الكنافة واخلطها بالسمن.\nضع نصف الكنافة في الصينية.\nوزّع الجبن ثم باقي الكنافة.\nاخبز في فرن 180°م حتى تصبح ذهبية.\nاسكب القطر البارد وزين بالفستق.' },
-            { id:'ar9', title:'البقلاوة التركية', cat:'sweet', area:'تركي', time:'60 د', img:'🥮', yt:'', ings:['علبة عجينة جلاش','2 كوب جوز مفروم','2 كوب سمن','3 كوب قطر','فستق للزينة'], steps:'ادهن الصينية بالسمن.\nضع طبقة جلاش وادهنها بالسمن.\nكرر 10 طبقات ثم ضع الجوز.\nأضف 10 طبقات أخرى مع السمن.\nقطّع البقلاوة إلى مربعات.\nاخبز 45 دقيقة حتى تصبح ذهبية.\nاسكب القطر البارد وزين بالفستق.' },
-            { id:'ar10', title:'أم علي', cat:'sweet', area:'مصري', time:'35 د', img:'🥣', yt:'', ings:['علبة عجينة بف باستري','3 أكواب حليب','كوب قشطة','مكسرات مشكلة','زبيب','جوز هند'], steps:'اخبز البف باستري وفتته.\nاخلط الحليب مع القشطة وسخّنه.\nضع البف باستري في صينية.\nأضف المكسرات والزبيب.\nاسكب الحليب الساخن.\nاخبز 20 دقيقة وقدّمها ساخنة.' },
-            { id:'ar11', title:'الكباب العراقي', cat:'main', area:'عراقي', time:'30 د', img:'🥙', yt:'', ings:['500g لحم مفروم','بصل مفروم','بقدونس','بهارات مشكلة','ملح وفلفل'], steps:'اخلط اللحم مع البصل والبقدونس.\nتبّل بالبهارات جيداً.\nشكّل اللحم على أسياخ.\nاشوِ على الفحم أو في الفرن.\nقدّم مع الخبز والسلطة.' },
-            { id:'ar12', title:'الشكشوكة المغربية', cat:'main', area:'مغربي', time:'20 د', img:'🍳', yt:'', ings:['4 بيضات','4 طماطم','بصل','فلفل أخضر','كمون','بابريكا'], steps:'اقلي البصل والفلفل في الزيت.\nأضف الطماطم والبهارات.\nاطبخ حتى تصبح صلصة سميكة.\nاكسر البيض فوق الصلصة.\nغطّ حتى ينضج البيض.\nقدّم مع الخبز الطازج.' },
-            { id:'ar13', title:'المحاشي المصرية', cat:'main', area:'مصري', time:'120 د', img:'🫑', yt:'', ings:['فلفل وباذنجان وكوسا','2 كوب أرز','لحم مفروم','شبت وبقدونس','صلصة طماطم'], steps:'احفر الخضار وأفرغها.\nاخلط الأرز مع اللحم والأعشاب.\nاحشُ الخضار بالخليط.\nرصّ المحاشي في القدر.\nاطبخ في صلصة الطماطم ساعة.\nقدّم ساخنة مع الزبادي.' },
-            { id:'ar14', title:'الفتوش اللبناني', cat:'appetizer', area:'لبناني', time:'15 د', img:'🥗', yt:'', ings:['خبز عربي محمص','خس','طماطم','خيار','بصل','زيت زيتون','دبس رمان','سماق'], steps:'قطّع الخضار إلى قطع متوسطة.\nاقطع الخبز المحمص.\nاخلط زيت الزيتون مع دبس الرمان.\nضع الخضار في طبق التقديم.\nأضف الخبز والصوص.\nرش السماق على الوجه.' },
-            { id:'ar15', title:'الشاي العدني', cat:'drink', area:'يمني', time:'15 د', img:'☕', yt:'', ings:['4 أكياس شاي أحمر','حليب مكثف','هيل','زنجبيل','قرنفل','سكر'], steps:'اغلِ الماء مع الهيل والزنجبيل.\nأضف الشاي واتركه 3 دقائق.\nصفّ الشاي في أكواب.\nأضف الحليب المكثف حسب الرغبة.\nقدّم ساخناً مع التمر.' },
-            { id:'ar16', title:'القهوة العربية', cat:'drink', area:'عربي', time:'20 د', img:'🫖', yt:'', ings:['3 ملاعق بن عربي مطحون','هيل مطحون','زعفران','ماء','تمر للتقديم'], steps:'اغلِ الماء في دلة القهوة.\nأضف البن واتركه يغلي 10 دقائق.\nأضف الهيل والزعفران.\nاتركه يهدأ ويرسب البن.\nاسكب في فناجين صغيرة.\nقدّم مع التمر الفاخر.' },
-            { id:'ar17', title:'المعصوب اليمني', cat:'sweet', area:'يمني', time:'20 د', img:'🍌', yt:'', ings:['2 رغيف خبز بر','2 موز ناضج','قشطة','عسل','تمر مقطع'], steps:'فتّت الخبز في وعاء.\nاهرس الموز وأضفه للخبز.\nأضف القشطة واخلط جيداً.\nاسكب العسل على الوجه.\nزيّن بالتمر وقدّم فوراً.' },
-            { id:'ar18', title:'السمبوسة', cat:'appetizer', area:'هندي', time:'40 د', img:'🥟', yt:'', ings:['علبة عجينة سمبوسة','لحم مفروم','بصل','بهارات','زيت للقلي'], steps:'اطبخ اللحم مع البصل والبهارات.\nاحشُ العجينة بالحشوة.\nاطوِ السمبوسة على شكل مثلث.\nاقلي في زيت غزير حتى تصبح ذهبية.\nقدّم مع الصلصة الحارة.' },
-            { id:'ar19', title:'المهلبية', cat:'sweet', area:'عربي', time:'15 د', img:'🍮', yt:'', ings:['4 أكواب حليب','نصف كوب نشا','سكر','ماء ورد','فستق للزينة'], steps:'اخلط النشا مع قليل من الحليب البارد.\nسخّن باقي الحليب مع السكر.\nأضف النشا وحرّك باستمرار.\nاطبخ حتى يصبح سميكاً.\nأضف ماء الورد واسكب في أطباق.\nبرّد وزين بالفستق.' },
-            { id:'ar20', title:'الكبسة الحجازية', cat:'rice', area:'سعودي', time:'60 د', img:'🍛', yt:'', ings:['دجاجة كاملة','3 أكواب أرز','طماطم','جزر','بهارات كبسة','لوز وزبيب'], steps:'حمّر الدجاج في الزيت.\nأضف الخضار والبهارات.\nاطبخ مع الماء 40 دقيقة.\nأضف الأرز واطبخ 25 دقيقة.\nزيّن بالمكسرات المحمصة.\nقدّم مع الصلصة الحارة.' }
+            { id:'ar1', title:'كبسة الدجاج السعودية', cat:'rice', area:'سعودي', time:'90 د', img:'🍗', ings:['دجاجة كاملة','3 أكواب أرز بسمتي','2 بصل','4 طماطم','بهارات كبسة','زبيب ولوز'], steps:'حمّر الدجاج حتى يصبح ذهبياً.\nأضف البصل وقلّب حتى يذبل.\nأضف الطماطم والبهارات واطبخ 10 دقائق.\nأضف 4 أكواب ماء واتركه يغلي.\nأضف الأرز واتركه على نار هادئة 30 دقيقة.\nزيّن بالزبيب واللوز المحمص.' },
+            { id:'ar2', title:'مندي اللحم', cat:'rice', area:'يمني', time:'180 د', img:'🥩', ings:['2 كيلو لحم غنم','3 أكواب أرز','بهارات مندي','فحم','زعفران','مكسرات'], steps:'تبّل اللحم واتركه ساعتين.\nاطبخ اللحم في قدر الضغط 45 دقيقة.\nاسلق الأرز في مرق اللحم.\nضع الفحم المشتعل للتدخين 10 دقائق.\nقدّم مع المكسرات.' },
+            { id:'ar3', title:'شاورما الدجاج', cat:'main', area:'عربي', time:'40 د', img:'🌯', ings:['صدر دجاج','بهارات شاورما','ثومية','مخلل','بطاطس','خبز صاج'], steps:'قطّع الدجاج شرائح.\nتبّل واتركه 30 دقيقة.\nاقلي على نار عالية.\nادهن الخبز بالثومية.\nأضف الحشوة ولفّ.' },
+            { id:'ar4', title:'مقلوبة فلسطينية', cat:'rice', area:'فلسطيني', time:'90 د', img:'🍲', ings:['دجاج','أرز','باذنجان','قرنبيط','بطاطا','بهارات'], steps:'اسلق الدجاج.\nاقلي الخضار.\nرصّ في القدر.\nاسكب المرق واطبخ 30 دقيقة.\nاقلب القدر وقدم.' },
+            { id:'ar5', title:'منسف أردني', cat:'main', area:'أردني', time:'120 د', img:'🍖', ings:['لحم غنم','جميد','أرز','خبز شراك','صنوبر'], steps:'انقع الجميد.\nاطبخ اللحم.\nضع الخبز ثم الأرز واللحم.\nاسكب الجميد وزين.' },
+            { id:'ar6', title:'حمص بيروتي', cat:'appetizer', area:'لبناني', time:'15 د', img:'🫒', ings:['حمص','طحينة','ليمون','ثوم','زيت زيتون','كمون'], steps:'اسلق الحمص.\nاهرسه مع الطحينة والليمون.\nزين بزيت الزيتون ورش الكمون.' },
+            { id:'ar7', title:'متبل باذنجان', cat:'appetizer', area:'شامي', time:'25 د', img:'🍆', ings:['باذنجان','طحينة','ليمون','ثوم','زيت زيتون'], steps:'اشوِ الباذنجان.\nقشّره واهرسه.\nأضف الطحينة والليمون.\nزيّن بزيت الزيتون.' },
+            { id:'ar8', title:'كنافة نابلسية', cat:'sweet', area:'فلسطيني', time:'60 د', img:'🧀', ings:['عجينة كنافة','جبن عكاوي','سمن','قطر','فستق'], steps:'فتّت العجينة واخلطها بالسمن.\nضع نصفها ثم الجبن.\nأضف الباقي واخبز.\nاسكب القطر وزين.' },
+            { id:'ar9', title:'بقلاوة تركية', cat:'sweet', area:'تركي', time:'60 د', img:'🥮', ings:['جلاش','جوز','سمن','قطر','فستق'], steps:'ضع طبقات الجلاش مع الجوز.\nاخبز 45 دقيقة.\nاسكب القطر البارد.' },
+            { id:'ar10', title:'أم علي', cat:'sweet', area:'مصري', time:'35 د', img:'🥣', ings:['بف باستري','حليب','قشطة','مكسرات','زبيب'], steps:'اخبز البف باستري وفتته.\nأضف الحليب والمكسرات.\nاخبز 20 دقيقة وقدم.' },
+            { id:'ar11', title:'كباب عراقي', cat:'main', area:'عراقي', time:'30 د', img:'🥙', ings:['لحم مفروم','بصل','بقدونس','بهارات'], steps:'اخلط اللحم مع البصل.\nشكّل على أسياخ.\nاشوِ وقدم.' },
+            { id:'ar12', title:'شكشوكة مغربية', cat:'main', area:'مغربي', time:'20 د', img:'🍳', ings:['بيض','طماطم','بصل','فلفل','كمون'], steps:'اقلي البصل والفلفل.\nأضف الطماطم.\nاكسر البيض وغطّ.' },
+            { id:'ar13', title:'قهوة عربية', cat:'drink', area:'عربي', time:'20 د', img:'🫖', ings:['بن عربي','هيل','زعفران','ماء','تمر'], steps:'اغلِ الماء.\nأضف البن.\nأضف الهيل.\nاتركه يهدأ واسكب.' },
+            { id:'ar14', title:'شاي عدني', cat:'drink', area:'يمني', time:'15 د', img:'☕', ings:['شاي أحمر','حليب مكثف','هيل','زنجبيل'], steps:'اغلِ الماء مع البهارات.\nأضف الشاي.\nصفّ وأضف الحليب.' },
+            { id:'ar15', title:'معصوب يمني', cat:'sweet', area:'يمني', time:'20 د', img:'🍌', ings:['خبز بر','موز','قشطة','عسل','تمر'], steps:'فتّت الخبز.\nاهرس الموز.\nأضف القشطة.\nاسكب العسل.' }
         ];
 
         async function fetchRecipes(query) {
-            const area = document.getElementById('contentArea');
-            area.innerHTML = '<div class="loading-box"><div class="spinner"></div><div class="loading-text">جاري تحميل الوصفات...</div></div>';
+            document.getElementById('contentArea').innerHTML = '<div class="loading-state"><div class="loading-ring"></div><div class="loading-text">جاري التحميل...</div></div>';
             let fetched = [];
             try {
                 const q = query || 'chicken';
@@ -447,16 +513,14 @@
                 if (data.meals) {
                     fetched = data.meals.map(m => ({
                         id: m.idMeal, title: m.strMeal, cat: m.strCategory || 'عام',
-                        area: m.strArea || 'عالمي', time: '30-45 د', img: m.strMealThumb || '🍽️',
+                        area: m.strArea || 'عالمي', time: '30-45 د',
+                        img: m.strMealThumb ? m.strMealThumb + '/preview' : '🍽️',
                         yt: m.strYoutube || '', ings: getIngs(m), steps: m.strInstructions || ''
                     }));
                 }
                 allRecipes = [...arabicRecipes, ...fetched];
                 render(); updateStats();
-                showToast(`✅ ${allRecipes.length} وصفة`);
-            } catch(e) {
-                allRecipes = arabicRecipes; render(); updateStats();
-            }
+            } catch(e) { allRecipes = arabicRecipes; render(); updateStats(); }
         }
 
         function getIngs(m) {
@@ -470,7 +534,7 @@
 
         async function searchRecipes() {
             const q = document.getElementById('searchInput').value.trim();
-            if (!q) { showToast('⚠️ اكتب اسم الوصفة'); return; }
+            if (!q) return showToast('⚠️ اكتب اسم الوصفة');
             await fetchRecipes(q);
         }
 
@@ -484,34 +548,19 @@
 
             updateStats();
             if (!list.length) {
-                area.innerHTML = '<div class="empty-box"><span class="empty-icon">🍽️</span><span class="empty-text">لا توجد وصفات</span></div>';
+                area.innerHTML = '<div class="empty-state"><span class="empty-icon">🍽️</span><div class="empty-title">لا توجد وصفات</div><div class="empty-sub">جرب البحث عن شيء آخر</div></div>';
                 return;
             }
 
             area.innerHTML = list.map(r => {
                 const isFav = favorites.includes(r.id);
-                const catName = { main:'رئيسي', rice:'أرز', appetizer:'مقبلات', sweet:'حلويات', drink:'مشروبات' }[r.cat] || r.cat || 'عام';
-                const hasImage = r.img && r.img.startsWith('http');
-                const imgTag = hasImage 
-                    ? `<img src="${r.img}" alt="${r.title}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">` 
-                    : `<span style="font-size:50px">${r.img||'🍽️'}</span>`;
-                return `
-                    <div class="card" onclick="openModal('${r.id}')">
-                        <div class="card-img">
-                            ${imgTag}
-                            <span class="card-time">⏱ ${r.time}</span>
-                            <button class="card-fav ${isFav?'liked':''}" onclick="event.stopPropagation();toggleFav('${r.id}')">${isFav?'❤️':'🤍'}</button>
-                        </div>
-                        <div class="card-body">
-                            <span class="card-tag">${catName}</span>
-                            <div class="card-title">${r.title}</div>
-                            <div class="card-footer">
-                                <span class="card-area">🌍 ${r.area||'عالمي'}</span>
-                                <span class="card-stars">⭐</span>
-                            </div>
-                        </div>
-                    </div>
-                `;
+                const catNames = { main:'رئيسي', rice:'أرز', appetizer:'مقبلات', sweet:'حلويات', drink:'مشروبات' };
+                const catName = catNames[r.cat] || r.cat || 'عام';
+                const isImage = r.img && r.img.startsWith('http');
+                const imgTag = isImage
+                    ? `<img src="${r.img}" alt="${r.title}" loading="lazy" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><span class="emoji-placeholder" style="display:none">🍽️</span>`
+                    : `<span class="emoji-placeholder">${r.img||'🍽️'}</span>`;
+                return `<div class="card" onclick="openModal('${r.id}')"><div class="card-img">${imgTag}<span class="card-badge-time">⏱ ${r.time}</span><button class="card-btn-fav ${isFav?'liked':''}" onclick="event.stopPropagation();toggleFav('${r.id}')">${isFav?'❤️':'🤍'}</button></div><div class="card-body"><span class="card-tag">${catName}</span><div class="card-title">${r.title}</div><div class="card-footer"><span class="card-area">🌍 ${r.area||'عالمي'}</span><span class="card-rate">⭐</span></div></div></div>`;
             }).join('');
         }
 
@@ -534,12 +583,12 @@
             showFavs = !showFavs;
             document.getElementById('favFilterBtn').classList.toggle('active', showFavs);
             render();
-            showToast(showFavs ? '❤️ عرض المفضلة' : '🌍 عرض الكل');
+            showToast(showFavs ? '❤️ المفضلة' : '🌍 الكل');
         }
 
         function toggleFav(id) {
             favorites = favorites.includes(id) ? favorites.filter(f => f !== id) : [...favorites, id];
-            localStorage.setItem('tbakh_final_favs', JSON.stringify(favorites));
+            localStorage.setItem('tbakh_pro_favs', JSON.stringify(favorites));
             updateStats(); render();
         }
 
@@ -547,35 +596,27 @@
             const r = allRecipes.find(x => x.id.toString() === id.toString());
             if (!r) return;
             const isFav = favorites.includes(r.id);
-            const catName = { main:'رئيسي', rice:'أرز', appetizer:'مقبلات', sweet:'حلويات', drink:'مشروبات' }[r.cat] || r.cat || 'عام';
-            const hasImage = r.img && r.img.startsWith('http');
-            const imgTag = hasImage 
-                ? `<img src="${r.img}" alt="${r.title}" style="width:100%;height:100%;object-fit:cover;display:block;">` 
-                : `<span style="font-size:65px">${r.img||'🍽️'}</span>`;
+            const catNames = { main:'رئيسي', rice:'أرز', appetizer:'مقبلات', sweet:'حلويات', drink:'مشروبات' };
+            const catName = catNames[r.cat] || r.cat || 'عام';
+            const isImage = r.img && r.img.startsWith('http');
+            const imgTag = isImage
+                ? `<img src="${r.img}" alt="${r.title}" onerror="this.style.display='none';this.nextElementSibling.style.display='block'"><span class="emoji-placeholder" style="display:none">🍽️</span>`
+                : `<span class="emoji-placeholder">${r.img||'🍽️'}</span>`;
 
             document.getElementById('modal').innerHTML = `
                 <div class="modal-handle"></div>
-                <div class="modal-hero">${imgTag}<button class="modal-close" onclick="closeModal()">✕</button></div>
-                <div class="modal-body">
-                    <span class="modal-tag">${catName} • ${r.area||'عالمي'}</span>
+                <div class="modal-hero">${imgTag}<button class="modal-close-btn" onclick="closeModal()">✕</button></div>
+                <div class="modal-content">
+                    <div class="modal-meta-row"><span class="modal-tag">${catName}</span><span style="font-size:9px;color:#999">${r.area||'عالمي'}</span></div>
                     <div class="modal-title">${r.title}</div>
-                    <div class="modal-info">
-                        <div class="info-pill">⏱ ${r.time}</div>
-                        <div class="info-pill">🌍 ${r.area||'عالمي'}</div>
-                        <div class="info-pill">📋 ${(r.ings||[]).length} مكونات</div>
+                    <div class="modal-info-pills"><div class="info-pill"><span class="pill-icon">⏱</span>${r.time}</div><div class="info-pill"><span class="pill-icon">🌍</span>${r.area||'عالمي'}</div><div class="info-pill"><span class="pill-icon">📋</span>${(r.ings||[]).length} مكونات</div></div>
+                    <div class="modal-section"><div class="section-heading">🛒 المقادير</div><ul class="ingredients-list">${(r.ings||['مكونات متنوعة']).map(i => `<li class="ingredient-row"><span class="ingredient-bullet"></span>${i}</li>`).join('')}</ul></div>
+                    <div class="modal-section"><div class="section-heading">👨‍🍳 طريقة التحضير</div><div class="instructions-text">${r.steps||'暂无说明'}</div></div>
+                    <div class="btn-row">
+                        ${r.yt ? `<a href="${r.yt}" target="_blank" class="btn-youtube-link">▶️ شاهد الفيديو على يوتيوب</a>` : ''}
+                        <button class="btn-favorite ${isFav?'liked':''}" onclick="toggleFav('${r.id}');closeModal();showToast('${isFav?'💔 تمت الإزالة':'❤️ تمت الإضافة'}')">${isFav?'❤️ إزالة من المفضلة':'🤍 أضف إلى المفضلة'}</button>
                     </div>
-                    <div class="section">
-                        <div class="section-title">🛒 المقادير</div>
-                        <ul class="ingredient-list">${(r.ings||['مكونات متنوعة']).map(i => `<li class="ingredient-item"><span class="ingredient-dot"></span>${i}</li>`).join('')}</ul>
-                    </div>
-                    <div class="section">
-                        <div class="section-title">👨‍🍳 طريقة التحضير</div>
-                        <div class="instructions">${r.steps||'暂无说明'}</div>
-                    </div>
-                    ${r.yt ? `<a href="${r.yt}" target="_blank" class="btn-yt">▶️ شاهد الفيديو على يوتيوب</a>` : ''}
-                    <button class="btn-fav ${isFav?'liked':''}" onclick="toggleFav('${r.id}');closeModal();showToast('${isFav?'💔 تمت الإزالة':'❤️ تمت الإضافة'}')">${isFav?'❤️ إزالة من المفضلة':'🤍 أضف إلى المفضلة'}</button>
-                </div>
-            `;
+                </div>`;
             document.getElementById('modalOverlay').classList.add('show');
         }
 
@@ -585,7 +626,7 @@
         function showToast(msg) {
             const t = document.getElementById('toast');
             t.textContent = msg; t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 2000);
+            setTimeout(() => t.classList.remove('show'), 2200);
         }
 
         updateStats(); fetchRecipes();
