@@ -3,39 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>كتاب الطبخ العربي</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+    <title>طبّاخ | وصفات عالمية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=El+Messiri:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #fafaf8;
             --surface: #ffffff;
-            --border: #f0ede8;
+            --border: #eeece8;
             --gold: #c9a84c;
-            --gold-light: #f5ecd8;
+            --gold-light: #f8f2e0;
             --gold-dark: #8b7300;
-            --brown: #8B4513;
-            --brown-light: #faf5f0;
-            --olive: #556B2F;
-            --olive-light: #f5f8f0;
+            --accent: #e74c3c;
+            --accent-light: #fdf2f2;
+            --green: #27ae60;
+            --green-light: #eafaf1;
             --text: #1a1a1a;
             --text2: #555;
             --text3: #999;
-            --shadow: 0 2px 8px rgba(0,0,0,0.04);
-            --shadow-lg: 0 8px 24px rgba(0,0,0,0.06);
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.03);
+            --shadow: 0 2px 8px rgba(0,0,0,0.05);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
+            --shadow-xl: 0 20px 50px rgba(0,0,0,0.12);
+            --radius-sm: 10px;
+            --radius: 14px;
+            --radius-lg: 18px;
+            --radius-xl: 22px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: #f2f0eb;
+            background: linear-gradient(180deg, #f5f3ee 0%, #f0ede6 100%);
             color: var(--text);
-            font-family: 'Cairo', 'Tajawal', sans-serif;
+            font-family: 'Cairo', 'El Messiri', sans-serif;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             -webkit-tap-highlight-color: transparent;
-            direction: rtl;
+            -webkit-font-smoothing: antialiased;
         }
 
         .app {
@@ -46,15 +52,16 @@
             display: flex;
             flex-direction: column;
             background: var(--bg);
-            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
+            box-shadow: var(--shadow-xl);
             position: relative;
             overflow: hidden;
+            border-radius: 8px;
         }
 
         /* ==================== HEADER ==================== */
         .header {
             padding: 14px 18px;
-            background: linear-gradient(135deg, #fff, #fdfaf5);
+            background: linear-gradient(135deg, #fff 0%, #fefefe 100%);
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
@@ -62,67 +69,98 @@
             z-index: 10;
         }
 
-        .header-right {
+        .header-brand {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+        }
+
+        .logo-container {
+            position: relative;
+            width: 44px;
+            height: 44px;
         }
 
         .logo-icon {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
             border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
-            box-shadow: 0 4px 12px rgba(201,168,76,0.3);
+            font-size: 20px;
+            box-shadow: 0 4px 14px rgba(231,76,60,0.25);
+            position: relative;
+            z-index: 2;
         }
 
-        .header-title {
-            font-size: 19px;
+        .logo-dot {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: #f39c12;
+            border-radius: 50%;
+            top: -2px;
+            right: -2px;
+            z-index: 3;
+            animation: dotPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes dotPulse {
+            0%, 100% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.8); opacity: 1; }
+        }
+
+        .header-text h1 {
+            font-size: 18px;
             font-weight: 800;
             color: #1a1a1a;
             letter-spacing: 0;
+            line-height: 1;
         }
 
-        .header-sub {
+        .header-text span {
             font-size: 9px;
             color: #999;
-            font-weight: 600;
+            font-weight: 500;
+            letter-spacing: 0.5px;
         }
 
-        .header-actions { display: flex; gap: 6px; }
+        .header-actions {
+            display: flex;
+            gap: 8px;
+        }
 
-        .header-btn {
-            width: 38px;
-            height: 38px;
-            background: #f8f6f2;
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            background: #f8f7f4;
             border: 1px solid var(--border);
             color: #888;
             cursor: pointer;
-            border-radius: 12px;
+            border-radius: 13px;
             font-size: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.3s;
+            transition: all 0.25s;
             position: relative;
         }
 
-        .header-btn.active {
-            background: #fdf5f5;
+        .icon-btn:hover { background: #f0ede8; color: #555; }
+        .icon-btn.active {
+            background: var(--accent-light);
             border-color: #e74c3c;
             color: #e74c3c;
         }
 
-        .fav-badge {
+        .badge {
             position: absolute;
-            top: -5px;
-            right: -5px;
-            width: 18px;
-            height: 18px;
+            top: -6px;
+            right: -6px;
+            width: 20px;
+            height: 20px;
             background: #e74c3c;
             color: #fff;
             font-size: 9px;
@@ -132,59 +170,78 @@
             align-items: center;
             justify-content: center;
             display: none;
+            box-shadow: 0 2px 6px rgba(231,76,60,0.3);
         }
-        .fav-badge.show { display: flex; }
+        .badge.show { display: flex; }
 
-        /* ==================== STATS ==================== */
-        .stats-bar {
+        /* ==================== STATS BAR ==================== */
+        .stats-row {
             display: flex;
-            gap: 6px;
-            padding: 8px 16px;
-            background: var(--surface);
+            gap: 8px;
+            padding: 10px 16px;
+            background: #fff;
             border-bottom: 1px solid var(--border);
         }
 
-        .stat-card {
+        .stat-box {
             flex: 1;
-            padding: 8px;
-            background: #fdfaf5;
-            border: 1px solid var(--border);
-            border-radius: 10px;
+            padding: 10px 8px;
+            border-radius: var(--radius-sm);
             text-align: center;
+            transition: all 0.3s;
         }
 
+        .stat-box:nth-child(1) { background: #fdfaf3; border: 1px solid #f5eed8; }
+        .stat-box:nth-child(2) { background: #fdf5f5; border: 1px solid #fce4e4; }
+        .stat-box:nth-child(3) { background: #f5fdf8; border: 1px solid #d5f5e3; }
+        .stat-box:nth-child(4) { background: #f5f8fd; border: 1px solid #d6eaf8; }
+
         .stat-num {
-            font-size: 14px;
+            font-size: 15px;
             font-weight: 800;
-            color: var(--gold-dark);
+            display: block;
         }
-        .stat-lbl {
-            font-size: 7px;
+
+        .stat-box:nth-child(1) .stat-num { color: #b8860b; }
+        .stat-box:nth-child(2) .stat-num { color: #e74c3c; }
+        .stat-box:nth-child(3) .stat-num { color: #27ae60; }
+        .stat-box:nth-child(4) .stat-num { color: #2980b9; }
+
+        .stat-label {
+            font-size: 8px;
             color: #999;
-            letter-spacing: 1px;
+            letter-spacing: 0.5px;
             margin-top: 2px;
         }
 
         /* ==================== SEARCH ==================== */
-        .search-section {
-            padding: 0 16px 8px;
-            background: var(--surface);
+        .search-container {
+            padding: 10px 16px;
+            background: #fff;
+            border-bottom: 1px solid var(--border);
         }
 
-        .search-wrapper { position: relative; }
+        .search-box {
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-input-wrap {
+            flex: 1;
+            position: relative;
+        }
 
         .search-input {
             width: 100%;
-            padding: 11px 40px 11px 14px;
-            background: #f8f6f2;
+            padding: 12px 42px 12px 16px;
+            background: #f8f7f4;
             border: 1.5px solid var(--border);
             color: var(--text);
             font-size: 12px;
-            border-radius: 12px;
+            border-radius: 14px;
             font-family: 'Cairo', sans-serif;
             outline: none;
             transition: all 0.3s;
-            text-align: right;
         }
 
         .search-input:focus {
@@ -192,52 +249,29 @@
             background: #fff;
             box-shadow: 0 0 0 4px rgba(201,168,76,0.06);
         }
-        .search-input::placeholder { color: #ccc; }
 
-        .search-icon {
+        .search-input::placeholder { color: #ccc; font-family: 'Cairo', sans-serif; }
+
+        .search-icon-btn {
             position: absolute;
-            right: 14px;
+            right: 4px;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 14px;
-            color: #bbb;
-            pointer-events: none;
-        }
-
-        /* ==================== CATEGORY FILTER ==================== */
-        .cat-scroll {
-            display: flex;
-            gap: 6px;
-            padding: 0 16px 10px;
-            background: var(--surface);
-            overflow-x: auto;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .cat-scroll::-webkit-scrollbar { height: 0; }
-
-        .cat-chip {
-            padding: 8px 14px;
-            background: #f8f6f2;
-            border: 1.5px solid var(--border);
-            color: #888;
+            width: 34px;
+            height: 34px;
+            background: var(--gold);
+            border: none;
+            color: #fff;
             cursor: pointer;
-            border-radius: 22px;
-            font-size: 10px;
-            font-weight: 700;
-            white-space: nowrap;
+            border-radius: 10px;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             transition: all 0.3s;
-            font-family: 'Cairo', sans-serif;
         }
 
-        .cat-chip:hover { background: #f0ede8; }
-        .cat-chip.active {
-            background: #fff;
-            border-color: var(--gold);
-            color: var(--gold-dark);
-            font-weight: 800;
-            box-shadow: 0 2px 8px rgba(201,168,76,0.12);
-        }
+        .search-icon-btn:hover { background: var(--gold-dark); }
 
         /* ==================== CONTENT ==================== */
         .content-area {
@@ -253,60 +287,83 @@
         .content-area::-webkit-scrollbar { width: 4px; }
         .content-area::-webkit-scrollbar-thumb { background: #e0ddd8; border-radius: 4px; }
 
-        /* ==================== RECIPE CARD ==================== */
+        /* ==================== CARD ==================== */
         .recipe-card {
-            background: var(--surface);
+            background: #fff;
             border: 1px solid var(--border);
-            border-radius: 16px;
+            border-radius: var(--radius-lg);
             overflow: hidden;
             cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: var(--shadow);
-            animation: cardIn 0.4s ease;
-            position: relative;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-sm);
+            animation: fadeUp 0.5s ease;
         }
 
-        @keyframes cardIn {
-            from { opacity: 0; transform: translateY(10px); }
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(14px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .recipe-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+        .recipe-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
         .recipe-card:active { transform: scale(0.97); }
 
-        .card-image {
+        .card-img {
             width: 100%;
             aspect-ratio: 1.3;
-            background: linear-gradient(135deg, #f8f4ec, #f0e8d8);
+            background: linear-gradient(135deg, #faf7f0, #f2ece0);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 36px;
+            font-size: 38px;
             position: relative;
+            overflow: hidden;
         }
 
-        .card-time {
+        .card-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s;
+        }
+
+        .recipe-card:hover .card-img img { transform: scale(1.05); }
+
+        .card-img-overlay {
             position: absolute;
-            top: 8px;
-            right: 8px;
-            padding: 4px 10px;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.2) 0%, transparent 50%);
+        }
+
+        .card-badge-time {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 5px 10px;
             background: rgba(255,255,255,0.95);
-            color: #666;
-            font-size: 9px;
+            color: #555;
+            font-size: 8px;
             font-weight: 700;
             border-radius: 20px;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            z-index: 2;
         }
 
-        .card-fav {
+        .card-btn-fav {
             position: absolute;
-            top: 8px;
-            left: 8px;
+            top: 10px;
+            left: 10px;
             width: 30px;
             height: 30px;
             background: rgba(255,255,255,0.95);
             border: none;
-            color: #ddd;
+            color: #ccc;
             cursor: pointer;
             border-radius: 50%;
             font-size: 13px;
@@ -314,19 +371,21 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s;
-            box-shadow: var(--shadow);
+            box-shadow: var(--shadow-sm);
+            z-index: 2;
         }
 
-        .card-fav.liked { color: #e74c3c; }
+        .card-btn-fav:hover { transform: scale(1.1); }
+        .card-btn-fav.liked { color: #e74c3c; background: #fff; }
 
         .card-body { padding: 12px 14px 14px; }
 
-        .card-cat {
+        .card-tag {
             display: inline-block;
             padding: 3px 8px;
             background: var(--gold-light);
             color: var(--gold-dark);
-            font-size: 8px;
+            font-size: 7px;
             font-weight: 700;
             border-radius: 6px;
             letter-spacing: 0.5px;
@@ -337,25 +396,29 @@
             font-size: 13px;
             font-weight: 700;
             color: #1a1a1a;
-            line-height: 1.4;
-            margin-bottom: 8px;
+            line-height: 1.35;
+            margin-bottom: 6px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
 
-        .card-footer {
+        .card-footer-row {
             display: flex;
             align-items: center;
             justify-content: space-between;
         }
 
-        .card-stars { color: #f0a500; font-size: 10px; }
-        .card-diff {
+        .card-area {
             font-size: 9px;
             color: #999;
             font-weight: 600;
+        }
+
+        .card-stars {
+            color: #f0a500;
+            font-size: 9px;
         }
 
         /* ==================== MODAL ==================== */
@@ -363,23 +426,24 @@
             display: none;
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,0.45);
+            background: rgba(0,0,0,0.5);
             z-index: 100;
             align-items: flex-end;
             justify-content: center;
+            backdrop-filter: blur(4px);
         }
 
         .modal-overlay.show { display: flex; }
 
         .modal {
             background: #fff;
-            border-radius: 24px 24px 0 0;
+            border-radius: 28px 28px 0 0;
             width: 100%;
             max-width: 480px;
-            max-height: 88vh;
+            max-height: 90vh;
             overflow-y: auto;
-            animation: slideUp 0.4s ease;
-            box-shadow: 0 -15px 50px rgba(0,0,0,0.2);
+            animation: slideUp 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 -20px 60px rgba(0,0,0,0.25);
         }
 
         @keyframes slideUp {
@@ -390,68 +454,85 @@
         .modal::-webkit-scrollbar { width: 3px; }
         .modal::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
 
-        .modal-handle {
-            width: 36px;
-            height: 4px;
+        .modal-drag-handle {
+            width: 40px;
+            height: 5px;
             background: #e0ddd8;
-            border-radius: 2px;
-            margin: 10px auto 0;
+            border-radius: 3px;
+            margin: 12px auto 0;
         }
 
-        .modal-image {
+        .modal-hero {
             width: 100%;
             aspect-ratio: 1.5;
-            background: linear-gradient(135deg, #f8f4ec, #f0e8d8);
+            background: linear-gradient(135deg, #faf7f0, #f2ece0);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 55px;
+            font-size: 60px;
             position: relative;
-            margin-top: 6px;
+            margin-top: 8px;
         }
 
-        .modal-close {
+        .modal-hero img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .modal-close-btn {
             position: absolute;
-            top: 12px;
-            right: 12px;
-            width: 34px;
-            height: 34px;
+            top: 14px;
+            right: 14px;
+            width: 38px;
+            height: 38px;
             background: rgba(255,255,255,0.95);
             border: none;
             color: #333;
             cursor: pointer;
             border-radius: 50%;
-            font-size: 15px;
+            font-size: 16px;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 5;
             box-shadow: var(--shadow);
+            transition: all 0.3s;
         }
 
-        .modal-body { padding: 20px 18px 30px; }
+        .modal-close-btn:hover {
+            background: #fff;
+            transform: scale(1.05);
+        }
 
-        .modal-cat {
+        .modal-content { padding: 22px 18px 32px; }
+
+        .modal-meta-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+
+        .modal-tag {
             display: inline-block;
-            padding: 4px 10px;
+            padding: 5px 12px;
             background: var(--gold-light);
             color: var(--gold-dark);
             font-size: 9px;
             font-weight: 700;
             border-radius: 20px;
-            letter-spacing: 0.5px;
-            margin-bottom: 6px;
         }
 
         .modal-title {
-            font-size: 21px;
+            font-size: 22px;
             font-weight: 800;
             color: #1a1a1a;
             margin-bottom: 12px;
-            line-height: 1.4;
+            line-height: 1.3;
         }
 
-        .modal-info {
+        .modal-info-pills {
             display: flex;
             gap: 8px;
             margin-bottom: 20px;
@@ -462,42 +543,64 @@
             display: flex;
             align-items: center;
             gap: 5px;
-            padding: 7px 12px;
-            background: #fdfaf5;
-            border-radius: 20px;
+            padding: 8px 14px;
+            background: #faf8f4;
+            border-radius: 25px;
             font-size: 10px;
             font-weight: 600;
             color: #666;
-            border: 1px solid var(--border);
+            border: 1px solid #f0ede8;
         }
 
-        .modal-section { margin-bottom: 20px; }
+        .info-pill .pill-icon { font-size: 15px; }
 
-        .section-title {
+        .modal-section {
+            margin-bottom: 20px;
+        }
+
+        .section-heading {
             font-size: 13px;
             font-weight: 700;
             color: #1a1a1a;
             margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 6px;
+            gap: 8px;
         }
 
-        .ingredient-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+        .section-heading::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #f0ede8;
+        }
 
-        .ingredient-item {
+        .ingredients-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .ingredient-row {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
             font-size: 11px;
             color: #444;
-            padding: 9px 12px;
+            padding: 10px 14px;
             background: #fafaf8;
             border-radius: 10px;
             border: 1px solid #f5f2ec;
+            transition: all 0.2s;
         }
 
-        .ingredient-dot {
+        .ingredient-row:hover {
+            background: #fdfaf3;
+            border-color: #f0e8d0;
+        }
+
+        .ingredient-bullet {
             width: 6px;
             height: 6px;
             background: var(--gold);
@@ -505,33 +608,23 @@
             flex-shrink: 0;
         }
 
-        .step-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
-
-        .step-item {
-            display: flex;
-            gap: 10px;
+        .instructions-text {
             font-size: 11px;
             color: #444;
-            line-height: 1.6;
+            line-height: 1.9;
+            white-space: pre-line;
         }
 
-        .step-num {
-            width: 24px;
-            height: 24px;
-            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-            color: #fff;
-            font-weight: 700;
-            font-size: 10px;
+        .btn-row {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            flex-shrink: 0;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 6px;
         }
 
-        .btn-fav {
+        .btn-favorite {
             width: 100%;
-            padding: 12px;
+            padding: 13px;
             background: #fafaf8;
             border: 1.5px solid #f0ede8;
             color: #666;
@@ -541,25 +634,81 @@
             font-weight: 700;
             transition: all 0.3s;
             font-family: 'Cairo', sans-serif;
-            margin-top: 4px;
         }
 
-        .btn-fav.liked {
-            background: #e74c3c;
+        .btn-favorite:hover { background: #fdf5f5; border-color: #e74c3c; color: #e74c3c; }
+        .btn-favorite.liked { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+
+        .btn-youtube-link {
+            width: 100%;
+            padding: 13px;
+            background: #ff0000;
             color: #fff;
-            border-color: #e74c3c;
+            border: none;
+            cursor: pointer;
+            border-radius: 14px;
+            font-size: 12px;
+            font-weight: 700;
+            transition: all 0.3s;
+            font-family: 'Cairo', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
         }
 
-        /* ==================== EMPTY ==================== */
+        .btn-youtube-link:hover { background: #cc0000; }
+
+        /* ==================== LOADING & EMPTY ==================== */
+        .loading-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px 20px;
+            color: #bbb;
+        }
+
+        .loading-ring {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #f0ede8;
+            border-top-color: var(--gold);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        .loading-text {
+            font-size: 11px;
+            font-weight: 600;
+        }
+
         .empty-state {
             grid-column: 1 / -1;
             text-align: center;
-            padding: 40px;
-            color: #ccc;
+            padding: 50px 20px;
         }
 
-        .empty-icon { font-size: 45px; display: block; margin-bottom: 8px; }
-        .empty-text { font-size: 12px; font-weight: 600; }
+        .empty-icon {
+            font-size: 50px;
+            display: block;
+            margin-bottom: 10px;
+            opacity: 0.4;
+        }
+
+        .empty-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #999;
+            margin-bottom: 4px;
+        }
+
+        .empty-sub {
+            font-size: 10px;
+            color: #bbb;
+        }
 
         /* ==================== TOAST ==================== */
         .toast {
@@ -569,143 +718,244 @@
             transform: translateX(-50%) translateY(120px);
             background: #1a1a1a;
             color: #fff;
-            padding: 12px 22px;
+            padding: 12px 24px;
             border-radius: 30px;
-            font-size: 11px;
+            font-size: 10px;
             font-weight: 600;
             z-index: 300;
-            transition: transform 0.4s;
+            transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             font-family: 'Cairo', sans-serif;
+            white-space: nowrap;
         }
 
         .toast.show { transform: translateX(-50%) translateY(0); }
+
+        /* Pull to refresh */
+        .refresh-hint {
+            text-align: center;
+            padding: 8px;
+            background: #fdfaf3;
+            color: var(--gold-dark);
+            font-size: 9px;
+            font-weight: 700;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border);
+            transition: all 0.3s;
+        }
+
+        .refresh-hint:hover { background: #faf5e6; }
+        .refresh-hint:active { background: #f5ecd0; }
     </style>
 </head>
 <body>
     <div class="app">
-        <!-- Header -->
+        <!-- ==================== HEADER ==================== -->
         <div class="header">
-            <div class="header-right">
-                <div class="logo-icon">🍳</div>
-                <div>
-                    <div class="header-title">كتاب الطبخ</div>
-                    <div class="header-sub">المطبخ العربي الأصيل</div>
+            <div class="header-brand">
+                <div class="logo-container">
+                    <div class="logo-icon">🍳</div>
+                    <div class="logo-dot"></div>
+                </div>
+                <div class="header-text">
+                    <h1>طبّاخ</h1>
+                    <span>وصفات عالمية</span>
                 </div>
             </div>
             <div class="header-actions">
-                <button class="header-btn" id="favFilterBtn" onclick="toggleFavFilter()">
+                <button class="icon-btn" id="favFilterBtn" onclick="toggleFavFilter()">
                     ❤️
-                    <span class="fav-badge" id="favBadge">0</span>
+                    <span class="badge" id="favBadge">0</span>
                 </button>
             </div>
         </div>
 
-        <!-- Stats -->
-        <div class="stats-bar">
-            <div class="stat-card"><div class="stat-num" id="statTotal">20</div><div class="stat-lbl">وصفة</div></div>
-            <div class="stat-card"><div class="stat-num">5</div><div class="stat-lbl">أقسام</div></div>
-            <div class="stat-card"><div class="stat-num" id="statFavs">0</div><div class="stat-lbl">مفضلة</div></div>
-            <div class="stat-card"><div class="stat-num">⭐</div><div class="stat-lbl">تقييم</div></div>
-        </div>
-
-        <!-- Search -->
-        <div class="search-section">
-            <div class="search-wrapper">
-                <input type="text" class="search-input" placeholder="ابحث عن وصفة أو مكون..." id="searchInput" oninput="renderRecipes()">
-                <span class="search-icon">🔍</span>
+        <!-- ==================== STATS ==================== -->
+        <div class="stats-row">
+            <div class="stat-box">
+                <span class="stat-num" id="statTotal">-</span>
+                <span class="stat-label">وصفة</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-num" id="statFavs">0</span>
+                <span class="stat-label">مفضلة</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-num">🌐</span>
+                <span class="stat-label">أونلاين</span>
+            </div>
+            <div class="stat-box">
+                <span class="stat-num">🔄</span>
+                <span class="stat-label">تحديث</span>
             </div>
         </div>
 
-        <!-- Categories -->
-        <div class="cat-scroll" id="catFilter">
-            <button class="cat-chip active" data-cat="all" onclick="filterCat('all', this)">🍽️ الكل</button>
-            <button class="cat-chip" data-cat="main" onclick="filterCat('main', this)">🍖 أطباق رئيسية</button>
-            <button class="cat-chip" data-cat="rice" onclick="filterCat('rice', this)">🍚 أرز وكبسات</button>
-            <button class="cat-chip" data-cat="appetizer" onclick="filterCat('appetizer', this)">🥗 مقبلات</button>
-            <button class="cat-chip" data-cat="sweet" onclick="filterCat('sweet', this)">🍯 حلويات</button>
-            <button class="cat-chip" data-cat="drink" onclick="filterCat('drink', this)">☕ مشروبات</button>
+        <!-- ==================== REFRESH ==================== -->
+        <div class="refresh-hint" onclick="fetchRecipes()">
+            🔄 اسحب للتحديث وجلب وصفات جديدة من حول العالم
         </div>
 
-        <!-- Content -->
-        <div class="content-area" id="contentArea"></div>
+        <!-- ==================== SEARCH ==================== -->
+        <div class="search-container">
+            <div class="search-box">
+                <div class="search-input-wrap">
+                    <input type="text" class="search-input" placeholder="ابحث عن أي وصفة في العالم..." id="searchInput" onkeypress="if(event.key==='Enter')searchRecipes()">
+                    <button class="search-icon-btn" onclick="searchRecipes()">🔍</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- ==================== CONTENT ==================== -->
+        <div class="content-area" id="contentArea">
+            <div class="loading-state">
+                <div class="loading-ring"></div>
+                <div class="loading-text">جاري تحميل أشهى الوصفات...</div>
+            </div>
+        </div>
     </div>
 
-    <!-- Modal -->
+    <!-- ==================== MODAL ==================== -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal" id="modal"></div>
     </div>
 
-    <!-- Toast -->
+    <!-- ==================== TOAST ==================== -->
     <div class="toast" id="toast"></div>
 
     <script>
-        const recipes = [
-            { id:1, title:'كبسة الدجاج السعودية', cat:'rice', time:'ساعة ونصف', diff:'متوسط', servings:6, stars:5, image:'🍗', ingredients:['دجاجة كاملة مقطعة','3 أكواب أرز بسمتي','2 بصل مفروم','4 طماطم مبشورة','بهارات الكبسة','زبيب ولوز للزينة','زيت نباتي'], steps:['اغسل الأرز وانقعه 30 دقيقة.','حمّر الدجاج في الزيت حتى يصبح ذهبياً.','أضف البصل وقلّب حتى يذبل.','أضف الطماطم والبهارات واطبخ 10 دقائق.','أضف 4 أكواب ماء واتركه يغلي.','أضف الأرز واتركه على نار هادئة 30 دقيقة.','زيّن بالزبيب واللوز المحمص.'] },
-            { id:2, title:'مندي اللحم', cat:'rice', time:'3 ساعات', diff:'صعب', servings:8, stars:5, image:'🥩', ingredients:['2 كيلو لحم غنم','3 أكواب أرز بسمتي','بهارات المندي','فحم للتدخين','زعفران','مكسرات'], steps:['تبّل اللحم بالبهارات واتركه ساعتين.','اطبخ اللحم في قدر الضغط 45 دقيقة.','اسلق الأرز في مرق اللحم.','ضع الفحم المشتعل في ورق قصدير مع زيت.','غطّ القدر واتركه يتدخن 10 دقائق.','قدّم مع المكسرات والصلصة.'] },
-            { id:3, title:'شاورما الدجاج', cat:'main', time:'40 دقيقة', diff:'سهل', servings:4, stars:5, image:'🌯', ingredients:['500g صدر دجاج','بهارات شاورما','ثومية (توم)','مخلل خيار','بطاطس مقلية','خبز صاج'], steps:['قطّع الدجاج شرائح رفيعة.','تبّل بالبهارات واتركه 30 دقيقة.','اقلي الدجاج على نار عالية.','ادهن الخبز بالثومية.','أضف الدجاج والبطاطس والمخلل.','لفّ الشاورما بإحكام وقدّمها.'] },
-            { id:4, title:'المقلوبة الفلسطينية', cat:'rice', time:'ساعة', diff:'متوسط', servings:6, stars:5, image:'🍲', ingredients:['دجاجة كاملة','2 كوب أرز','باذنجان مقلي','قرنبيط مقلي','بطاطا مقلية','بهارات مشكلة'], steps:['اسلق الدجاج مع البهارات.','اقلي الخضار كل على حدة.','ضع طبقة خضار في القدر ثم الأرز.','اسكب المرق واطبخ 30 دقيقة.','اقلب القدر على صينية التقديم.','زيّن بالمكسرات المحمصة.'] },
-            { id:5, title:'المنسف الأردني', cat:'main', time:'ساعتين', diff:'صعب', servings:8, stars:5, image:'🍖', ingredients:['2 كيلو لحم غنم','جميد (لبن مجفف)','3 أكواب أرز','خبز شراك','صنوبر ولوز','بهارات'], steps:['انقع الجميد في الماء ليلة كاملة.','اطبخ اللحم في قدر الضغط ساعة.','حضّر الأرز بالشعيرية.','سخّن الجميد واخفقه حتى يصبح ناعماً.','ضع الخبز في الطبق ثم الأرز.','اسكب اللحم والجميد وزين بالمكسرات.'] },
-            { id:6, title:'حمص بيروتي', cat:'appetizer', time:'15 دقيقة', diff:'سهل', servings:4, stars:4, image:'🫒', ingredients:['400g حمص حب','3 ملاعق طحينة','عصير ليمونتين','2 فص ثوم','زيت زيتون','كمون وبابريكا'], steps:['اسلق الحمص حتى يصبح طرياً.','اهرسه مع الطحينة والليمون.','أضف الثوم المهروس والملح.','اسكب في طبق وزين بزيت الزيتون.','رش الكمون والبابريكا على الوجه.'] },
-            { id:7, title:'متبل الباذنجان', cat:'appetizer', time:'25 دقيقة', diff:'سهل', servings:4, stars:5, image:'🍆', ingredients:['2 باذنجان كبير','3 ملاعق طحينة','عصير ليمونة','2 فص ثوم','زيت زيتون','بقدونس'], steps:['اشوِ الباذنجان على النار حتى يحترق القشر.','قشّر الباذنجان واهرسه جيداً.','أضف الطحينة والليمون والثوم.','اخلط جيداً حتى يصبح كريمياً.','زيّن بزيت الزيتون والبقدونس.'] },
-            { id:8, title:'الكنافة النابلسية', cat:'sweet', time:'ساعة', diff:'متوسط', servings:8, stars:5, image:'🧀', ingredients:['500g عجينة كنافة','500g جبن عكاوي','2 كوب قطر (شيرة)','سمن بلدي','فستق حلبي'], steps:['انقع الجبن في الماء لتخفيف الملح.','فتّت عجينة الكنافة واخلطها بالسمن.','ضع نصف الكنافة في الصينية.','وزّع الجبن ثم باقي الكنافة.','اخبز في فرن 180°م حتى تصبح ذهبية.','اسكب القطر البارد وزين بالفستق.'] },
-            { id:9, title:'البقلاوة التركية', cat:'sweet', time:'ساعة', diff:'متوسط', servings:10, stars:5, image:'🥮', ingredients:['علبة عجينة جلاش','2 كوب جوز مفروم','2 كوب سمن','3 كوب قطر','فستق للزينة'], steps:['ادهن الصينية بالسمن.','ضع طبقة جلاش وادهنها بالسمن.','كرر 10 طبقات ثم ضع الجوز.','أضف 10 طبقات أخرى مع السمن.','قطّع البقلاوة إلى مربعات.','اخبز 45 دقيقة حتى تصبح ذهبية.','اسكب القطر البارد وزين بالفستق.'] },
-            { id:10, title:'أم علي', cat:'sweet', time:'35 دقيقة', diff:'سهل', servings:6, stars:5, image:'🥣', ingredients:['علبة عجينة بف باستري','3 أكواب حليب','كوب قشطة','مكسرات مشكلة','زبيب','جوز هند'], steps:['اخبز البف باستري وفتته.','اخلط الحليب مع القشطة وسخّنه.','ضع البف باستري في صينية.','أضف المكسرات والزبيب.','اسكب الحليب الساخن.','اخبز 20 دقيقة وقدّمها ساخنة.'] },
-            { id:11, title:'الكباب العراقي', cat:'main', time:'30 دقيقة', diff:'سهل', servings:4, stars:5, image:'🥙', ingredients:['500g لحم مفروم','بصل مفروم','بقدونس','بهارات مشكلة','ملح وفلفل'], steps:['اخلط اللحم مع البصل والبقدونس.','تبّل بالبهارات جيداً.','شكّل اللحم على أسياخ.','اشوِ على الفحم أو في الفرن.','قدّم مع الخبز والسلطة.'] },
-            { id:12, title:'الشكشوكة المغربية', cat:'main', time:'20 دقيقة', diff:'سهل', servings:2, stars:4, image:'🍳', ingredients:['4 بيضات','4 طماطم','بصل','فلفل أخضر','كمون','بابريكا'], steps:['اقلي البصل والفلفل في الزيت.','أضف الطماطم والبهارات.','اطبخ حتى تصبح صلصة سميكة.','اكسر البيض فوق الصلصة.','غطّ حتى ينضج البيض.','قدّم مع الخبز الطازج.'] },
-            { id:13, title:'المحاشي المصرية', cat:'main', time:'ساعتين', diff:'صعب', servings:8, stars:5, image:'🫑', ingredients:['فلفل وباذنجان وكوسا','2 كوب أرز','لحم مفروم','شبت وبقدونس','صلصة طماطم'], steps:['احفر الخضار وأفرغها.','اخلط الأرز مع اللحم والأعشاب.','احشُ الخضار بالخليط.','رصّ المحاشي في القدر.','اطبخ في صلصة الطماطم ساعة.','قدّم ساخنة مع الزبادي.'] },
-            { id:14, title:'الفتوش اللبناني', cat:'appetizer', time:'15 دقيقة', diff:'سهل', servings:4, stars:5, image:'🥗', ingredients:['خبز عربي محمص','خس','طماطم','خيار','بصل','زيت زيتون','دبس رمان','سماق'], steps:['قطّع الخضار إلى قطع متوسطة.','اقطع الخبز المحمص.','اخلط زيت الزيتون مع دبس الرمان.','ضع الخضار في طبق التقديم.','أضف الخبز والصوص.','رش السماق على الوجه.'] },
-            { id:15, title:'الشاي العدني', cat:'drink', time:'15 دقيقة', diff:'سهل', servings:4, stars:5, image:'☕', ingredients:['4 أكياس شاي أحمر','حليب مكثف','هيل','زنجبيل','قرنفل','سكر'], steps:['اغلِ الماء مع الهيل والزنجبيل.','أضف الشاي واتركه 3 دقائق.','صفّ الشاي في أكواب.','أضف الحليب المكثف حسب الرغبة.','قدّم ساخناً مع التمر.'] },
-            { id:16, title:'القهوة العربية', cat:'drink', time:'20 دقيقة', diff:'سهل', servings:6, stars:5, image:'🫖', ingredients:['3 ملاعق بن عربي مطحون','هيل مطحون','زعفران','ماء','تمر للتقديم'], steps:['اغلِ الماء في دلة القهوة.','أضف البن واتركه يغلي 10 دقائق.','أضف الهيل والزعفران.','اتركه يهدأ ويرسب البن.','اسكب في فناجين صغيرة.','قدّم مع التمر الفاخر.'] },
-            { id:17, title:'المعصوب اليمني', cat:'sweet', time:'20 دقيقة', diff:'سهل', servings:2, stars:5, image:'🍌', ingredients:['2 رغيف خبز بر','2 موز ناضج','قشطة','عسل','تمر مقطع'], steps:['فتّت الخبز في وعاء.','اهرس الموز وأضفه للخبز.','أضف القشطة واخلط جيداً.','اسكب العسل على الوجه.','زيّن بالتمر وقدّم فوراً.'] },
-            { id:18, title:'السمبوسة', cat:'appetizer', time:'40 دقيقة', diff:'متوسط', servings:10, stars:5, image:'🥟', ingredients:['علبة عجينة سمبوسة','لحم مفروم','بصل','بهارات','زيت للقلي'], steps:['اطبخ اللحم مع البصل والبهارات.','احشُ العجينة بالحشوة.','اطوِ السمبوسة على شكل مثلث.','اقلي في زيت غزير حتى تصبح ذهبية.','قدّم مع الصلصة الحارة.'] },
-            { id:19, title:'المهلبية', cat:'sweet', time:'15 دقيقة', diff:'سهل', servings:4, stars:4, image:'🍮', ingredients:['4 أكواب حليب','نصف كوب نشا','سكر','ماء ورد','فستق للزينة'], steps:['اخلط النشا مع قليل من الحليب البارد.','سخّن باقي الحليب مع السكر.','أضف النشا وحرّك باستمرار.','اطبخ حتى يصبح سميكاً.','أضف ماء الورد واسكب في أطباق.','برّد وزين بالفستق.'] },
-            { id:20, title:'الكبسة الحجازية', cat:'rice', time:'ساعة', diff:'متوسط', servings:6, stars:5, image:'🍛', ingredients:['دجاجة كاملة','3 أكواب أرز','طماطم','جزر','بهارات كبسة','لوز وزبيب'], steps:['حمّر الدجاج في الزيت.','أضف الخضار والبهارات.','اطبخ مع الماء 40 دقيقة.','أضف الأرز واطبخ 25 دقيقة.','زيّن بالمكسرات المحمصة.','قدّم مع الصلصة الحارة.'] }
-        ];
-
-        let favorites = JSON.parse(localStorage.getItem('arabic_recipe_favs') || '[]');
-        let currentCat = 'all';
+        // ==================== STATE ====================
+        let allRecipes = [];
+        let displayedRecipes = [];
+        let favorites = JSON.parse(localStorage.getItem('tbakh_pro_favs') || '[]');
         let showFavsOnly = false;
 
+        // ==================== ARABIC RECIPES ====================
+        const arabicRecipes = [
+            { id:'ar1', title:'كبسة الدجاج السعودية', category:'أرز', area:'سعودي', time:'90 دقيقة', image:'🍗', youtube:'', ingredients:['دجاجة كاملة','3 أكواب أرز بسمتي','2 بصل','4 طماطم','بهارات كبسة','زبيب ولوز'], instructions:'حمّر الدجاج ثم أضف البصل والطماطم والبهارات. أضف الماء واتركه يغلي. أضف الأرز واطبخ على نار هادئة 30 دقيقة. زين بالمكسرات.' },
+            { id:'ar2', title:'شاورما الدجاج', category:'لحوم', area:'عربي', time:'40 دقيقة', image:'🌯', youtube:'', ingredients:['صدر دجاج','بهارات شاورما','ثومية','مخلل','بطاطس','خبز صاج'], instructions:'قطع الدجاج شرائح وتبله. اقله على نار عالية. ادهن الخبز بالثومية وأضف الدجاج والبطاطس والمخلل. لف وقدم.' },
+            { id:'ar3', title:'المنسف الأردني', category:'لحوم', area:'أردني', time:'120 دقيقة', image:'🍖', youtube:'', ingredients:['لحم غنم','جميد','أرز','خبز شراك','صنوبر','لوز'], instructions:'انقع الجميد واطبخ اللحم. حضّر الأرز. سخن الجميد واخفقه. ضع الخبز ثم الأرز ثم اللحم واسكب الجميد. زين بالمكسرات.' },
+            { id:'ar4', title:'كنافة نابلسية', category:'حلويات', area:'فلسطيني', time:'60 دقيقة', image:'🧀', youtube:'', ingredients:['عجينة كنافة','جبن عكاوي','سمن','قطر','فستق'], instructions:'فتت العجينة واخلطها بالسمن. ضع نصفها ثم الجبن ثم النصف الآخر. اخبز حتى تصبح ذهبية. اسكب القطر وزين بالفستق.' },
+            { id:'ar5', title:'حمص بيروتي', category:'مقبلات', area:'لبناني', time:'15 دقيقة', image:'🫒', youtube:'', ingredients:['حمص حب','طحينة','ليمون','ثوم','زيت زيتون','كمون'], instructions:'اسلق الحمص واهرسه. أضف الطحينة والليمون والثوم. زين بزيت الزيتون ورش الكمون.' },
+            { id:'ar6', title:'مقلوبة باذنجان', category:'أرز', area:'فلسطيني', time:'90 دقيقة', image:'🍲', youtube:'', ingredients:['دجاج','أرز','باذنجان','قرنبيط','بطاطا','بهارات'], instructions:'اسلق الدجاج. اقلي الخضار. رص الخضار في القدر ثم الأرز. اسكب المرق واطبخ 30 دقيقة. اقلب القدر وقدم.' },
+            { id:'ar7', title:'قهوة عربية', category:'مشروبات', area:'عربي', time:'20 دقيقة', image:'☕', youtube:'', ingredients:['بن عربي','هيل','زعفران','ماء'], instructions:'اغل الماء في الدلة. أضف البن واتركه يغلي 10 دقائق. أضف الهيل والزعفران. اتركه يهدأ ثم اسكب.' },
+            { id:'ar8', title:'بقلاوة تركية', category:'حلويات', area:'تركي', time:'60 دقيقة', image:'🥮', youtube:'', ingredients:['جلاش','جوز','سمن','قطر','فستق'], instructions:'ادهن الصينية بالسمن. ضع طبقات الجلاش مع الجوز. اخبز 45 دقيقة. اسكب القطر البارد وزين.' }
+        ];
+
+        // ==================== FETCH ====================
+        async function fetchRecipes(query) {
+            const area = document.getElementById('contentArea');
+            area.innerHTML = '<div class="loading-state"><div class="loading-ring"></div><div class="loading-text">جاري تحميل الوصفات...</div></div>';
+
+            let fetched = [];
+            const searchTerm = query || 'chicken';
+
+            try {
+                const url = query 
+                    ? `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(searchTerm)}`
+                    : `https://www.themealdb.com/api/json/v1/1/search.php?f=a`;
+                
+                const res = await fetch(url);
+                const data = await res.json();
+                
+                if (data.meals) {
+                    fetched = data.meals.map(m => ({
+                        id: m.idMeal,
+                        title: m.strMeal,
+                        category: m.strCategory || 'عام',
+                        area: m.strArea || 'عالمي',
+                        time: '30-45 دقيقة',
+                        image: m.strMealThumb || '🍽️',
+                        youtube: m.strYoutube || '',
+                        ingredients: getIngredients(m),
+                        instructions: m.strInstructions || 'لا يوجد شرح'
+                    }));
+                }
+
+                const allData = [...arabicRecipes, ...fetched];
+                const unique = [];
+                const ids = new Set();
+                allData.forEach(r => {
+                    if (!ids.has(r.id)) {
+                        ids.add(r.id);
+                        unique.push(r);
+                    }
+                });
+
+                allRecipes = unique;
+                displayedRecipes = unique;
+                renderRecipes();
+                updateStats();
+                showToast(`✅ ${unique.length} وصفة محملة`);
+
+            } catch (e) {
+                allRecipes = arabicRecipes;
+                displayedRecipes = arabicRecipes;
+                renderRecipes();
+                updateStats();
+                showToast('⚠️ الوصفات المحلية');
+            }
+        }
+
+        function getIngredients(meal) {
+            const ings = [];
+            for (let i = 1; i <= 20; i++) {
+                const ing = meal['strIngredient' + i];
+                const meas = meal['strMeasure' + i];
+                if (ing && ing.trim()) ings.push(meas ? `${meas.trim()} ${ing.trim()}` : ing.trim());
+            }
+            return ings.length > 0 ? ings : ['مكونات متنوعة'];
+        }
+
+        // ==================== SEARCH ====================
+        async function searchRecipes() {
+            const q = document.getElementById('searchInput').value.trim();
+            if (!q) { showToast('⚠️ اكتب اسم الوصفة'); return; }
+            await fetchRecipes(q);
+        }
+
+        // ==================== RENDER ====================
         function renderRecipes() {
             const area = document.getElementById('contentArea');
-            const search = document.getElementById('searchInput').value.trim();
+            const searchText = document.getElementById('searchInput').value.trim();
             
-            let filtered = recipes;
-            if (currentCat !== 'all') filtered = filtered.filter(r => r.cat === currentCat);
+            let filtered = displayedRecipes;
             if (showFavsOnly) filtered = filtered.filter(r => favorites.includes(r.id));
-            if (search) {
+            if (searchText) {
                 filtered = filtered.filter(r => 
-                    r.title.includes(search) || 
-                    r.ingredients.some(i => i.includes(search))
+                    r.title.includes(searchText) || 
+                    (r.ingredients && r.ingredients.some(i => i.includes(searchText)))
                 );
             }
 
             updateStats();
 
             if (filtered.length === 0) {
-                area.innerHTML = `<div class="empty-state"><span class="empty-icon">🍽️</span><span class="empty-text">لا توجد وصفات</span></div>`;
+                area.innerHTML = '<div class="empty-state"><span class="empty-icon">🍽️</span><div class="empty-title">لا توجد وصفات</div><div class="empty-sub">جرب البحث عن وصفة أخرى</div></div>';
                 return;
             }
 
             area.innerHTML = filtered.map(r => {
                 const isFav = favorites.includes(r.id);
-                const stars = '⭐'.repeat(r.stars);
+                const imgContent = r.image && r.image.startsWith('http') 
+                    ? `<img src="${r.image}" alt="${r.title}" loading="lazy">` 
+                    : `<span style="font-size:42px">${r.image || '🍽️'}</span>`;
+                
                 return `
-                    <div class="recipe-card" onclick="openRecipe(${r.id})">
-                        <div class="card-image">
-                            <span style="font-size:40px">${r.image}</span>
-                            <span class="card-time">⏱ ${r.time}</span>
-                            <button class="card-fav ${isFav ? 'liked' : ''}" 
-                                onclick="event.stopPropagation();toggleFav(${r.id})">
+                    <div class="recipe-card" onclick="openRecipe('${r.id}')">
+                        <div class="card-img">
+                            ${imgContent}
+                            <div class="card-img-overlay"></div>
+                            <div class="card-badge-time">⏱ ${r.time || '30 د'}</div>
+                            <button class="card-btn-fav ${isFav ? 'liked' : ''}" onclick="event.stopPropagation();toggleFav('${r.id}')">
                                 ${isFav ? '❤️' : '🤍'}
                             </button>
                         </div>
                         <div class="card-body">
-                            <span class="card-cat">${getCatName(r.cat)}</span>
+                            <span class="card-tag">${r.category || 'عام'}</span>
                             <div class="card-title">${r.title}</div>
-                            <div class="card-footer">
-                                <span class="card-stars">${stars}</span>
-                                <span class="card-diff">${r.diff}</span>
+                            <div class="card-footer-row">
+                                <span class="card-area">🌍 ${r.area || 'عالمي'}</span>
+                                <span class="card-stars">⭐</span>
                             </div>
                         </div>
                     </div>
@@ -713,74 +963,84 @@
             }).join('');
         }
 
-        function getCatName(cat) {
-            const names = { main:'رئيسي', rice:'أرز', appetizer:'مقبلات', sweet:'حلويات', drink:'مشروبات' };
-            return names[cat] || cat;
-        }
-
         function updateStats() {
+            document.getElementById('statTotal').textContent = allRecipes.length;
             document.getElementById('statFavs').textContent = favorites.length;
-            document.getElementById('favBadge').textContent = favorites.length;
-            document.getElementById('favBadge').classList.toggle('show', favorites.length > 0);
+            const badge = document.getElementById('favBadge');
+            badge.textContent = favorites.length;
+            badge.classList.toggle('show', favorites.length > 0);
         }
 
-        function filterCat(cat, btn) {
-            currentCat = cat;
-            document.querySelectorAll('.cat-chip').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderRecipes();
-        }
-
+        // ==================== FAVORITES ====================
         function toggleFavFilter() {
             showFavsOnly = !showFavsOnly;
             document.getElementById('favFilterBtn').classList.toggle('active', showFavsOnly);
             renderRecipes();
-            showToast(showFavsOnly ? '❤️ عرض المفضلة' : '🍽️ عرض الكل');
+            showToast(showFavsOnly ? '❤️ المفضلة' : '🌍 كل الوصفات');
         }
 
         function toggleFav(id) {
-            if (favorites.includes(id)) favorites = favorites.filter(f => f !== id);
-            else favorites.push(id);
-            localStorage.setItem('arabic_recipe_favs', JSON.stringify(favorites));
+            if (favorites.includes(id)) {
+                favorites = favorites.filter(f => f !== id);
+            } else {
+                favorites.push(id);
+            }
+            localStorage.setItem('tbakh_pro_favs', JSON.stringify(favorites));
             updateStats();
             renderRecipes();
         }
 
+        // ==================== MODAL ====================
         function openRecipe(id) {
-            const r = recipes.find(x => x.id === id);
+            const r = allRecipes.find(x => x.id.toString() === id.toString());
             if (!r) return;
             const isFav = favorites.includes(r.id);
+            const imgContent = r.image && r.image.startsWith('http') 
+                ? `<img src="${r.image}" alt="${r.title}">` 
+                : `<span style="font-size:65px">${r.image || '🍽️'}</span>`;
 
             document.getElementById('modal').innerHTML = `
-                <div class="modal-handle"></div>
-                <div class="modal-image">
-                    <span style="font-size:60px">${r.image}</span>
-                    <button class="modal-close" onclick="closeModal()">✕</button>
+                <div class="modal-drag-handle"></div>
+                <div class="modal-hero">
+                    ${imgContent}
+                    <button class="modal-close-btn" onclick="closeModal()">✕</button>
                 </div>
-                <div class="modal-body">
-                    <span class="modal-cat">${getCatName(r.cat)}</span>
+                <div class="modal-content">
+                    <div class="modal-meta-row">
+                        <span class="modal-tag">${r.category || 'عام'}</span>
+                        <span style="font-size:9px;color:#999">${r.area || 'عالمي'}</span>
+                    </div>
                     <div class="modal-title">${r.title}</div>
-                    <div class="modal-info">
-                        <div class="info-pill">⏱ ${r.time}</div>
-                        <div class="info-pill">📊 ${r.diff}</div>
-                        <div class="info-pill">🍽️ ${r.servings} أشخاص</div>
-                        <div class="info-pill">⭐ ${r.stars}/5</div>
+                    
+                    <div class="modal-info-pills">
+                        <div class="info-pill"><span class="pill-icon">⏱</span> ${r.time || '30 دقيقة'}</div>
+                        <div class="info-pill"><span class="pill-icon">🌍</span> ${r.area || 'عالمي'}</div>
+                        <div class="info-pill"><span class="pill-icon">📋</span> ${(r.ingredients||[]).length} مكونات</div>
                     </div>
+                    
                     <div class="modal-section">
-                        <div class="section-title">🛒 المقادير</div>
-                        <ul class="ingredient-list">
-                            ${r.ingredients.map(i => `<li class="ingredient-item"><span class="ingredient-dot"></span>${i}</li>`).join('')}
+                        <div class="section-heading">🛒 المقادير</div>
+                        <ul class="ingredients-list">
+                            ${(r.ingredients || ['مكونات متنوعة']).map(i => `
+                                <li class="ingredient-row">
+                                    <span class="ingredient-bullet"></span>
+                                    ${i}
+                                </li>
+                            `).join('')}
                         </ul>
                     </div>
+                    
                     <div class="modal-section">
-                        <div class="section-title">👨‍🍳 طريقة التحضير</div>
-                        <ul class="step-list">
-                            ${r.steps.map((s, idx) => `<li class="step-item"><span class="step-num">${idx+1}</span><span>${s}</span></li>`).join('')}
-                        </ul>
+                        <div class="section-heading">👨‍🍳 طريقة التحضير</div>
+                        <div class="instructions-text">${r.instructions || '暂无说明'}</div>
                     </div>
-                    <button class="btn-fav ${isFav ? 'liked' : ''}" onclick="toggleFav(${r.id});closeModal();showToast('${isFav ? '💔 تمت الإزالة' : '❤️ تمت الإضافة'}')">
-                        ${isFav ? '❤️ إزالة من المفضلة' : '🤍 أضف إلى المفضلة'}
-                    </button>
+                    
+                    <div class="btn-row">
+                        ${r.youtube ? `<a href="${r.youtube}" target="_blank" class="btn-youtube-link">▶️ شاهد الفيديو على يوتيوب</a>` : ''}
+                        <button class="btn-favorite ${isFav ? 'liked' : ''}" onclick="toggleFav('${r.id}');closeModal();showToast('${isFav ? '💔 تمت الإزالة' : '❤️ تمت الإضافة'}')">
+                            ${isFav ? '❤️ إزالة من المفضلة' : '🤍 أضف إلى المفضلة'}
+                        </button>
+                    </div>
                 </div>
             `;
             document.getElementById('modalOverlay').classList.add('show');
@@ -798,11 +1058,20 @@
             const t = document.getElementById('toast');
             t.textContent = msg;
             t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 2000);
+            setTimeout(() => t.classList.remove('show'), 2200);
         }
 
+        // ==================== PULL TO REFRESH ====================
+        let touchStartY = 0;
+        document.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; });
+        document.addEventListener('touchend', e => {
+            const dy = e.changedTouches[0].clientY - touchStartY;
+            if (dy > 80 && window.scrollY === 0) fetchRecipes();
+        });
+
+        // ==================== INIT ====================
         updateStats();
-        renderRecipes();
+        fetchRecipes();
     </script>
 </body>
 </html>
