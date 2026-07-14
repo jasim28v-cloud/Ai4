@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>🐍 Snake 2044 - Ultimate Edition</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>🧵 Cross Stitch 2044 - Ultimate Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="bg-mesh" id="bgMesh"></div>
+    <div class="bg-mesh"></div>
     <div class="bg-orb" id="bgOrb1"></div>
     <div class="bg-orb" id="bgOrb2"></div>
     <div class="bg-orb" id="bgOrb3"></div>
@@ -17,88 +17,110 @@
     <div class="app">
         <div class="header">
             <div class="header-brand">
-                <div class="logo" id="logoIcon">🐍</div>
+                <div class="logo">🧵</div>
                 <div class="header-text">
-                    <h1>Snake 2044</h1>
+                    <h1>Cross Stitch 2044</h1>
                     <span>✦ Ultimate Edition ✦</span>
                 </div>
             </div>
-            <div class="header-badge" id="themeBadge">✨ نيون</div>
+            <div class="header-badge">🎨 50+ لون</div>
         </div>
 
-        <div class="game-wrapper">
-            <div class="canvas-container">
-                <canvas id="gameCanvas"></canvas>
-                <div class="game-overlay" id="gameOverlay">
-                    <div class="overlay-content">
-                        <div class="overlay-icon" id="overlayIcon">🎮</div>
-                        <h2 id="overlayTitle">Snake 2044</h2>
-                        <p id="overlayMsg">اضغط ابدأ للعب</p>
-                        <div class="overlay-score" id="overlayScore"></div>
-                        <button class="btn-game pulse-btn" id="overlayBtn" onclick="startGame()">▶️ ابدأ اللعب</button>
+        <div class="main-content">
+            <div class="upload-section" id="uploadSection">
+                <div class="upload-area" onclick="document.getElementById('imageInput').click()">
+                    <div class="upload-icon">🖼️</div>
+                    <h2>ارفع صورة</h2>
+                    <p>اختر صورة لتحويلها لنمط تطريز</p>
+                    <span class="upload-hint">JPG, PNG, WEBP - حتى 10MB</span>
+                </div>
+                <input type="file" id="imageInput" accept="image/*" style="display:none" onchange="loadImage(this)">
+                <div class="sample-images">
+                    <span class="sample-label">أو جرب صورة تجريبية:</span>
+                    <div class="sample-grid">
+                        <button class="sample-btn" onclick="loadSample('flower')">🌸 وردة</button>
+                        <button class="sample-btn" onclick="loadSample('heart')">❤️ قلب</button>
+                        <button class="sample-btn" onclick="loadSample('star')">⭐ نجمة</button>
+                        <button class="sample-btn" onclick="loadSample('cat')">🐱 قطة</button>
                     </div>
                 </div>
-                <div class="combo-popup" id="comboPopup"></div>
             </div>
 
-            <div class="stats-row">
-                <div class="stat-box">
-                    <div class="stat-label">🏆 النقاط</div>
-                    <div class="stat-value" id="scoreDisplay">0</div>
+            <div class="editor-section" id="editorSection" style="display:none">
+                <div class="editor-toolbar">
+                    <div class="tool-group">
+                        <label>📐 حجم الشبكة:</label>
+                        <select id="gridSize" onchange="updateGrid()">
+                            <option value="16">16x16 (كبير)</option>
+                            <option value="32" selected>32x32 (وسط)</option>
+                            <option value="48">48x48 (صغير)</option>
+                            <option value="64">64x64 (دقيق)</option>
+                        </select>
+                    </div>
+                    <div class="tool-group">
+                        <label>🧵 نوع الغرزة:</label>
+                        <select id="stitchType" onchange="updateGrid()">
+                            <option value="full">✖️ كاملة (X)</option>
+                            <option value="half">➗ نصف (/ \)</option>
+                            <option value="quarter">🟦 ربع</option>
+                        </select>
+                    </div>
+                    <div class="tool-group">
+                        <label>🎨 الألوان:</label>
+                        <select id="maxColors" onchange="updateGrid()">
+                            <option value="10">10 ألوان</option>
+                            <option value="20" selected>20 لون</option>
+                            <option value="30">30 لون</option>
+                            <option value="50">50 لون</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="stat-box">
-                    <div class="stat-label">📊 المستوى</div>
-                    <div class="stat-value" id="levelDisplay">1</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">👑 الأفضل</div>
-                    <div class="stat-value" id="bestDisplay">0</div>
-                </div>
-                <div class="stat-box">
-                    <div class="stat-label">🔥 كومبو</div>
-                    <div class="stat-value combo-value" id="comboDisplay">x1</div>
-                </div>
-            </div>
 
-            <div class="controls-mobile">
-                <button class="ctrl-btn up" onpointerdown="changeDir(0,-1)">▲</button>
-                <button class="ctrl-btn left" onpointerdown="changeDir(-1,0)">◀</button>
-                <button class="ctrl-btn center-btn" onclick="togglePause()">⏯️</button>
-                <button class="ctrl-btn right" onpointerdown="changeDir(1,0)">▶</button>
-                <button class="ctrl-btn down" onpointerdown="changeDir(0,1)">▼</button>
-            </div>
+                <div class="canvas-section">
+                    <div class="canvas-wrap">
+                        <canvas id="stitchCanvas"></canvas>
+                        <div class="canvas-overlay">
+                            <div class="grid-overlay" id="gridOverlay"></div>
+                        </div>
+                    </div>
+                    <div class="zoom-controls">
+                        <button onclick="zoomIn()">🔍+</button>
+                        <span id="zoomLevel">100%</span>
+                        <button onclick="zoomOut()">🔍-</button>
+                        <button onclick="resetZoom()">🔄</button>
+                    </div>
+                </div>
 
-            <div class="action-btns">
-                <button class="btn-small" onclick="showLeaderboard()" title="لوحة الصدارة">🏆</button>
-                <button class="btn-small" onclick="showAchievements()" title="الإنجازات">🎯</button>
-                <button class="btn-small" onclick="changeTheme()" title="تغيير الثيم">🎨</button>
-                <button class="btn-small" onclick="toggleGhost()" id="ghostBtn" title="وضع الشبح">👻</button>
-                <button class="btn-small" onclick="toggleSound()" id="soundBtn" title="الصوت">🔊</button>
-                <button class="btn-small" onclick="resetGame()" title="إعادة">🔄</button>
-            </div>
-        </div>
-    </div>
+                <div class="color-chart-section">
+                    <h3>📋 جدول الألوان</h3>
+                    <div class="color-chart" id="colorChart"></div>
+                    <div class="color-summary">
+                        <span>🧵 مجموع الغرز: <strong id="totalStitches">0</strong></span>
+                        <span>🎨 عدد الألوان: <strong id="colorCount">0</strong></span>
+                    </div>
+                </div>
 
-    <div class="panel-overlay" id="panelOverlay" onclick="hidePanel()">
-        <div class="panel" id="panel" onclick="event.stopPropagation()">
-            <div class="panel-header">
-                <h3 id="panelTitle">🏆 لوحة الصدارة</h3>
-                <button class="btn-close" onclick="hidePanel()">✕</button>
+                <div class="action-btns">
+                    <button class="btn-primary" onclick="downloadPattern()">📥 تحميل الباترن</button>
+                    <button class="btn-secondary" onclick="downloadChart()">📋 تحميل جدول الألوان</button>
+                    <button class="btn-secondary" onclick="sharePattern()">📤 مشاركة</button>
+                    <button class="btn-outline" onclick="resetEditor()">🔄 صورة جديدة</button>
+                </div>
             </div>
-            <div class="panel-body" id="panelBody"></div>
         </div>
     </div>
 
     <div class="toast" id="toast"></div>
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner"></div>
+        <p>🧵 جاري تحويل الصورة...</p>
+    </div>
 
-    <script src="themes.js"></script>
-    <script src="fruits.js"></script>
+    <script src="colors.js"></script>
     <script src="storage.js"></script>
     <script src="particles.js"></script>
-    <script src="sounds.js"></script>
-    <script src="levels.js"></script>
-    <script src="achievements.js"></script>
-    <script src="leaderboard.js"></script>
-    <script src="snake.js"></script>
+    <script src="converter.js"></script>
+    <script src="renderer.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
