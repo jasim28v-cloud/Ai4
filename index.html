@@ -3,119 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>🎨 Pixel Art 2044 - Ultimate Edition</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>📻 Radio 2044 - Premium Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="bg-mesh"></div>
-    <div class="bg-orb" id="bgOrb1"></div>
-    <div class="bg-orb" id="bgOrb2"></div>
-    <div class="bg-orb" id="bgOrb3"></div>
+    <div class="bg-elegant"></div>
+    <div class="bg-glow"></div>
     <div id="particlesContainer"></div>
 
     <div class="app">
+        <!-- Header -->
         <div class="header">
-            <div class="header-brand">
-                <div class="logo">🎨</div>
+            <div class="header-left">
+                <div class="logo">📻</div>
                 <div class="header-text">
-                    <h1>Pixel Art 2044</h1>
-                    <span>✦ Ultimate Edition ✦</span>
+                    <h1>Radio 2044</h1>
+                    <span>✦ Premium Edition ✦</span>
                 </div>
             </div>
-            <div class="header-badge">🔲 16x16 → 128x128</div>
+            <div class="header-right">
+                <button class="btn-icon" onclick="toggleTheme()" title="الوضع الليلي">🌙</button>
+            </div>
         </div>
 
-        <div class="main-content">
-            <div class="upload-section" id="uploadSection">
-                <div class="upload-area" onclick="document.getElementById('imageInput').click()">
-                    <div class="upload-icon">🖼️</div>
-                    <h2>ارفع صورة</h2>
-                    <p>حول أي صورة إلى Pixel Art جميل</p>
-                    <span class="upload-hint">JPG, PNG, WEBP - حتى 10MB</span>
+        <!-- Radio Device -->
+        <div class="radio-device">
+            <div class="antenna">
+                <div class="antenna-line"></div>
+                <div class="antenna-ball"></div>
+            </div>
+            <div class="radio-body">
+                <div class="radio-screen">
+                    <div class="screen-header">
+                        <span class="screen-dot"></span>
+                        <span class="screen-label">FM 2044</span>
+                    </div>
+                    <div class="frequency-display">
+                        <span class="freq-num" id="freqDisplay">87.5</span>
+                        <span class="freq-unit">MHz</span>
+                    </div>
+                    <div class="station-info">
+                        <div class="station-name" id="stationName">اختر محطة</div>
+                        <div class="station-location" id="stationLocation">Radio 2044</div>
+                    </div>
+                    <div class="visualizer" id="visualizer">
+                        <span class="viz-bar"></span><span class="viz-bar"></span><span class="viz-bar"></span>
+                        <span class="viz-bar"></span><span class="viz-bar"></span><span class="viz-bar"></span>
+                        <span class="viz-bar"></span><span class="viz-bar"></span><span class="viz-bar"></span>
+                        <span class="viz-bar"></span><span class="viz-bar"></span><span class="viz-bar"></span>
+                        <span class="viz-bar"></span><span class="viz-bar"></span><span class="viz-bar"></span>
+                        <span class="viz-bar"></span><span class="viz-bar"></span><span class="viz-bar"></span>
+                        <span class="viz-bar"></span><span class="viz-bar"></span><span class="viz-bar"></span>
+                    </div>
                 </div>
-                <input type="file" id="imageInput" accept="image/*" style="display:none" onchange="loadImage(this)">
-                <div class="sample-images">
-                    <span class="sample-label">جرب عينة:</span>
-                    <div class="sample-grid">
-                        <button class="sample-btn" onclick="loadSample('flower')">🌸 وردة</button>
-                        <button class="sample-btn" onclick="loadSample('heart')">❤️ قلب</button>
-                        <button class="sample-btn" onclick="loadSample('star')">⭐ نجمة</button>
-                        <button class="sample-btn" onclick="loadSample('cat')">🐱 قطة</button>
-                        <button class="sample-btn" onclick="loadSample('tree')">🌳 شجرة</button>
-                        <button class="sample-btn" onclick="loadSample('moon')">🌙 قمر</button>
+                <div class="radio-controls">
+                    <button class="ctrl-dial" onclick="prevStation()" title="المحطة السابقة">⏮</button>
+                    <button class="ctrl-play" id="playBtn" onclick="togglePlay()" title="تشغيل/إيقاف">
+                        <span class="play-icon">▶</span>
+                    </button>
+                    <button class="ctrl-dial" onclick="nextStation()" title="المحطة التالية">⏭</button>
+                </div>
+                <div class="radio-knobs">
+                    <div class="knob-group">
+                        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70" oninput="setVolume(this.value)" title="الصوت">
+                        <span class="knob-label">🔊 الصوت</span>
+                    </div>
+                    <div class="knob-group">
+                        <button class="btn-fav" id="favBtn" onclick="toggleFavorite()" title="المفضلة">
+                            <span class="heart-icon">🤍</span>
+                        </button>
+                        <span class="knob-label">❤️ حفظ</span>
                     </div>
                 </div>
             </div>
+            <div class="radio-feet">
+                <div class="foot"></div>
+                <div class="foot"></div>
+            </div>
+        </div>
 
-            <div class="editor-section" id="editorSection" style="display:none">
-                <div class="editor-toolbar">
-                    <div class="tool-group">
-                        <label>🔲 حجم البيكسل:</label>
-                        <select id="pixelSize" onchange="updatePixelArt()">
-                            <option value="16">16x16 (كبير جداً)</option>
-                            <option value="24">24x24 (كبير)</option>
-                            <option value="32" selected>32x32 (وسط)</option>
-                            <option value="48">48x48 (صغير)</option>
-                            <option value="64">64x64 (دقيق)</option>
-                            <option value="96">96x96 (دقيق جداً)</option>
-                            <option value="128">128x128 (فائق الدقة)</option>
-                        </select>
-                    </div>
-                    <div class="tool-group">
-                        <label>🎨 الفلتر:</label>
-                        <select id="colorFilter" onchange="updatePixelArt()">
-                            <option value="original">ألوان أصلية</option>
-                            <option value="vibrant">ألوان زاهية</option>
-                            <option value="pastel">باستيل</option>
-                            <option value="retro">ريترو</option>
-                            <option value="neon">نيون</option>
-                            <option value="mono">أبيض وأسود</option>
-                        </select>
-                    </div>
-                    <div class="tool-group">
-                        <label>📐 حجم العرض:</label>
-                        <select id="displaySize" onchange="updatePixelArt()">
-                            <option value="300">صغير (300px)</option>
-                            <option value="400" selected>وسط (400px)</option>
-                            <option value="500">كبير (500px)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="canvas-section">
-                    <div class="canvas-wrap">
-                        <canvas id="pixelCanvas"></canvas>
-                    </div>
-                    <div class="canvas-info">
-                        <span>🔲 <strong id="pixelCount">0</strong> بيكسل</span>
-                        <span>🎨 <strong id="colorCount">0</strong> لون</span>
-                    </div>
-                </div>
-
-                <div class="preview-text" id="previewText"></div>
-
-                <div class="action-btns">
-                    <button class="btn-primary" onclick="downloadPNG()">📥 تحميل PNG</button>
-                    <button class="btn-secondary" onclick="downloadHTML()">📄 تحميل HTML</button>
-                    <button class="btn-secondary" onclick="copyText()">📋 نسخ كنص</button>
-                    <button class="btn-secondary" onclick="shareImage()">📤 مشاركة</button>
-                    <button class="btn-outline" onclick="resetEditor()">🔄 صورة جديدة</button>
+        <!-- Station List -->
+        <div class="stations-section">
+            <div class="section-header">
+                <h3>📋 المحطات</h3>
+                <div class="section-tabs">
+                    <button class="tab-btn active" onclick="filterStations('all', this)">الكل</button>
+                    <button class="tab-btn" onclick="filterStations('arabic', this)">🇸🇦 عربية</button>
+                    <button class="tab-btn" onclick="filterStations('music', this)">🎵 موسيقى</button>
+                    <button class="tab-btn" onclick="filterStations('news', this)">📰 أخبار</button>
+                    <button class="tab-btn" onclick="filterStations('favorites', this)">❤️ مفضلتي</button>
                 </div>
             </div>
+            <div class="stations-grid" id="stationsGrid"></div>
         </div>
     </div>
 
     <div class="toast" id="toast"></div>
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-        <p>🎨 جاري تحويل الصورة إلى Pixel Art...</p>
-    </div>
 
+    <script src="stations.js"></script>
     <script src="storage.js"></script>
     <script src="particles.js"></script>
-    <script src="converter.js"></script>
-    <script src="renderer.js"></script>
+    <script src="player.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

@@ -1,0 +1,22 @@
+const STATIONS=[
+{name:'إذاعة القرآن الكريم',url:'https://qurango.net/radio/quran',location:'🇸🇦 السعودية',freq:'100.0',icon:'🕌',category:'arabic'},
+{name:'MBC FM',url:'https://mbcfm-riyadh.akacast.akamaistream.net/7/894/177670/v1/auth.akacast.akamaistream.net/mbc_fm',location:'🇸🇦 السعودية',freq:'89.5',icon:'🎵',category:'arabic'},
+{name:'Radio Sawa',url:'https://n06.radiojar.com/9s5z4fa2w7zuv',location:'🇸🇦 الشرق الأوسط',freq:'98.1',icon:'📰',category:'arabic'},
+{name:'Panorama FM',url:'https://stream.almajal.fm/panoramafm',location:'🇸🇦 السعودية',freq:'102.5',icon:'🎵',category:'arabic'},
+{name:'إذاعة الرياض',url:'https://stream.almajal.fm/riyadh',location:'🇸🇦 الرياض',freq:'93.0',icon:'📰',category:'arabic'},
+{name:'BBC Arabic',url:'https://stream.live.vc.bbcmedia.co.uk/bbc_arabic_radio',location:'🇬🇧 لندن',freq:'95.5',icon:'📰',category:'news'},
+{name:'Jazz Radio',url:'https://jazzradio.ice.infomaniak.ch/jazzradio-high.mp3',location:'🇫🇷 فرنسا',freq:'88.2',icon:'🎷',category:'music'},
+{name:'Chillout Radio',url:'https://streams.ilovemusic.de/iloveradio17.mp3',location:'🇩🇪 ألمانيا',freq:'90.1',icon:'🌴',category:'music'},
+{name:'Classic FM',url:'https://classicfm.ice.infomaniak.ch/classic-fm.mp3',location:'🇬🇧 بريطانيا',freq:'101.1',icon:'🎻',category:'music'},
+{name:'Lofi Radio',url:'https://play.streamafrica.net/lofiradio',location:'🌍 عالمي',freq:'87.5',icon:'🎧',category:'music'},
+{name:'Radio Monte Carlo',url:'https://mc-mcdoualiya.ice.infomaniak.ch/mc-mcdoualiya.mp3',location:'🇫🇷 موناكو',freq:'98.5',icon:'📰',category:'news'},
+{name:'Smooth Jazz',url:'https://sj128.hnux.com',location:'🇺🇸 أمريكا',freq:'94.7',icon:'🎹',category:'music'},
+{name:'Pulse FM',url:'https://stream.pulsefm.co.uk',location:'🇬🇧 بريطانيا',freq:'92.3',icon:'🎵',category:'music'},
+{name:'Rotana FM',url:'https://stream.almajal.fm/rotanafm',location:'🇸🇦 السعودية',freq:'104.2',icon:'🎵',category:'arabic'},
+{name:'Nogoum FM',url:'https://stream.nogoumfm.com',location:'🇪🇬 مصر',freq:'100.6',icon:'⭐',category:'arabic'},
+{name:'Radio Jordan',url:'https://stream.jrt.jo/radiojordan',location:'🇯🇴 الأردن',freq:'96.3',icon:'📰',category:'arabic'},
+{name:'France Inter',url:'https://icecast.radiofrance.fr/franceinter-midfi.mp3',location:'🇫🇷 فرنسا',freq:'87.8',icon:'📰',category:'news'},
+{name:'Country Radio',url:'https://stream.countryradio.cz',location:'🇨🇿 تشيك',freq:'91.4',icon:'🤠',category:'music'},
+{name:'Deep House Radio',url:'https://stream.deephouseradio.com',location:'🇩🇪 ألمانيا',freq:'96.8',icon:'🪩',category:'music'},
+{name:'Radio Nostalgie',url:'https://nostalgie.ice.infomaniak.ch/nostalgie-128.mp3',location:'🇫🇷 فرنسا',freq:'90.4',icon:'📻',category:'music'}
+];

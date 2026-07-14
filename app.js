@@ -1,4 +1,3 @@
-function showLoading(){document.getElementById('loadingOverlay').classList.add('show')}
-function hideLoading(){document.getElementById('loadingOverlay').classList.remove('show')}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
-initParticles();
+function toggleTheme(){document.body.classList.toggle('dark');const btn=document.querySelector('.btn-icon');btn.textContent=document.body.classList.contains('dark')?'☀️':'🌙';localStorage.setItem('radio2044_theme',document.body.classList.contains('dark')?'dark':'light')}
+function initTheme(){if(localStorage.getItem('radio2044_theme')==='dark'){document.body.classList.add('dark');document.querySelector('.btn-icon').textContent='☀️'}}
+initParticles();initTheme();initPlayer();
