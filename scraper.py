@@ -1,7 +1,7 @@
 import os
 
 def create_website_files():
-    """تطبيق طبّاخ برو العربي المطور"""
+    """طبّاخ برو - النسخة العربية النهائية"""
     
     os.makedirs("www", exist_ok=True)
     
@@ -10,7 +10,7 @@ def create_website_files():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>طبّاخ برو | وصفات عربية</title>
+    <title>طبّاخ برو</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -125,14 +125,6 @@ def create_website_files():
 
         .stat-lbl { font-size: 7px; color: #999; margin-top: 1px; }
 
-        /* ==================== REFRESH ==================== */
-        .refresh-bar {
-            text-align: center; padding: 6px; background: #fdfaf3;
-            color: var(--gold-dark); font-size: 9px; font-weight: 700;
-            cursor: pointer; border-bottom: 1px solid var(--border);
-        }
-        .refresh-bar:hover { background: #faf5e6; }
-
         /* ==================== SEARCH ==================== */
         .search-bar {
             padding: 10px 14px; background: #fff;
@@ -151,7 +143,7 @@ def create_website_files():
             border-color: var(--gold); background: #fff;
             box-shadow: 0 0 0 3px rgba(201,168,76,0.06);
         }
-        .search-input::placeholder { color: #ccc; }
+        .search-input::placeholder { color: #ccc; font-family: 'Cairo', sans-serif; }
 
         .search-btn {
             padding: 10px 16px; background: var(--gold); color: #fff;
@@ -207,10 +199,13 @@ def create_website_files():
             width: 100%; aspect-ratio: 1.3;
             background: linear-gradient(135deg, #faf7f0, #f2ece0);
             display: flex; align-items: center; justify-content: center;
-            font-size: 36px; position: relative; overflow: hidden;
+            font-size: 50px; position: relative; overflow: hidden;
         }
 
-        .card-img img { width: 100%; height: 100%; object-fit: cover; }
+        .card-img img {
+            width: 100%; height: 100%; object-fit: cover;
+            display: block;
+        }
 
         .card-time {
             position: absolute; top: 8px; right: 8px;
@@ -270,9 +265,13 @@ def create_website_files():
             width: 100%; aspect-ratio: 1.5;
             background: linear-gradient(135deg, #faf7f0, #f2ece0);
             display: flex; align-items: center; justify-content: center;
-            font-size: 55px; position: relative; margin-top: 6px;
+            font-size: 65px; position: relative; margin-top: 6px; overflow: hidden;
         }
-        .modal-hero img { width: 100%; height: 100%; object-fit: cover; }
+
+        .modal-hero img {
+            width: 100%; height: 100%; object-fit: cover;
+            display: block;
+        }
 
         .modal-close {
             position: absolute; top: 12px; right: 12px;
@@ -341,10 +340,11 @@ def create_website_files():
             animation: spin 0.8s linear infinite; margin: 0 auto 10px;
         }
         @keyframes spin { to { transform: rotate(360deg); } }
+        .loading-text { font-family: 'Cairo', sans-serif; font-size: 11px; }
 
         .empty-box { grid-column: 1 / -1; text-align: center; padding: 40px; color: #ccc; }
         .empty-icon { font-size: 40px; display: block; margin-bottom: 6px; }
-        .empty-text { font-size: 11px; font-weight: 600; }
+        .empty-text { font-size: 11px; font-weight: 600; font-family: 'Cairo', sans-serif; }
 
         /* ==================== TOAST ==================== */
         .toast {
@@ -356,11 +356,18 @@ def create_website_files():
             font-family: 'Cairo', sans-serif; white-space: nowrap;
         }
         .toast.show { transform: translateX(-50%) translateY(0); }
+
+        .refresh-bar {
+            text-align: center; padding: 6px; background: #fdfaf3;
+            color: var(--gold-dark); font-size: 9px; font-weight: 700;
+            cursor: pointer; border-bottom: 1px solid var(--border);
+            font-family: 'Cairo', sans-serif;
+        }
+        .refresh-bar:hover { background: #faf5e6; }
     </style>
 </head>
 <body>
     <div class="app">
-        <!-- Header -->
         <div class="header">
             <div class="brand">
                 <div class="logo-icon">🍳</div>
@@ -377,23 +384,19 @@ def create_website_files():
             </div>
         </div>
 
-        <!-- Stats -->
         <div class="stats-row">
             <div class="stat-item"><span class="stat-num" id="statTotal">-</span><span class="stat-lbl">وصفة</span></div>
             <div class="stat-item"><span class="stat-num" id="statFavs">0</span><span class="stat-lbl">مفضلة</span></div>
             <div class="stat-item"><span class="stat-num">🌐</span><span class="stat-lbl">مباشر</span></div>
         </div>
 
-        <!-- Refresh -->
         <div class="refresh-bar" onclick="fetchRecipes()">🔄 اضغط للتحديث وجلب وصفات جديدة</div>
 
-        <!-- Search -->
         <div class="search-bar">
             <input type="text" class="search-input" placeholder="ابحث عن وصفة..." id="searchInput" onkeypress="if(event.key==='Enter')searchRecipes()">
             <button class="search-btn" onclick="searchRecipes()">🔍 بحث</button>
         </div>
 
-        <!-- Categories -->
         <div class="cat-scroll" id="catFilter">
             <button class="cat-chip active" data-cat="all" onclick="filterCat('all', this)">🍽️ الكل</button>
             <button class="cat-chip" data-cat="main" onclick="filterCat('main', this)">🍖 رئيسية</button>
@@ -403,53 +406,46 @@ def create_website_files():
             <button class="cat-chip" data-cat="drink" onclick="filterCat('drink', this)">☕ مشروبات</button>
         </div>
 
-        <!-- Content -->
         <div class="content" id="contentArea">
-            <div class="loading-box"><div class="spinner"></div><div>جاري تحميل الوصفات...</div></div>
+            <div class="loading-box"><div class="spinner"></div><div class="loading-text">جاري تحميل الوصفات...</div></div>
         </div>
     </div>
 
-    <!-- Modal -->
     <div class="modal-overlay" id="modalOverlay"><div class="modal" id="modal"></div></div>
-    <!-- Toast -->
     <div class="toast" id="toast"></div>
 
     <script>
-        // ==================== STATE ====================
         let allRecipes = [];
-        let favorites = JSON.parse(localStorage.getItem('tbakh_dev_favs') || '[]');
+        let favorites = JSON.parse(localStorage.getItem('tbakh_final_favs') || '[]');
         let showFavs = false;
         let currentCat = 'all';
 
-        // ==================== ARABIC RECIPES ====================
         const arabicRecipes = [
-            { id:'ar1', title:'كبسة الدجاج السعودية', cat:'rice', area:'سعودي', time:'90 د', img:'🍗', yt:'', ings:['دجاجة كاملة','3 أكواب أرز بسمتي','2 بصل','4 طماطم','بهارات كبسة','زبيب ولوز'], steps:'حمّر الدجاج ثم أضف البصل والطماطم والبهارات. أضف الماء واتركه يغلي. أضف الأرز واطبخ 30 دقيقة. زين بالمكسرات.' },
-            { id:'ar2', title:'مندي اللحم', cat:'rice', area:'يمني', time:'180 د', img:'🥩', yt:'', ings:['2 كيلو لحم غنم','3 أكواب أرز','بهارات مندي','فحم','زعفران','مكسرات'], steps:'تبّل اللحم واطبخه. اسلق الأرز في المرق. ضع الفحم للتدخين. قدم مع المكسرات.' },
-            { id:'ar3', title:'شاورما الدجاج', cat:'main', area:'عربي', time:'40 د', img:'🌯', yt:'', ings:['صدر دجاج','بهارات شاورما','ثومية','مخلل','بطاطس','خبز صاج'], steps:'قطع الدجاج وتبله. اقله. ادهن الخبز بالثومية. أضف الحشوة ولف.' },
-            { id:'ar4', title:'مقلوبة فلسطينية', cat:'rice', area:'فلسطيني', time:'90 د', img:'🍲', yt:'', ings:['دجاج','أرز','باذنجان','قرنبيط','بطاطا','بهارات'], steps:'اسلق الدجاج. اقلي الخضار. رص ثم اطبخ. اقلب القدر وقدم.' },
-            { id:'ar5', title:'منسف أردني', cat:'main', area:'أردني', time:'120 د', img:'🍖', yt:'', ings:['لحم غنم','جميد','أرز','خبز شراك','صنوبر'], steps:'انقع الجميد. اطبخ اللحم. ضع الخبز ثم الأرز واللحم. اسكب الجميد.' },
-            { id:'ar6', title:'حمص بيروتي', cat:'appetizer', area:'لبناني', time:'15 د', img:'🫒', yt:'', ings:['حمص','طحينة','ليمون','ثوم','زيت زيتون','كمون'], steps:'اسلق الحمص. اهرسه مع الطحينة والليمون. زين بزيت الزيتون.' },
-            { id:'ar7', title:'متبل باذنجان', cat:'appetizer', area:'شامي', time:'25 د', img:'🍆', yt:'', ings:['باذنجان','طحينة','ليمون','ثوم','زيت زيتون'], steps:'اشوِ الباذنجان. قشره واهرسه. أضف الطحينة والليمون. زين.' },
-            { id:'ar8', title:'كنافة نابلسية', cat:'sweet', area:'فلسطيني', time:'60 د', img:'🧀', yt:'', ings:['عجينة كنافة','جبن عكاوي','سمن','قطر','فستق'], steps:'فتت العجينة. ضع نصفها ثم الجبن. أضف الباقي. اخبز. اسكب القطر.' },
-            { id:'ar9', title:'بقلاوة تركية', cat:'sweet', area:'تركي', time:'60 د', img:'🥮', yt:'', ings:['جلاش','جوز','سمن','قطر','فستق'], steps:'ضع طبقات الجلاش مع الجوز. اخبز. اسكب القطر البارد.' },
-            { id:'ar10', title:'أم علي', cat:'sweet', area:'مصري', time:'35 د', img:'🥣', yt:'', ings:['بف باستري','حليب','قشطة','مكسرات','زبيب'], steps:'اخبز البف باستري. أضف الحليب والمكسرات. اخبز وقدم.' },
-            { id:'ar11', title:'كباب عراقي', cat:'main', area:'عراقي', time:'30 د', img:'🥙', yt:'', ings:['لحم مفروم','بصل','بقدونس','بهارات'], steps:'اخلط اللحم مع البصل. شكّل على أسياخ. اشوِ وقدم.' },
-            { id:'ar12', title:'شكشوكة مغربية', cat:'main', area:'مغربي', time:'20 د', img:'🍳', yt:'', ings:['بيض','طماطم','بصل','فلفل','كمون'], steps:'اقلي البصل. أضف الطماطم. اكسر البيض. غطّ حتى ينضج.' },
-            { id:'ar13', title:'محاشي مصرية', cat:'main', area:'مصري', time:'120 د', img:'🫑', yt:'', ings:['فلفل','باذنجان','كوسا','أرز','لحم مفروم'], steps:'احفر الخضار. احشُ بالخلطة. اطبخ في الصلصة.' },
-            { id:'ar14', title:'فتوش لبناني', cat:'appetizer', area:'لبناني', time:'15 د', img:'🥗', yt:'', ings:['خبز محمص','خس','طماطم','خيار','زيت زيتون','دبس رمان'], steps:'قطع الخضار. أضف الخبز. اسكب الصوص. رش السماق.' },
-            { id:'ar15', title:'شاي عدني', cat:'drink', area:'يمني', time:'15 د', img:'☕', yt:'', ings:['شاي أحمر','حليب مكثف','هيل','زنجبيل','قرنفل'], steps:'اغلِ الماء مع البهارات. أضف الشاي. صفّ وأضف الحليب.' },
-            { id:'ar16', title:'قهوة عربية', cat:'drink', area:'عربي', time:'20 د', img:'🫖', yt:'', ings:['بن عربي','هيل','زعفران','ماء','تمر'], steps:'اغلِ الماء. أضف البن. أضف الهيل. اسكب وقدم مع التمر.' },
-            { id:'ar17', title:'معصوب يمني', cat:'sweet', area:'يمني', time:'20 د', img:'🍌', yt:'', ings:['خبز بر','موز','قشطة','عسل','تمر'], steps:'فتت الخبز. اهرس الموز. أضف القشطة. اسكب العسل.' },
-            { id:'ar18', title:'سمبوسة', cat:'appetizer', area:'هندي', time:'40 د', img:'🥟', yt:'', ings:['عجينة سمبوسة','لحم مفروم','بصل','بهارات'], steps:'اطبخ الحشوة. احشُ العجينة. اقلي حتى تصبح ذهبية.' },
-            { id:'ar19', title:'مهلبية', cat:'sweet', area:'عربي', time:'15 د', img:'🍮', yt:'', ings:['حليب','نشا','سكر','ماء ورد','فستق'], steps:'اخلط النشا. سخن الحليب. أضف النشا. اسكب وبرد.' },
-            { id:'ar20', title:'كبسة حجازية', cat:'rice', area:'سعودي', time:'60 د', img:'🍛', yt:'', ings:['دجاج','أرز','طماطم','جزر','بهارات'], steps:'حمّر الدجاج. أضف الخضار. أضف الأرز. اطبخ وقدم.' }
+            { id:'ar1', title:'كبسة الدجاج السعودية', cat:'rice', area:'سعودي', time:'90 د', img:'🍗', yt:'', ings:['دجاجة كاملة','3 أكواب أرز بسمتي','2 بصل','4 طماطم','بهارات كبسة','زبيب ولوز'], steps:'حمّر الدجاج حتى يصبح ذهبياً.\nأضف البصل وقلّب حتى يذبل.\nأضف الطماطم والبهارات واطبخ 10 دقائق.\nأضف 4 أكواب ماء واتركه يغلي.\nأضف الأرز واتركه على نار هادئة 30 دقيقة.\nزيّن بالزبيب واللوز المحمص.' },
+            { id:'ar2', title:'مندي اللحم', cat:'rice', area:'يمني', time:'180 د', img:'🥩', yt:'', ings:['2 كيلو لحم غنم','3 أكواب أرز بسمتي','بهارات المندي','فحم للتدخين','زعفران','مكسرات'], steps:'تبّل اللحم بالبهارات واتركه ساعتين.\nاطبخ اللحم في قدر الضغط 45 دقيقة.\nاسلق الأرز في مرق اللحم.\nضع الفحم المشتعل في ورق قصدير مع زيت.\nغطّ القدر واتركه يتدخن 10 دقائق.\nقدّم مع المكسرات.' },
+            { id:'ar3', title:'شاورما الدجاج', cat:'main', area:'عربي', time:'40 د', img:'🌯', yt:'', ings:['صدر دجاج','بهارات شاورما','ثومية','مخلل خيار','بطاطس مقلية','خبز صاج'], steps:'قطّع الدجاج شرائح رفيعة.\nتبّل بالبهارات واتركه 30 دقيقة.\nاقلي الدجاج على نار عالية.\nادهن الخبز بالثومية.\nأضف الدجاج والبطاطس والمخلل.\nلفّ الشاورما بإحكام وقدّمها.' },
+            { id:'ar4', title:'مقلوبة فلسطينية', cat:'rice', area:'فلسطيني', time:'90 د', img:'🍲', yt:'', ings:['دجاجة كاملة','2 كوب أرز','باذنجان مقلي','قرنبيط مقلي','بطاطا مقلية','بهارات مشكلة'], steps:'اسلق الدجاج مع البهارات.\nاقلي الخضار كل على حدة.\nضع طبقة خضار في القدر ثم الأرز.\nاسكب المرق واطبخ 30 دقيقة.\nاقلب القدر على صينية التقديم.\nزيّن بالمكسرات المحمصة.' },
+            { id:'ar5', title:'المنسف الأردني', cat:'main', area:'أردني', time:'120 د', img:'🍖', yt:'', ings:['2 كيلو لحم غنم','جميد','3 أكواب أرز','خبز شراك','صنوبر ولوز','بهارات'], steps:'انقع الجميد في الماء ليلة كاملة.\nاطبخ اللحم في قدر الضغط ساعة.\nحضّر الأرز بالشعيرية.\nسخّن الجميد واخفقه حتى يصبح ناعماً.\nضع الخبز في الطبق ثم الأرز.\nاسكب اللحم والجميد وزين بالمكسرات.' },
+            { id:'ar6', title:'حمص بيروتي', cat:'appetizer', area:'لبناني', time:'15 د', img:'🫒', yt:'', ings:['400g حمص حب','3 ملاعق طحينة','عصير ليمونتين','2 فص ثوم','زيت زيتون','كمون وبابريكا'], steps:'اسلق الحمص حتى يصبح طرياً.\nاهرسه مع الطحينة والليمون.\nأضف الثوم المهروس والملح.\nاسكب في طبق وزين بزيت الزيتون.\nرش الكمون والبابريكا على الوجه.' },
+            { id:'ar7', title:'متبل الباذنجان', cat:'appetizer', area:'شامي', time:'25 د', img:'🍆', yt:'', ings:['2 باذنجان كبير','3 ملاعق طحينة','عصير ليمونة','2 فص ثوم','زيت زيتون','بقدونس'], steps:'اشوِ الباذنجان على النار حتى يحترق القشر.\nقشّر الباذنجان واهرسه جيداً.\nأضف الطحينة والليمون والثوم.\nاخلط جيداً حتى يصبح كريمياً.\nزيّن بزيت الزيتون والبقدونس.' },
+            { id:'ar8', title:'الكنافة النابلسية', cat:'sweet', area:'فلسطيني', time:'60 د', img:'🧀', yt:'', ings:['500g عجينة كنافة','500g جبن عكاوي','2 كوب قطر','سمن بلدي','فستق حلبي'], steps:'انقع الجبن في الماء لتخفيف الملح.\nفتّت عجينة الكنافة واخلطها بالسمن.\nضع نصف الكنافة في الصينية.\nوزّع الجبن ثم باقي الكنافة.\nاخبز في فرن 180°م حتى تصبح ذهبية.\nاسكب القطر البارد وزين بالفستق.' },
+            { id:'ar9', title:'البقلاوة التركية', cat:'sweet', area:'تركي', time:'60 د', img:'🥮', yt:'', ings:['علبة عجينة جلاش','2 كوب جوز مفروم','2 كوب سمن','3 كوب قطر','فستق للزينة'], steps:'ادهن الصينية بالسمن.\nضع طبقة جلاش وادهنها بالسمن.\nكرر 10 طبقات ثم ضع الجوز.\nأضف 10 طبقات أخرى مع السمن.\nقطّع البقلاوة إلى مربعات.\nاخبز 45 دقيقة حتى تصبح ذهبية.\nاسكب القطر البارد وزين بالفستق.' },
+            { id:'ar10', title:'أم علي', cat:'sweet', area:'مصري', time:'35 د', img:'🥣', yt:'', ings:['علبة عجينة بف باستري','3 أكواب حليب','كوب قشطة','مكسرات مشكلة','زبيب','جوز هند'], steps:'اخبز البف باستري وفتته.\nاخلط الحليب مع القشطة وسخّنه.\nضع البف باستري في صينية.\nأضف المكسرات والزبيب.\nاسكب الحليب الساخن.\nاخبز 20 دقيقة وقدّمها ساخنة.' },
+            { id:'ar11', title:'الكباب العراقي', cat:'main', area:'عراقي', time:'30 د', img:'🥙', yt:'', ings:['500g لحم مفروم','بصل مفروم','بقدونس','بهارات مشكلة','ملح وفلفل'], steps:'اخلط اللحم مع البصل والبقدونس.\nتبّل بالبهارات جيداً.\nشكّل اللحم على أسياخ.\nاشوِ على الفحم أو في الفرن.\nقدّم مع الخبز والسلطة.' },
+            { id:'ar12', title:'الشكشوكة المغربية', cat:'main', area:'مغربي', time:'20 د', img:'🍳', yt:'', ings:['4 بيضات','4 طماطم','بصل','فلفل أخضر','كمون','بابريكا'], steps:'اقلي البصل والفلفل في الزيت.\nأضف الطماطم والبهارات.\nاطبخ حتى تصبح صلصة سميكة.\nاكسر البيض فوق الصلصة.\nغطّ حتى ينضج البيض.\nقدّم مع الخبز الطازج.' },
+            { id:'ar13', title:'المحاشي المصرية', cat:'main', area:'مصري', time:'120 د', img:'🫑', yt:'', ings:['فلفل وباذنجان وكوسا','2 كوب أرز','لحم مفروم','شبت وبقدونس','صلصة طماطم'], steps:'احفر الخضار وأفرغها.\nاخلط الأرز مع اللحم والأعشاب.\nاحشُ الخضار بالخليط.\nرصّ المحاشي في القدر.\nاطبخ في صلصة الطماطم ساعة.\nقدّم ساخنة مع الزبادي.' },
+            { id:'ar14', title:'الفتوش اللبناني', cat:'appetizer', area:'لبناني', time:'15 د', img:'🥗', yt:'', ings:['خبز عربي محمص','خس','طماطم','خيار','بصل','زيت زيتون','دبس رمان','سماق'], steps:'قطّع الخضار إلى قطع متوسطة.\nاقطع الخبز المحمص.\nاخلط زيت الزيتون مع دبس الرمان.\nضع الخضار في طبق التقديم.\nأضف الخبز والصوص.\nرش السماق على الوجه.' },
+            { id:'ar15', title:'الشاي العدني', cat:'drink', area:'يمني', time:'15 د', img:'☕', yt:'', ings:['4 أكياس شاي أحمر','حليب مكثف','هيل','زنجبيل','قرنفل','سكر'], steps:'اغلِ الماء مع الهيل والزنجبيل.\nأضف الشاي واتركه 3 دقائق.\nصفّ الشاي في أكواب.\nأضف الحليب المكثف حسب الرغبة.\nقدّم ساخناً مع التمر.' },
+            { id:'ar16', title:'القهوة العربية', cat:'drink', area:'عربي', time:'20 د', img:'🫖', yt:'', ings:['3 ملاعق بن عربي مطحون','هيل مطحون','زعفران','ماء','تمر للتقديم'], steps:'اغلِ الماء في دلة القهوة.\nأضف البن واتركه يغلي 10 دقائق.\nأضف الهيل والزعفران.\nاتركه يهدأ ويرسب البن.\nاسكب في فناجين صغيرة.\nقدّم مع التمر الفاخر.' },
+            { id:'ar17', title:'المعصوب اليمني', cat:'sweet', area:'يمني', time:'20 د', img:'🍌', yt:'', ings:['2 رغيف خبز بر','2 موز ناضج','قشطة','عسل','تمر مقطع'], steps:'فتّت الخبز في وعاء.\nاهرس الموز وأضفه للخبز.\nأضف القشطة واخلط جيداً.\nاسكب العسل على الوجه.\nزيّن بالتمر وقدّم فوراً.' },
+            { id:'ar18', title:'السمبوسة', cat:'appetizer', area:'هندي', time:'40 د', img:'🥟', yt:'', ings:['علبة عجينة سمبوسة','لحم مفروم','بصل','بهارات','زيت للقلي'], steps:'اطبخ اللحم مع البصل والبهارات.\nاحشُ العجينة بالحشوة.\nاطوِ السمبوسة على شكل مثلث.\nاقلي في زيت غزير حتى تصبح ذهبية.\nقدّم مع الصلصة الحارة.' },
+            { id:'ar19', title:'المهلبية', cat:'sweet', area:'عربي', time:'15 د', img:'🍮', yt:'', ings:['4 أكواب حليب','نصف كوب نشا','سكر','ماء ورد','فستق للزينة'], steps:'اخلط النشا مع قليل من الحليب البارد.\nسخّن باقي الحليب مع السكر.\nأضف النشا وحرّك باستمرار.\nاطبخ حتى يصبح سميكاً.\nأضف ماء الورد واسكب في أطباق.\nبرّد وزين بالفستق.' },
+            { id:'ar20', title:'الكبسة الحجازية', cat:'rice', area:'سعودي', time:'60 د', img:'🍛', yt:'', ings:['دجاجة كاملة','3 أكواب أرز','طماطم','جزر','بهارات كبسة','لوز وزبيب'], steps:'حمّر الدجاج في الزيت.\nأضف الخضار والبهارات.\nاطبخ مع الماء 40 دقيقة.\nأضف الأرز واطبخ 25 دقيقة.\nزيّن بالمكسرات المحمصة.\nقدّم مع الصلصة الحارة.' }
         ];
 
-        // ==================== FETCH ====================
         async function fetchRecipes(query) {
             const area = document.getElementById('contentArea');
-            area.innerHTML = '<div class="loading-box"><div class="spinner"></div><div>جاري التحميل...</div></div>';
-
+            area.innerHTML = '<div class="loading-box"><div class="spinner"></div><div class="loading-text">جاري تحميل الوصفات...</div></div>';
             let fetched = [];
             try {
                 const q = query || 'chicken';
@@ -479,14 +475,12 @@ def create_website_files():
             return ings.length ? ings : ['مكونات متنوعة'];
         }
 
-        // ==================== SEARCH ====================
         async function searchRecipes() {
             const q = document.getElementById('searchInput').value.trim();
             if (!q) { showToast('⚠️ اكتب اسم الوصفة'); return; }
             await fetchRecipes(q);
         }
 
-        // ==================== RENDER ====================
         function render() {
             const area = document.getElementById('contentArea');
             const search = document.getElementById('searchInput').value.trim();
@@ -503,8 +497,11 @@ def create_website_files():
 
             area.innerHTML = list.map(r => {
                 const isFav = favorites.includes(r.id);
-                const imgTag = r.img && r.img.startsWith('http') ? `<img src="${r.img}" alt="${r.title}" loading="lazy">` : `<span style="font-size:40px">${r.img||'🍽️'}</span>`;
                 const catName = { main:'رئيسي', rice:'أرز', appetizer:'مقبلات', sweet:'حلويات', drink:'مشروبات' }[r.cat] || r.cat || 'عام';
+                const hasImage = r.img && r.img.startsWith('http');
+                const imgTag = hasImage 
+                    ? `<img src="${r.img}" alt="${r.title}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">` 
+                    : `<span style="font-size:50px">${r.img||'🍽️'}</span>`;
                 return `
                     <div class="card" onclick="openModal('${r.id}')">
                         <div class="card-img">
@@ -533,7 +530,6 @@ def create_website_files():
             b.classList.toggle('show', favorites.length > 0);
         }
 
-        // ==================== FILTERS ====================
         function filterCat(cat, btn) {
             currentCat = cat;
             document.querySelectorAll('.cat-chip').forEach(b => b.classList.remove('active'));
@@ -545,22 +541,24 @@ def create_website_files():
             showFavs = !showFavs;
             document.getElementById('favFilterBtn').classList.toggle('active', showFavs);
             render();
-            showToast(showFavs ? '❤️ المفضلة' : '🌍 الكل');
+            showToast(showFavs ? '❤️ عرض المفضلة' : '🌍 عرض الكل');
         }
 
         function toggleFav(id) {
             favorites = favorites.includes(id) ? favorites.filter(f => f !== id) : [...favorites, id];
-            localStorage.setItem('tbakh_dev_favs', JSON.stringify(favorites));
+            localStorage.setItem('tbakh_final_favs', JSON.stringify(favorites));
             updateStats(); render();
         }
 
-        // ==================== MODAL ====================
         function openModal(id) {
             const r = allRecipes.find(x => x.id.toString() === id.toString());
             if (!r) return;
             const isFav = favorites.includes(r.id);
             const catName = { main:'رئيسي', rice:'أرز', appetizer:'مقبلات', sweet:'حلويات', drink:'مشروبات' }[r.cat] || r.cat || 'عام';
-            const imgTag = r.img && r.img.startsWith('http') ? `<img src="${r.img}" alt="${r.title}">` : `<span style="font-size:60px">${r.img||'🍽️'}</span>`;
+            const hasImage = r.img && r.img.startsWith('http');
+            const imgTag = hasImage 
+                ? `<img src="${r.img}" alt="${r.title}" style="width:100%;height:100%;object-fit:cover;display:block;">` 
+                : `<span style="font-size:65px">${r.img||'🍽️'}</span>`;
 
             document.getElementById('modal').innerHTML = `
                 <div class="modal-handle"></div>
@@ -578,10 +576,10 @@ def create_website_files():
                         <ul class="ingredient-list">${(r.ings||['مكونات متنوعة']).map(i => `<li class="ingredient-item"><span class="ingredient-dot"></span>${i}</li>`).join('')}</ul>
                     </div>
                     <div class="section">
-                        <div class="section-title">👨‍🍳 الطريقة</div>
+                        <div class="section-title">👨‍🍳 طريقة التحضير</div>
                         <div class="instructions">${r.steps||'暂无说明'}</div>
                     </div>
-                    ${r.yt ? `<a href="${r.yt}" target="_blank" class="btn-yt">▶️ شاهد على يوتيوب</a>` : ''}
+                    ${r.yt ? `<a href="${r.yt}" target="_blank" class="btn-yt">▶️ شاهد الفيديو على يوتيوب</a>` : ''}
                     <button class="btn-fav ${isFav?'liked':''}" onclick="toggleFav('${r.id}');closeModal();showToast('${isFav?'💔 تمت الإزالة':'❤️ تمت الإضافة'}')">${isFav?'❤️ إزالة من المفضلة':'🤍 أضف إلى المفضلة'}</button>
                 </div>
             `;
@@ -597,7 +595,6 @@ def create_website_files():
             setTimeout(() => t.classList.remove('show'), 2000);
         }
 
-        // ==================== INIT ====================
         updateStats(); fetchRecipes();
     </script>
 </body>
@@ -607,20 +604,17 @@ def create_website_files():
         f.write(html_content)
 
     print("╔══════════════════════════════════════════╗")
-    print("║  🍳 طبّاخ برو - النسخة المطورة         ║")
+    print("║  🍳 طبّاخ برو - النسخة العربية النهائية║")
     print("║  🇸🇦 تم الإنشاء بنجاح                  ║")
     print("╚══════════════════════════════════════════╝")
     print(f"📁 www/index.html")
     print(f"💾 حجم الملف: {os.path.getsize('www/index.html')/1024:.1f} KB")
     print("")
-    print("🇸🇦 التحسينات:")
-    print("  🌐 وصفات محلية + أونلاين")
-    print("  🔍 بحث مع زر ذهبي")
-    print("  📊 إحصائيات متجددة")
-    print("  🔄 سحب للتحديث")
-    print("  📸 صور API حقيقية")
-    print("  ▶️ روابط يوتيوب")
-    print("  ❤️ مفضلة مع حفظ")
+    print("✅ التحسينات:")
+    print("  🖼️ صور API بحجم مناسب object-fit:cover")
+    print("  🇸🇦 كل الواجهة بالعربية")
+    print("  📱 تصميم نظامي ومرتب")
+    print("  ⭐ 20 وصفة عربية + API")
 
 if __name__ == "__main__":
     create_website_files()
