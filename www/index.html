@@ -1,47 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Recipe Book Pro | Ultimate</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>كتاب الطبخ العربي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #fafafa;
+            --bg: #fafaf8;
             --surface: #ffffff;
-            --border: #f0f0f0;
-            --border2: #e8e8e8;
+            --border: #f0ede8;
             --gold: #c9a84c;
-            --gold-light: #f5e6c8;
+            --gold-light: #f5ecd8;
+            --gold-dark: #8b7300;
+            --brown: #8B4513;
+            --brown-light: #faf5f0;
+            --olive: #556B2F;
+            --olive-light: #f5f8f0;
             --text: #1a1a1a;
-            --text2: #555555;
-            --text3: #999999;
-            --accent: #2d8a4e;
-            --accent-light: #e8f5e9;
-            --red: #e74c3c;
-            --red-light: #fdeaea;
-            --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
-            --shadow: 0 2px 8px rgba(0,0,0,0.06);
-            --shadow-lg: 0 8px 24px rgba(0,0,0,0.08);
-            --shadow-xl: 0 20px 60px rgba(0,0,0,0.12);
-            --radius-sm: 10px;
-            --radius: 16px;
-            --radius-lg: 20px;
-            --radius-xl: 24px;
+            --text2: #555;
+            --text3: #999;
+            --shadow: 0 2px 8px rgba(0,0,0,0.04);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.06);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            background: #f0f2f0;
+            background: #f2f0eb;
             color: var(--text);
-            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Cairo', 'Tajawal', sans-serif;
             min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
             -webkit-tap-highlight-color: transparent;
-            -webkit-font-smoothing: antialiased;
+            direction: rtl;
         }
 
         .app {
@@ -52,15 +46,15 @@
             display: flex;
             flex-direction: column;
             background: var(--bg);
-            box-shadow: var(--shadow-xl);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.12);
             position: relative;
             overflow: hidden;
         }
 
         /* ==================== HEADER ==================== */
         .header {
-            padding: 14px 20px;
-            background: var(--surface);
+            padding: 14px 18px;
+            background: linear-gradient(135deg, #fff, #fdfaf5);
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
@@ -68,73 +62,68 @@
             z-index: 10;
         }
 
-        .header-left {
+        .header-right {
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
         .logo-icon {
-            width: 42px;
-            height: 42px;
-            background: linear-gradient(135deg, #2d8a4e, #3cb371);
-            border-radius: 13px;
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+            border-radius: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            box-shadow: 0 4px 12px rgba(45,138,78,0.2);
+            font-size: 22px;
+            box-shadow: 0 4px 12px rgba(201,168,76,0.3);
         }
 
         .header-title {
-            font-size: 18px;
+            font-size: 19px;
             font-weight: 800;
             color: #1a1a1a;
-            letter-spacing: -0.3px;
+            letter-spacing: 0;
         }
 
         .header-sub {
-            font-size: 10px;
+            font-size: 9px;
             color: #999;
-            letter-spacing: 0.5px;
-            font-weight: 500;
+            font-weight: 600;
         }
 
-        .header-actions {
-            display: flex;
-            gap: 6px;
-        }
+        .header-actions { display: flex; gap: 6px; }
 
         .header-btn {
             width: 38px;
             height: 38px;
-            background: #f8f8f8;
+            background: #f8f6f2;
             border: 1px solid var(--border);
-            color: #666;
+            color: #888;
             cursor: pointer;
             border-radius: 12px;
             font-size: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.25s;
+            transition: all 0.3s;
             position: relative;
         }
 
-        .header-btn:hover { background: #f0f0f0; color: #333; }
         .header-btn.active {
-            background: var(--red-light);
-            border-color: var(--red);
-            color: var(--red);
+            background: #fdf5f5;
+            border-color: #e74c3c;
+            color: #e74c3c;
         }
 
         .fav-badge {
             position: absolute;
-            top: -4px;
-            right: -4px;
+            top: -5px;
+            right: -5px;
             width: 18px;
             height: 18px;
-            background: var(--red);
+            background: #e74c3c;
             color: #fff;
             font-size: 9px;
             font-weight: 700;
@@ -144,14 +133,13 @@
             justify-content: center;
             display: none;
         }
-
         .fav-badge.show { display: flex; }
 
-        /* ==================== STATS BAR ==================== */
+        /* ==================== STATS ==================== */
         .stats-bar {
             display: flex;
-            gap: 8px;
-            padding: 10px 20px;
+            gap: 6px;
+            padding: 8px 16px;
             background: var(--surface);
             border-bottom: 1px solid var(--border);
         }
@@ -159,60 +147,56 @@
         .stat-card {
             flex: 1;
             padding: 8px;
-            background: #f8faf8;
+            background: #fdfaf5;
             border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
+            border-radius: 10px;
             text-align: center;
         }
 
         .stat-num {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 800;
-            color: var(--accent);
+            color: var(--gold-dark);
         }
-
         .stat-lbl {
-            font-size: 8px;
+            font-size: 7px;
             color: #999;
             letter-spacing: 1px;
-            text-transform: uppercase;
-            margin-top: 1px;
+            margin-top: 2px;
         }
 
         /* ==================== SEARCH ==================== */
         .search-section {
-            padding: 0 20px 10px;
+            padding: 0 16px 8px;
             background: var(--surface);
         }
 
-        .search-wrapper {
-            position: relative;
-        }
+        .search-wrapper { position: relative; }
 
         .search-input {
             width: 100%;
-            padding: 11px 14px 11px 40px;
-            background: #f5f7f5;
+            padding: 11px 40px 11px 14px;
+            background: #f8f6f2;
             border: 1.5px solid var(--border);
             color: var(--text);
             font-size: 12px;
-            border-radius: var(--radius-sm);
-            font-family: inherit;
+            border-radius: 12px;
+            font-family: 'Cairo', sans-serif;
             outline: none;
             transition: all 0.3s;
+            text-align: right;
         }
 
         .search-input:focus {
-            border-color: var(--accent);
+            border-color: var(--gold);
             background: #fff;
-            box-shadow: 0 0 0 4px rgba(45,138,78,0.06);
+            box-shadow: 0 0 0 4px rgba(201,168,76,0.06);
         }
-
-        .search-input::placeholder { color: #c0c0c0; }
+        .search-input::placeholder { color: #ccc; }
 
         .search-icon {
             position: absolute;
-            left: 14px;
+            right: 14px;
             top: 50%;
             transform: translateY(-50%);
             font-size: 14px;
@@ -220,155 +204,109 @@
             pointer-events: none;
         }
 
-        /* ==================== CUISINE FILTER ==================== */
-        .cuisine-scroll {
+        /* ==================== CATEGORY FILTER ==================== */
+        .cat-scroll {
             display: flex;
             gap: 6px;
-            padding: 0 20px 12px;
+            padding: 0 16px 10px;
             background: var(--surface);
             overflow-x: auto;
             border-bottom: 1px solid var(--border);
         }
 
-        .cuisine-scroll::-webkit-scrollbar { height: 0; }
+        .cat-scroll::-webkit-scrollbar { height: 0; }
 
-        .cuisine-chip {
-            padding: 9px 15px;
-            background: #f8f8f8;
+        .cat-chip {
+            padding: 8px 14px;
+            background: #f8f6f2;
             border: 1.5px solid var(--border);
             color: #888;
             cursor: pointer;
-            border-radius: 25px;
+            border-radius: 22px;
             font-size: 10px;
-            font-weight: 600;
-            white-space: nowrap;
-            letter-spacing: 0.3px;
-            transition: all 0.3s;
-            font-family: inherit;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .cuisine-chip .dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            background: #ccc;
-            transition: all 0.3s;
-        }
-
-        .cuisine-chip:hover { background: #f0f0f0; color: #555; }
-        .cuisine-chip.active {
-            background: #fff;
-            border-color: var(--accent);
-            color: var(--accent);
             font-weight: 700;
-            box-shadow: 0 2px 8px rgba(45,138,78,0.1);
+            white-space: nowrap;
+            transition: all 0.3s;
+            font-family: 'Cairo', sans-serif;
         }
-        .cuisine-chip.active .dot { background: var(--accent); }
 
-        .chip-italian.active { border-color: #e74c3c; color: #e74c3c; background: #fff5f5; }
-        .chip-italian.active .dot { background: #e74c3c; }
-        .chip-indian.active { border-color: #f39c12; color: #f39c12; background: #fffdf5; }
-        .chip-indian.active .dot { background: #f39c12; }
-        .chip-chinese.active { border-color: #e74c3c; color: #c0392b; background: #fff5f5; }
-        .chip-chinese.active .dot { background: #c0392b; }
-        .chip-mexican.active { border-color: #2ecc71; color: #27ae60; background: #f5fff8; }
-        .chip-mexican.active .dot { background: #27ae60; }
-        .chip-arabic.active { border-color: #8e44ad; color: #8e44ad; background: #fdf5ff; }
-        .chip-arabic.active .dot { background: #8e44ad; }
-        .chip-american.active { border-color: #3498db; color: #2980b9; background: #f5faff; }
-        .chip-american.active .dot { background: #2980b9; }
+        .cat-chip:hover { background: #f0ede8; }
+        .cat-chip.active {
+            background: #fff;
+            border-color: var(--gold);
+            color: var(--gold-dark);
+            font-weight: 800;
+            box-shadow: 0 2px 8px rgba(201,168,76,0.12);
+        }
 
         /* ==================== CONTENT ==================== */
         .content-area {
             flex: 1;
             overflow-y: auto;
-            padding: 14px 16px;
+            padding: 12px 14px;
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
+            gap: 10px;
             align-content: start;
         }
 
         .content-area::-webkit-scrollbar { width: 4px; }
-        .content-area::-webkit-scrollbar-thumb { background: #ddd; border-radius: 4px; }
+        .content-area::-webkit-scrollbar-thumb { background: #e0ddd8; border-radius: 4px; }
 
         /* ==================== RECIPE CARD ==================== */
         .recipe-card {
             background: var(--surface);
             border: 1px solid var(--border);
-            border-radius: var(--radius);
+            border-radius: 16px;
             overflow: hidden;
             cursor: pointer;
-            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: var(--shadow-sm);
-            animation: cardIn 0.5s ease;
+            transition: all 0.3s;
+            box-shadow: var(--shadow);
+            animation: cardIn 0.4s ease;
             position: relative;
         }
 
         @keyframes cardIn {
-            from { opacity: 0; transform: translateY(12px); }
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .recipe-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .recipe-card:active { transform: scale(0.96); }
+        .recipe-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+        .recipe-card:active { transform: scale(0.97); }
 
         .card-image {
             width: 100%;
-            aspect-ratio: 1.35;
-            background: linear-gradient(135deg, #f8f6f0, #f0ece0);
+            aspect-ratio: 1.3;
+            background: linear-gradient(135deg, #f8f4ec, #f0e8d8);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 38px;
+            font-size: 36px;
             position: relative;
-            overflow: hidden;
         }
 
-        .card-image::after {
-            content: '';
+        .card-time {
             position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 40%;
-            background: linear-gradient(to top, rgba(0,0,0,0.03), transparent);
-        }
-
-        .card-time-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            padding: 5px 10px;
+            top: 8px;
+            right: 8px;
+            padding: 4px 10px;
             background: rgba(255,255,255,0.95);
-            color: #555;
+            color: #666;
             font-size: 9px;
             font-weight: 700;
             border-radius: 20px;
-            letter-spacing: 0.3px;
-            box-shadow: var(--shadow-sm);
-            z-index: 2;
-            display: flex;
-            align-items: center;
-            gap: 4px;
+            box-shadow: var(--shadow);
         }
 
-        .card-fav-btn {
+        .card-fav {
             position: absolute;
-            top: 10px;
-            right: 10px;
-            width: 32px;
-            height: 32px;
+            top: 8px;
+            left: 8px;
+            width: 30px;
+            height: 30px;
             background: rgba(255,255,255,0.95);
             border: none;
-            color: #ccc;
+            color: #ddd;
             cursor: pointer;
             border-radius: 50%;
             font-size: 13px;
@@ -376,25 +314,22 @@
             align-items: center;
             justify-content: center;
             transition: all 0.3s;
-            box-shadow: var(--shadow-sm);
-            z-index: 2;
+            box-shadow: var(--shadow);
         }
 
-        .card-fav-btn:hover { transform: scale(1.1); }
-        .card-fav-btn.liked { color: #e74c3c; background: #fff; }
+        .card-fav.liked { color: #e74c3c; }
 
         .card-body { padding: 12px 14px 14px; }
 
-        .card-cuisine-tag {
+        .card-cat {
             display: inline-block;
             padding: 3px 8px;
-            background: #f8faf8;
-            border-radius: 6px;
+            background: var(--gold-light);
+            color: var(--gold-dark);
             font-size: 8px;
             font-weight: 700;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: var(--accent);
+            border-radius: 6px;
+            letter-spacing: 0.5px;
             margin-bottom: 6px;
         }
 
@@ -402,7 +337,7 @@
             font-size: 13px;
             font-weight: 700;
             color: #1a1a1a;
-            line-height: 1.35;
+            line-height: 1.4;
             margin-bottom: 8px;
             display: -webkit-box;
             -webkit-line-clamp: 2;
@@ -416,16 +351,12 @@
             justify-content: space-between;
         }
 
-        .card-stars { color: #f0a500; font-size: 10px; letter-spacing: 1px; }
-        .card-difficulty {
+        .card-stars { color: #f0a500; font-size: 10px; }
+        .card-diff {
             font-size: 9px;
             color: #999;
             font-weight: 600;
         }
-
-        .card-difficulty.easy { color: #2d8a4e; }
-        .card-difficulty.medium { color: #f39c12; }
-        .card-difficulty.hard { color: #e74c3c; }
 
         /* ==================== MODAL ==================== */
         .modal-overlay {
@@ -436,19 +367,18 @@
             z-index: 100;
             align-items: flex-end;
             justify-content: center;
-            backdrop-filter: blur(2px);
         }
 
         .modal-overlay.show { display: flex; }
 
         .modal {
             background: #fff;
-            border-radius: 28px 28px 0 0;
+            border-radius: 24px 24px 0 0;
             width: 100%;
             max-width: 480px;
             max-height: 88vh;
             overflow-y: auto;
-            animation: slideUp 0.45s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: slideUp 0.4s ease;
             box-shadow: 0 -15px 50px rgba(0,0,0,0.2);
         }
 
@@ -463,232 +393,173 @@
         .modal-handle {
             width: 36px;
             height: 4px;
-            background: #ddd;
+            background: #e0ddd8;
             border-radius: 2px;
             margin: 10px auto 0;
         }
 
         .modal-image {
             width: 100%;
-            aspect-ratio: 1.6;
-            background: linear-gradient(135deg, #f8f6f0, #f0ece0);
+            aspect-ratio: 1.5;
+            background: linear-gradient(135deg, #f8f4ec, #f0e8d8);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 60px;
+            font-size: 55px;
             position: relative;
-            margin-top: 8px;
+            margin-top: 6px;
         }
 
         .modal-close {
             position: absolute;
-            top: 14px;
-            left: 14px;
-            width: 36px;
-            height: 36px;
+            top: 12px;
+            right: 12px;
+            width: 34px;
+            height: 34px;
             background: rgba(255,255,255,0.95);
             border: none;
             color: #333;
             cursor: pointer;
             border-radius: 50%;
-            font-size: 16px;
+            font-size: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 5;
             box-shadow: var(--shadow);
-            transition: all 0.3s;
         }
 
-        .modal-close:hover { background: #fff; transform: scale(1.05); }
+        .modal-body { padding: 20px 18px 30px; }
 
-        .modal-body { padding: 22px 20px 30px; }
-
-        .modal-header {
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .modal-cat {
+            display: inline-block;
+            padding: 4px 10px;
+            background: var(--gold-light);
+            color: var(--gold-dark);
+            font-size: 9px;
+            font-weight: 700;
+            border-radius: 20px;
+            letter-spacing: 0.5px;
             margin-bottom: 6px;
         }
 
-        .modal-cuisine {
-            font-size: 10px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-transform: uppercase;
-            padding: 4px 10px;
-            border-radius: 20px;
-        }
-
         .modal-title {
-            font-size: 22px;
+            font-size: 21px;
             font-weight: 800;
             color: #1a1a1a;
-            margin-bottom: 14px;
-            line-height: 1.3;
-            letter-spacing: -0.3px;
+            margin-bottom: 12px;
+            line-height: 1.4;
         }
 
-        .modal-info-row {
+        .modal-info {
             display: flex;
-            gap: 10px;
-            margin-bottom: 22px;
+            gap: 8px;
+            margin-bottom: 20px;
             flex-wrap: wrap;
         }
 
         .info-pill {
             display: flex;
             align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
-            background: #f8faf8;
-            border-radius: 25px;
-            font-size: 11px;
+            gap: 5px;
+            padding: 7px 12px;
+            background: #fdfaf5;
+            border-radius: 20px;
+            font-size: 10px;
             font-weight: 600;
-            color: #555;
-            border: 1px solid #f0f0f0;
+            color: #666;
+            border: 1px solid var(--border);
         }
 
-        .info-pill .icon { font-size: 15px; }
-
-        .modal-section { margin-bottom: 22px; }
+        .modal-section { margin-bottom: 20px; }
 
         .section-title {
             font-size: 13px;
             font-weight: 700;
             color: #1a1a1a;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
-            gap: 8px;
-        }
-
-        .section-title::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: #f0f0f0;
-        }
-
-        .ingredient-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
             gap: 6px;
         }
+
+        .ingredient-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
 
         .ingredient-item {
             display: flex;
             align-items: center;
-            gap: 10px;
-            font-size: 12px;
+            gap: 8px;
+            font-size: 11px;
             color: #444;
-            padding: 10px 14px;
-            background: #fafafa;
-            border-radius: 12px;
-            border: 1px solid #f5f5f5;
-            transition: all 0.3s;
+            padding: 9px 12px;
+            background: #fafaf8;
+            border-radius: 10px;
+            border: 1px solid #f5f2ec;
         }
 
-        .ingredient-item:hover { background: #f5faf5; border-color: #e0e8e0; }
-
-        .ingredient-check {
-            width: 18px;
-            height: 18px;
-            border: 2px solid #ddd;
+        .ingredient-dot {
+            width: 6px;
+            height: 6px;
+            background: var(--gold);
             border-radius: 50%;
             flex-shrink: 0;
-            cursor: pointer;
-            transition: all 0.3s;
         }
 
-        .ingredient-check.checked {
-            background: var(--accent);
-            border-color: var(--accent);
-            position: relative;
-        }
-
-        .ingredient-check.checked::after {
-            content: '✓';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 9px;
-            color: #fff;
-            font-weight: 700;
-        }
-
-        .step-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+        .step-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
 
         .step-item {
             display: flex;
-            gap: 14px;
-            font-size: 12px;
+            gap: 10px;
+            font-size: 11px;
             color: #444;
             line-height: 1.6;
         }
 
         .step-num {
-            width: 28px;
-            height: 28px;
-            background: linear-gradient(135deg, var(--accent), #3cb371);
+            width: 24px;
+            height: 24px;
+            background: linear-gradient(135deg, var(--gold), var(--gold-dark));
             color: #fff;
             font-weight: 700;
-            font-size: 11px;
+            font-size: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
             border-radius: 50%;
             flex-shrink: 0;
-            box-shadow: 0 3px 8px rgba(45,138,78,0.2);
         }
 
         .btn-fav {
             width: 100%;
-            padding: 13px;
-            background: #fafafa;
-            border: 1.5px solid #f0f0f0;
+            padding: 12px;
+            background: #fafaf8;
+            border: 1.5px solid #f0ede8;
             color: #666;
             cursor: pointer;
             border-radius: 14px;
             font-size: 12px;
             font-weight: 700;
-            letter-spacing: 0.5px;
             transition: all 0.3s;
-            font-family: inherit;
-            margin-top: 6px;
+            font-family: 'Cairo', sans-serif;
+            margin-top: 4px;
         }
 
-        .btn-fav:hover { background: #fff5f5; border-color: #e74c3c; color: #e74c3c; }
-        .btn-fav.liked { background: #e74c3c; color: #fff; border-color: #e74c3c; }
+        .btn-fav.liked {
+            background: #e74c3c;
+            color: #fff;
+            border-color: #e74c3c;
+        }
 
-        /* ==================== EMPTY STATE ==================== */
+        /* ==================== EMPTY ==================== */
         .empty-state {
             grid-column: 1 / -1;
             text-align: center;
-            padding: 50px 20px;
+            padding: 40px;
+            color: #ccc;
         }
 
-        .empty-icon {
-            font-size: 55px;
-            display: block;
-            margin-bottom: 12px;
-            opacity: 0.5;
-        }
-
-        .empty-title {
-            font-size: 14px;
-            font-weight: 700;
-            color: #999;
-            margin-bottom: 4px;
-        }
-
-        .empty-sub {
-            font-size: 11px;
-            color: #bbb;
-            letter-spacing: 0.5px;
-        }
+        .empty-icon { font-size: 45px; display: block; margin-bottom: 8px; }
+        .empty-text { font-size: 12px; font-weight: 600; }
 
         /* ==================== TOAST ==================== */
         .toast {
@@ -702,10 +573,9 @@
             border-radius: 30px;
             font-size: 11px;
             font-weight: 600;
-            letter-spacing: 0.5px;
             z-index: 300;
-            transition: transform 0.45s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+            transition: transform 0.4s;
+            font-family: 'Cairo', sans-serif;
         }
 
         .toast.show { transform: translateX(-50%) translateY(0); }
@@ -713,13 +583,13 @@
 </head>
 <body>
     <div class="app">
-        <!-- ==================== HEADER ==================== -->
+        <!-- Header -->
         <div class="header">
-            <div class="header-left">
+            <div class="header-right">
                 <div class="logo-icon">🍳</div>
                 <div>
-                    <div class="header-title">Recipe Book</div>
-                    <div class="header-sub">World Cuisines</div>
+                    <div class="header-title">كتاب الطبخ</div>
+                    <div class="header-sub">المطبخ العربي الأصيل</div>
                 </div>
             </div>
             <div class="header-actions">
@@ -730,117 +600,90 @@
             </div>
         </div>
 
-        <!-- ==================== STATS ==================== -->
+        <!-- Stats -->
         <div class="stats-bar">
-            <div class="stat-card">
-                <div class="stat-num" id="statTotal">12</div>
-                <div class="stat-lbl">Recipes</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-num" id="statCuisines">6</div>
-                <div class="stat-lbl">Cuisines</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-num" id="statFavs">0</div>
-                <div class="stat-lbl">Favorites</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-num">⭐</div>
-                <div class="stat-lbl">Quality</div>
-            </div>
+            <div class="stat-card"><div class="stat-num" id="statTotal">20</div><div class="stat-lbl">وصفة</div></div>
+            <div class="stat-card"><div class="stat-num">5</div><div class="stat-lbl">أقسام</div></div>
+            <div class="stat-card"><div class="stat-num" id="statFavs">0</div><div class="stat-lbl">مفضلة</div></div>
+            <div class="stat-card"><div class="stat-num">⭐</div><div class="stat-lbl">تقييم</div></div>
         </div>
 
-        <!-- ==================== SEARCH ==================== -->
+        <!-- Search -->
         <div class="search-section">
             <div class="search-wrapper">
-                <input type="text" class="search-input" placeholder="Search recipes, ingredients..." id="searchInput" oninput="renderRecipes()">
+                <input type="text" class="search-input" placeholder="ابحث عن وصفة أو مكون..." id="searchInput" oninput="renderRecipes()">
                 <span class="search-icon">🔍</span>
             </div>
         </div>
 
-        <!-- ==================== CUISINE FILTER ==================== -->
-        <div class="cuisine-scroll" id="cuisineFilter">
-            <button class="cuisine-chip active" data-cuisine="all" onclick="filterCuisine('all', this)">
-                <span class="dot"></span> All
-            </button>
-            <button class="cuisine-chip chip-italian" data-cuisine="italian" onclick="filterCuisine('italian', this)">
-                <span class="dot"></span> Italian
-            </button>
-            <button class="cuisine-chip chip-indian" data-cuisine="indian" onclick="filterCuisine('indian', this)">
-                <span class="dot"></span> Indian
-            </button>
-            <button class="cuisine-chip chip-chinese" data-cuisine="chinese" onclick="filterCuisine('chinese', this)">
-                <span class="dot"></span> Chinese
-            </button>
-            <button class="cuisine-chip chip-mexican" data-cuisine="mexican" onclick="filterCuisine('mexican', this)">
-                <span class="dot"></span> Mexican
-            </button>
-            <button class="cuisine-chip chip-arabic" data-cuisine="arabic" onclick="filterCuisine('arabic', this)">
-                <span class="dot"></span> Arabic
-            </button>
-            <button class="cuisine-chip chip-american" data-cuisine="american" onclick="filterCuisine('american', this)">
-                <span class="dot"></span> American
-            </button>
+        <!-- Categories -->
+        <div class="cat-scroll" id="catFilter">
+            <button class="cat-chip active" data-cat="all" onclick="filterCat('all', this)">🍽️ الكل</button>
+            <button class="cat-chip" data-cat="main" onclick="filterCat('main', this)">🍖 أطباق رئيسية</button>
+            <button class="cat-chip" data-cat="rice" onclick="filterCat('rice', this)">🍚 أرز وكبسات</button>
+            <button class="cat-chip" data-cat="appetizer" onclick="filterCat('appetizer', this)">🥗 مقبلات</button>
+            <button class="cat-chip" data-cat="sweet" onclick="filterCat('sweet', this)">🍯 حلويات</button>
+            <button class="cat-chip" data-cat="drink" onclick="filterCat('drink', this)">☕ مشروبات</button>
         </div>
 
-        <!-- ==================== CONTENT ==================== -->
+        <!-- Content -->
         <div class="content-area" id="contentArea"></div>
     </div>
 
-    <!-- ==================== MODAL ==================== -->
+    <!-- Modal -->
     <div class="modal-overlay" id="modalOverlay">
         <div class="modal" id="modal"></div>
     </div>
 
-    <!-- ==================== TOAST ==================== -->
+    <!-- Toast -->
     <div class="toast" id="toast"></div>
 
     <script>
-        // ==================== DATABASE ====================
         const recipes = [
-            { id:1, title:'Spaghetti Carbonara', cuisine:'italian', time:'25 min', difficulty:'Easy', servings:4, stars:5, image:'🍝', ingredients:['400g spaghetti','200g guanciale','4 egg yolks','100g Pecorino','Black pepper','Salt'], steps:['Boil pasta in salted water until al dente.','Fry guanciale until crispy and golden.','Mix egg yolks with cheese and pepper.','Toss hot pasta with guanciale, remove from heat.','Add egg mixture and stir vigorously.','Serve immediately with extra cheese.'] },
-            { id:2, title:'Chicken Tikka Masala', cuisine:'indian', time:'45 min', difficulty:'Medium', servings:4, stars:5, image:'🍛', ingredients:['500g chicken breast','1 cup yogurt','3 tbsp tikka paste','2 onions','400g tomatoes','200ml cream','Garam masala','Ginger garlic paste'], steps:['Marinate chicken in yogurt and spices for 1 hour.','Grill chicken pieces until slightly charred.','Sauté onions until golden brown.','Add tomatoes, spices, and simmer for 15 minutes.','Add cream and stir well.','Add grilled chicken and cook 10 minutes.','Garnish with cilantro and serve with naan.'] },
-            { id:3, title:'Kung Pao Chicken', cuisine:'chinese', time:'30 min', difficulty:'Medium', servings:3, stars:4, image:'🥡', ingredients:['400g chicken thighs','Roasted peanuts','Dried red chilies','Soy sauce','Rice vinegar','Sesame oil','Green onions','Garlic','Ginger'], steps:['Dice chicken and marinate in soy sauce and cornstarch.','Stir-fry in hot wok until golden.','Remove chicken and set aside.','Fry chilies, garlic, and ginger.','Add sauce mixture and bring to boil.','Return chicken, add peanuts, toss well.','Garnish with green onions.'] },
-            { id:4, title:'Beef Tacos', cuisine:'mexican', time:'20 min', difficulty:'Easy', servings:6, stars:5, image:'🌮', ingredients:['500g ground beef','12 taco shells','Iceberg lettuce','Roma tomatoes','Cheddar cheese','Sour cream','Taco seasoning','Lime'], steps:['Brown beef in a skillet with taco seasoning.','Drain excess fat.','Warm taco shells in oven.','Chop lettuce and dice tomatoes.','Grate cheese finely.','Assemble tacos with meat and toppings.','Finish with sour cream and lime juice.'] },
-            { id:5, title:'Hummus bil Tahina', cuisine:'arabic', time:'15 min', difficulty:'Easy', servings:4, stars:5, image:'🫒', ingredients:['400g canned chickpeas','3 tbsp tahini paste','2 lemons (juiced)','2 garlic cloves','Extra virgin olive oil','Paprika','Cumin','Salt'], steps:['Drain and rinse chickpeas thoroughly.','Blend chickpeas with tahini and lemon juice.','Add crushed garlic and blend until smooth.','Add ice water for creamy texture.','Season with salt and cumin.','Plate and drizzle with olive oil.','Sprinkle paprika and serve with pita.'] },
-            { id:6, title:'Classic Cheeseburger', cuisine:'american', time:'20 min', difficulty:'Easy', servings:4, stars:4, image:'🍔', ingredients:['500g ground beef (80/20)','4 burger buns','Cheddar cheese slices','Lettuce','Tomato','Red onion','Ketchup','Mustard','Pickles'], steps:['Divide beef into 4 equal patties.','Season generously with salt and pepper.','Grill on high heat 4 minutes per side.','Add cheese and cover to melt.','Toast buns lightly on grill.','Assemble with lettuce, tomato, onion.','Add ketchup, mustard, and pickles.'] },
-            { id:7, title:'Margherita Pizza', cuisine:'italian', time:'40 min', difficulty:'Medium', servings:2, stars:5, image:'🍕', ingredients:['250g pizza dough','San Marzano tomatoes','Fresh mozzarella (200g)','Fresh basil leaves','Extra virgin olive oil','Sea salt'], steps:['Preheat oven to maximum (250°C/480°F).','Stretch dough into thin round shape.','Crush tomatoes and spread on dough.','Tear mozzarella and distribute evenly.','Drizzle with olive oil.','Bake for 8-10 minutes until bubbly.','Top with fresh basil and serve immediately.'] },
-            { id:8, title:'Butter Chicken', cuisine:'indian', time:'50 min', difficulty:'Medium', servings:4, stars:5, image:'🧈', ingredients:['500g chicken thighs','50g butter','200ml heavy cream','1 cup tomato puree','Garam masala','Fenugreek leaves','Ginger garlic paste','Cashew paste'], steps:['Marinate chicken in yogurt and spices.','Grill or bake chicken until cooked.','Melt butter in a large pan.','Add ginger garlic paste and sauté.','Add tomato puree and spices, simmer 20 min.','Add cream and cashew paste, stir well.','Add chicken pieces and fenugreek.','Simmer 10 minutes and serve with rice.'] },
-            { id:9, title:'Spring Rolls', cuisine:'chinese', time:'35 min', difficulty:'Medium', servings:8, stars:4, image:'🥟', ingredients:['Spring roll wrappers','Shredded cabbage','Julienned carrots','Bean sprouts','Soy sauce','Sesame oil','Oil for frying','Sweet chili sauce'], steps:['Mix all vegetables in a bowl.','Season with soy sauce and sesame oil.','Place filling on wrapper corner.','Fold sides and roll tightly.','Seal edges with flour paste.','Deep fry at 180°C until golden.','Drain on paper towels.','Serve with sweet chili sauce.'] },
-            { id:10, title:'Guacamole', cuisine:'mexican', time:'10 min', difficulty:'Easy', servings:4, stars:4, image:'🥑', ingredients:['3 ripe avocados','1 lime (juiced)','1 Roma tomato','½ red onion','Fresh cilantro','Jalapeño pepper','Salt'], steps:['Cut avocados and remove pits.','Mash with fork to desired consistency.','Dice tomato and onion finely.','Mince jalapeño and cilantro.','Fold all ingredients together.','Add lime juice and salt.','Serve immediately with tortilla chips.'] },
-            { id:11, title:'Chicken Shawarma', cuisine:'arabic', time:'40 min', difficulty:'Medium', servings:6, stars:5, image:'🥙', ingredients:['500g chicken thighs','Shawarma spice mix','Garlic sauce (toum)','Pickled turnips','Pita bread','Tahini sauce','Sumac'], steps:['Marinate chicken in spices overnight.','Stack chicken on vertical skewer.','Roast at 200°C for 35 minutes.','Slice thinly from the outside.','Warm pita bread.','Spread garlic sauce on pita.','Add chicken, pickles, and tahini.','Roll tightly and serve.'] },
-            { id:12, title:'Fluffy Pancakes', cuisine:'american', time:'15 min', difficulty:'Easy', servings:4, stars:5, image:'🥞', ingredients:['2 cups all-purpose flour','2 large eggs','1½ cups milk','3 tbsp sugar','2 tsp baking powder','Butter','Maple syrup','Fresh berries'], steps:['Mix flour, sugar, and baking powder.','Whisk eggs and milk separately.','Combine wet and dry ingredients.','Do not overmix; lumps are fine.','Heat griddle and melt butter.','Pour batter in circles.','Flip when bubbles appear on surface.','Stack, top with butter, syrup, and berries.'] }
+            { id:1, title:'كبسة الدجاج السعودية', cat:'rice', time:'ساعة ونصف', diff:'متوسط', servings:6, stars:5, image:'🍗', ingredients:['دجاجة كاملة مقطعة','3 أكواب أرز بسمتي','2 بصل مفروم','4 طماطم مبشورة','بهارات الكبسة','زبيب ولوز للزينة','زيت نباتي'], steps:['اغسل الأرز وانقعه 30 دقيقة.','حمّر الدجاج في الزيت حتى يصبح ذهبياً.','أضف البصل وقلّب حتى يذبل.','أضف الطماطم والبهارات واطبخ 10 دقائق.','أضف 4 أكواب ماء واتركه يغلي.','أضف الأرز واتركه على نار هادئة 30 دقيقة.','زيّن بالزبيب واللوز المحمص.'] },
+            { id:2, title:'مندي اللحم', cat:'rice', time:'3 ساعات', diff:'صعب', servings:8, stars:5, image:'🥩', ingredients:['2 كيلو لحم غنم','3 أكواب أرز بسمتي','بهارات المندي','فحم للتدخين','زعفران','مكسرات'], steps:['تبّل اللحم بالبهارات واتركه ساعتين.','اطبخ اللحم في قدر الضغط 45 دقيقة.','اسلق الأرز في مرق اللحم.','ضع الفحم المشتعل في ورق قصدير مع زيت.','غطّ القدر واتركه يتدخن 10 دقائق.','قدّم مع المكسرات والصلصة.'] },
+            { id:3, title:'شاورما الدجاج', cat:'main', time:'40 دقيقة', diff:'سهل', servings:4, stars:5, image:'🌯', ingredients:['500g صدر دجاج','بهارات شاورما','ثومية (توم)','مخلل خيار','بطاطس مقلية','خبز صاج'], steps:['قطّع الدجاج شرائح رفيعة.','تبّل بالبهارات واتركه 30 دقيقة.','اقلي الدجاج على نار عالية.','ادهن الخبز بالثومية.','أضف الدجاج والبطاطس والمخلل.','لفّ الشاورما بإحكام وقدّمها.'] },
+            { id:4, title:'المقلوبة الفلسطينية', cat:'rice', time:'ساعة', diff:'متوسط', servings:6, stars:5, image:'🍲', ingredients:['دجاجة كاملة','2 كوب أرز','باذنجان مقلي','قرنبيط مقلي','بطاطا مقلية','بهارات مشكلة'], steps:['اسلق الدجاج مع البهارات.','اقلي الخضار كل على حدة.','ضع طبقة خضار في القدر ثم الأرز.','اسكب المرق واطبخ 30 دقيقة.','اقلب القدر على صينية التقديم.','زيّن بالمكسرات المحمصة.'] },
+            { id:5, title:'المنسف الأردني', cat:'main', time:'ساعتين', diff:'صعب', servings:8, stars:5, image:'🍖', ingredients:['2 كيلو لحم غنم','جميد (لبن مجفف)','3 أكواب أرز','خبز شراك','صنوبر ولوز','بهارات'], steps:['انقع الجميد في الماء ليلة كاملة.','اطبخ اللحم في قدر الضغط ساعة.','حضّر الأرز بالشعيرية.','سخّن الجميد واخفقه حتى يصبح ناعماً.','ضع الخبز في الطبق ثم الأرز.','اسكب اللحم والجميد وزين بالمكسرات.'] },
+            { id:6, title:'حمص بيروتي', cat:'appetizer', time:'15 دقيقة', diff:'سهل', servings:4, stars:4, image:'🫒', ingredients:['400g حمص حب','3 ملاعق طحينة','عصير ليمونتين','2 فص ثوم','زيت زيتون','كمون وبابريكا'], steps:['اسلق الحمص حتى يصبح طرياً.','اهرسه مع الطحينة والليمون.','أضف الثوم المهروس والملح.','اسكب في طبق وزين بزيت الزيتون.','رش الكمون والبابريكا على الوجه.'] },
+            { id:7, title:'متبل الباذنجان', cat:'appetizer', time:'25 دقيقة', diff:'سهل', servings:4, stars:5, image:'🍆', ingredients:['2 باذنجان كبير','3 ملاعق طحينة','عصير ليمونة','2 فص ثوم','زيت زيتون','بقدونس'], steps:['اشوِ الباذنجان على النار حتى يحترق القشر.','قشّر الباذنجان واهرسه جيداً.','أضف الطحينة والليمون والثوم.','اخلط جيداً حتى يصبح كريمياً.','زيّن بزيت الزيتون والبقدونس.'] },
+            { id:8, title:'الكنافة النابلسية', cat:'sweet', time:'ساعة', diff:'متوسط', servings:8, stars:5, image:'🧀', ingredients:['500g عجينة كنافة','500g جبن عكاوي','2 كوب قطر (شيرة)','سمن بلدي','فستق حلبي'], steps:['انقع الجبن في الماء لتخفيف الملح.','فتّت عجينة الكنافة واخلطها بالسمن.','ضع نصف الكنافة في الصينية.','وزّع الجبن ثم باقي الكنافة.','اخبز في فرن 180°م حتى تصبح ذهبية.','اسكب القطر البارد وزين بالفستق.'] },
+            { id:9, title:'البقلاوة التركية', cat:'sweet', time:'ساعة', diff:'متوسط', servings:10, stars:5, image:'🥮', ingredients:['علبة عجينة جلاش','2 كوب جوز مفروم','2 كوب سمن','3 كوب قطر','فستق للزينة'], steps:['ادهن الصينية بالسمن.','ضع طبقة جلاش وادهنها بالسمن.','كرر 10 طبقات ثم ضع الجوز.','أضف 10 طبقات أخرى مع السمن.','قطّع البقلاوة إلى مربعات.','اخبز 45 دقيقة حتى تصبح ذهبية.','اسكب القطر البارد وزين بالفستق.'] },
+            { id:10, title:'أم علي', cat:'sweet', time:'35 دقيقة', diff:'سهل', servings:6, stars:5, image:'🥣', ingredients:['علبة عجينة بف باستري','3 أكواب حليب','كوب قشطة','مكسرات مشكلة','زبيب','جوز هند'], steps:['اخبز البف باستري وفتته.','اخلط الحليب مع القشطة وسخّنه.','ضع البف باستري في صينية.','أضف المكسرات والزبيب.','اسكب الحليب الساخن.','اخبز 20 دقيقة وقدّمها ساخنة.'] },
+            { id:11, title:'الكباب العراقي', cat:'main', time:'30 دقيقة', diff:'سهل', servings:4, stars:5, image:'🥙', ingredients:['500g لحم مفروم','بصل مفروم','بقدونس','بهارات مشكلة','ملح وفلفل'], steps:['اخلط اللحم مع البصل والبقدونس.','تبّل بالبهارات جيداً.','شكّل اللحم على أسياخ.','اشوِ على الفحم أو في الفرن.','قدّم مع الخبز والسلطة.'] },
+            { id:12, title:'الشكشوكة المغربية', cat:'main', time:'20 دقيقة', diff:'سهل', servings:2, stars:4, image:'🍳', ingredients:['4 بيضات','4 طماطم','بصل','فلفل أخضر','كمون','بابريكا'], steps:['اقلي البصل والفلفل في الزيت.','أضف الطماطم والبهارات.','اطبخ حتى تصبح صلصة سميكة.','اكسر البيض فوق الصلصة.','غطّ حتى ينضج البيض.','قدّم مع الخبز الطازج.'] },
+            { id:13, title:'المحاشي المصرية', cat:'main', time:'ساعتين', diff:'صعب', servings:8, stars:5, image:'🫑', ingredients:['فلفل وباذنجان وكوسا','2 كوب أرز','لحم مفروم','شبت وبقدونس','صلصة طماطم'], steps:['احفر الخضار وأفرغها.','اخلط الأرز مع اللحم والأعشاب.','احشُ الخضار بالخليط.','رصّ المحاشي في القدر.','اطبخ في صلصة الطماطم ساعة.','قدّم ساخنة مع الزبادي.'] },
+            { id:14, title:'الفتوش اللبناني', cat:'appetizer', time:'15 دقيقة', diff:'سهل', servings:4, stars:5, image:'🥗', ingredients:['خبز عربي محمص','خس','طماطم','خيار','بصل','زيت زيتون','دبس رمان','سماق'], steps:['قطّع الخضار إلى قطع متوسطة.','اقطع الخبز المحمص.','اخلط زيت الزيتون مع دبس الرمان.','ضع الخضار في طبق التقديم.','أضف الخبز والصوص.','رش السماق على الوجه.'] },
+            { id:15, title:'الشاي العدني', cat:'drink', time:'15 دقيقة', diff:'سهل', servings:4, stars:5, image:'☕', ingredients:['4 أكياس شاي أحمر','حليب مكثف','هيل','زنجبيل','قرنفل','سكر'], steps:['اغلِ الماء مع الهيل والزنجبيل.','أضف الشاي واتركه 3 دقائق.','صفّ الشاي في أكواب.','أضف الحليب المكثف حسب الرغبة.','قدّم ساخناً مع التمر.'] },
+            { id:16, title:'القهوة العربية', cat:'drink', time:'20 دقيقة', diff:'سهل', servings:6, stars:5, image:'🫖', ingredients:['3 ملاعق بن عربي مطحون','هيل مطحون','زعفران','ماء','تمر للتقديم'], steps:['اغلِ الماء في دلة القهوة.','أضف البن واتركه يغلي 10 دقائق.','أضف الهيل والزعفران.','اتركه يهدأ ويرسب البن.','اسكب في فناجين صغيرة.','قدّم مع التمر الفاخر.'] },
+            { id:17, title:'المعصوب اليمني', cat:'sweet', time:'20 دقيقة', diff:'سهل', servings:2, stars:5, image:'🍌', ingredients:['2 رغيف خبز بر','2 موز ناضج','قشطة','عسل','تمر مقطع'], steps:['فتّت الخبز في وعاء.','اهرس الموز وأضفه للخبز.','أضف القشطة واخلط جيداً.','اسكب العسل على الوجه.','زيّن بالتمر وقدّم فوراً.'] },
+            { id:18, title:'السمبوسة', cat:'appetizer', time:'40 دقيقة', diff:'متوسط', servings:10, stars:5, image:'🥟', ingredients:['علبة عجينة سمبوسة','لحم مفروم','بصل','بهارات','زيت للقلي'], steps:['اطبخ اللحم مع البصل والبهارات.','احشُ العجينة بالحشوة.','اطوِ السمبوسة على شكل مثلث.','اقلي في زيت غزير حتى تصبح ذهبية.','قدّم مع الصلصة الحارة.'] },
+            { id:19, title:'المهلبية', cat:'sweet', time:'15 دقيقة', diff:'سهل', servings:4, stars:4, image:'🍮', ingredients:['4 أكواب حليب','نصف كوب نشا','سكر','ماء ورد','فستق للزينة'], steps:['اخلط النشا مع قليل من الحليب البارد.','سخّن باقي الحليب مع السكر.','أضف النشا وحرّك باستمرار.','اطبخ حتى يصبح سميكاً.','أضف ماء الورد واسكب في أطباق.','برّد وزين بالفستق.'] },
+            { id:20, title:'الكبسة الحجازية', cat:'rice', time:'ساعة', diff:'متوسط', servings:6, stars:5, image:'🍛', ingredients:['دجاجة كاملة','3 أكواب أرز','طماطم','جزر','بهارات كبسة','لوز وزبيب'], steps:['حمّر الدجاج في الزيت.','أضف الخضار والبهارات.','اطبخ مع الماء 40 دقيقة.','أضف الأرز واطبخ 25 دقيقة.','زيّن بالمكسرات المحمصة.','قدّم مع الصلصة الحارة.'] }
         ];
 
-        let favorites = JSON.parse(localStorage.getItem('recipe_favs_v2') || '[]');
-        let currentCuisine = 'all';
+        let favorites = JSON.parse(localStorage.getItem('arabic_recipe_favs') || '[]');
+        let currentCat = 'all';
         let showFavsOnly = false;
 
-        // ==================== RENDER ====================
         function renderRecipes() {
             const area = document.getElementById('contentArea');
-            const search = document.getElementById('searchInput').value.toLowerCase();
+            const search = document.getElementById('searchInput').value.trim();
             
             let filtered = recipes;
-            if (currentCuisine !== 'all') filtered = filtered.filter(r => r.cuisine === currentCuisine);
+            if (currentCat !== 'all') filtered = filtered.filter(r => r.cat === currentCat);
             if (showFavsOnly) filtered = filtered.filter(r => favorites.includes(r.id));
             if (search) {
                 filtered = filtered.filter(r => 
-                    r.title.toLowerCase().includes(search) ||
-                    r.cuisine.toLowerCase().includes(search) ||
-                    r.ingredients.some(i => i.toLowerCase().includes(search))
+                    r.title.includes(search) || 
+                    r.ingredients.some(i => i.includes(search))
                 );
             }
 
             updateStats();
 
             if (filtered.length === 0) {
-                area.innerHTML = `
-                    <div class="empty-state">
-                        <span class="empty-icon">🍽️</span>
-                        <div class="empty-title">No recipes found</div>
-                        <div class="empty-sub">Try a different search or filter</div>
-                    </div>`;
+                area.innerHTML = `<div class="empty-state"><span class="empty-icon">🍽️</span><span class="empty-text">لا توجد وصفات</span></div>`;
                 return;
             }
 
@@ -850,24 +693,29 @@
                 return `
                     <div class="recipe-card" onclick="openRecipe(${r.id})">
                         <div class="card-image">
-                            <span style="font-size:42px">${r.image}</span>
-                            <div class="card-time-badge">⏱ ${r.time}</div>
-                            <button class="card-fav-btn ${isFav ? 'liked' : ''}" 
+                            <span style="font-size:40px">${r.image}</span>
+                            <span class="card-time">⏱ ${r.time}</span>
+                            <button class="card-fav ${isFav ? 'liked' : ''}" 
                                 onclick="event.stopPropagation();toggleFav(${r.id})">
                                 ${isFav ? '❤️' : '🤍'}
                             </button>
                         </div>
                         <div class="card-body">
-                            <span class="card-cuisine-tag">${r.cuisine}</span>
+                            <span class="card-cat">${getCatName(r.cat)}</span>
                             <div class="card-title">${r.title}</div>
                             <div class="card-footer">
                                 <span class="card-stars">${stars}</span>
-                                <span class="card-difficulty ${r.difficulty.toLowerCase()}">${r.difficulty}</span>
+                                <span class="card-diff">${r.diff}</span>
                             </div>
                         </div>
                     </div>
                 `;
             }).join('');
+        }
+
+        function getCatName(cat) {
+            const names = { main:'رئيسي', rice:'أرز', appetizer:'مقبلات', sweet:'حلويات', drink:'مشروبات' };
+            return names[cat] || cat;
         }
 
         function updateStats() {
@@ -876,10 +724,9 @@
             document.getElementById('favBadge').classList.toggle('show', favorites.length > 0);
         }
 
-        // ==================== FILTERS ====================
-        function filterCuisine(cuisine, btn) {
-            currentCuisine = cuisine;
-            document.querySelectorAll('.cuisine-chip').forEach(b => b.classList.remove('active'));
+        function filterCat(cat, btn) {
+            currentCat = cat;
+            document.querySelectorAll('.cat-chip').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             renderRecipes();
         }
@@ -888,86 +735,54 @@
             showFavsOnly = !showFavsOnly;
             document.getElementById('favFilterBtn').classList.toggle('active', showFavsOnly);
             renderRecipes();
-            showToast(showFavsOnly ? '❤️ Showing favorites' : '🌍 Showing all recipes');
+            showToast(showFavsOnly ? '❤️ عرض المفضلة' : '🍽️ عرض الكل');
         }
 
         function toggleFav(id) {
-            if (favorites.includes(id)) {
-                favorites = favorites.filter(f => f !== id);
-            } else {
-                favorites.push(id);
-            }
-            localStorage.setItem('recipe_favs_v2', JSON.stringify(favorites));
+            if (favorites.includes(id)) favorites = favorites.filter(f => f !== id);
+            else favorites.push(id);
+            localStorage.setItem('arabic_recipe_favs', JSON.stringify(favorites));
             updateStats();
             renderRecipes();
         }
 
-        // ==================== MODAL ====================
         function openRecipe(id) {
             const r = recipes.find(x => x.id === id);
             if (!r) return;
             const isFav = favorites.includes(r.id);
 
-            const cuisineColors = {
-                italian: { bg: '#fff5f5', color: '#e74c3c' },
-                indian: { bg: '#fffdf5', color: '#f39c12' },
-                chinese: { bg: '#fff5f5', color: '#c0392b' },
-                mexican: { bg: '#f5fff8', color: '#27ae60' },
-                arabic: { bg: '#fdf5ff', color: '#8e44ad' },
-                american: { bg: '#f5faff', color: '#2980b9' }
-            };
-            const cc = cuisineColors[r.cuisine] || { bg: '#f8faf8', color: '#2d8a4e' };
-
             document.getElementById('modal').innerHTML = `
                 <div class="modal-handle"></div>
                 <div class="modal-image">
-                    <span style="font-size:65px">${r.image}</span>
+                    <span style="font-size:60px">${r.image}</span>
                     <button class="modal-close" onclick="closeModal()">✕</button>
                 </div>
                 <div class="modal-body">
-                    <div class="modal-header">
-                        <span class="modal-cuisine" style="background:${cc.bg};color:${cc.color}">${r.cuisine}</span>
-                        ${isFav ? '<span style="font-size:12px">❤️ Saved</span>' : ''}
-                    </div>
+                    <span class="modal-cat">${getCatName(r.cat)}</span>
                     <div class="modal-title">${r.title}</div>
-                    
-                    <div class="modal-info-row">
-                        <div class="info-pill"><span class="icon">⏱</span> ${r.time}</div>
-                        <div class="info-pill"><span class="icon">📊</span> ${r.difficulty}</div>
-                        <div class="info-pill"><span class="icon">🍽️</span> ${r.servings} servings</div>
-                        <div class="info-pill"><span class="icon">⭐</span> ${r.stars}/5</div>
+                    <div class="modal-info">
+                        <div class="info-pill">⏱ ${r.time}</div>
+                        <div class="info-pill">📊 ${r.diff}</div>
+                        <div class="info-pill">🍽️ ${r.servings} أشخاص</div>
+                        <div class="info-pill">⭐ ${r.stars}/5</div>
                     </div>
-                    
                     <div class="modal-section">
-                        <div class="section-title">🛒 Ingredients</div>
+                        <div class="section-title">🛒 المقادير</div>
                         <ul class="ingredient-list">
-                            ${r.ingredients.map(i => `
-                                <li class="ingredient-item">
-                                    <span class="ingredient-check" onclick="this.classList.toggle('checked')"></span>
-                                    ${i}
-                                </li>
-                            `).join('')}
+                            ${r.ingredients.map(i => `<li class="ingredient-item"><span class="ingredient-dot"></span>${i}</li>`).join('')}
                         </ul>
                     </div>
-                    
                     <div class="modal-section">
-                        <div class="section-title">👨‍🍳 Instructions</div>
+                        <div class="section-title">👨‍🍳 طريقة التحضير</div>
                         <ul class="step-list">
-                            ${r.steps.map((s, idx) => `
-                                <li class="step-item">
-                                    <span class="step-num">${idx + 1}</span>
-                                    <span>${s}</span>
-                                </li>
-                            `).join('')}
+                            ${r.steps.map((s, idx) => `<li class="step-item"><span class="step-num">${idx+1}</span><span>${s}</span></li>`).join('')}
                         </ul>
                     </div>
-                    
-                    <button class="btn-fav ${isFav ? 'liked' : ''}" onclick="toggleFav(${r.id});closeModal();showToast('${isFav ? '💔 Removed' : '❤️ Added'} to favorites')">
-                        ${isFav ? '❤️ Remove from Favorites' : '🤍 Add to Favorites'}
+                    <button class="btn-fav ${isFav ? 'liked' : ''}" onclick="toggleFav(${r.id});closeModal();showToast('${isFav ? '💔 تمت الإزالة' : '❤️ تمت الإضافة'}')">
+                        ${isFav ? '❤️ إزالة من المفضلة' : '🤍 أضف إلى المفضلة'}
                     </button>
                 </div>
             `;
-
             document.getElementById('modalOverlay').classList.add('show');
         }
 
@@ -979,7 +794,6 @@
             if (e.target === this) closeModal();
         });
 
-        // ==================== TOAST ====================
         function showToast(msg) {
             const t = document.getElementById('toast');
             t.textContent = msg;
@@ -987,7 +801,6 @@
             setTimeout(() => t.classList.remove('show'), 2000);
         }
 
-        // ==================== INIT ====================
         updateStats();
         renderRecipes();
     </script>
