@@ -1,881 +1,757 @@
 import os
 import json
-from datetime import datetime
-from pathlib import Path
 
-def create_chatbot_files():
-    """Chatbot 2044 - Future Edition with Auto-Save"""
+def create_website_files():
+    """Music Player 2044 - Future Edition with Local Storage"""
     
-    # ==================== إنشاء المجلدات ====================
-    dirs = [
-        "chatbot_2044/www/css",
-        "chatbot_2044/www/js",
-        "chatbot_2044/www/assets"
-    ]
-    for d in dirs:
-        Path(d).mkdir(parents=True, exist_ok=True)
+    os.makedirs("www", exist_ok=True)
     
-    # ==================== 1. style.css ====================
-    style_css = r'''/* ==================== Chatbot 2044 - Future Edition ==================== */
-:root {
-    --glass: rgba(255,255,255,0.08);
-    --glass-border: rgba(255,255,255,0.15);
-    --glass-hover: rgba(255,255,255,0.12);
-    --text: #ffffff;
-    --text2: rgba(255,255,255,0.6);
-    --text3: rgba(255,255,255,0.4);
-    --accent: #00ffcc;
-    --accent2: #ff44aa;
-    --accent3: #ffaa00;
-    --shadow: 0 8px 32px rgba(0,0,0,0.2);
-    --neumorph: 8px 8px 16px rgba(0,0,0,0.3), -4px -4px 12px rgba(255,255,255,0.05);
-    --neumorph-inset: inset 4px 4px 8px rgba(0,0,0,0.4), inset -2px -2px 6px rgba(255,255,255,0.03);
-    --bot-bubble: linear-gradient(135deg, rgba(0,255,204,0.15), rgba(0,255,204,0.05));
-    --user-bubble: linear-gradient(135deg, rgba(255,68,170,0.2), rgba(255,68,170,0.08));
-    --radius-sm: 12px;
-    --radius: 20px;
-    --radius-lg: 28px;
-    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-    background: #0a0a0f;
-    font-family: 'Cairo', sans-serif;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    -webkit-tap-highlight-color: transparent;
-    overflow: hidden;
-    direction: rtl;
-}
-
-/* ==================== BACKGROUND ==================== */
-.bg-mesh {
-    position: fixed; inset: 0; z-index: 0;
-    background: conic-gradient(from 0deg at 50% 50%, 
-        #0a0a2e 0%, #1a0a2e 25%, #0a1a2e 50%, #1a0a0a 75%, #0a0a2e 100%);
-    animation: meshRotate 25s linear infinite;
-}
-@keyframes meshRotate { to { filter: hue-rotate(360deg); } }
-
-.bg-orb {
-    position: fixed; border-radius: 50%; filter: blur(100px); opacity: 0.3;
-    animation: orbFloat 10s ease-in-out infinite;
-}
-.bg-orb:nth-child(1) { width: 350px; height: 350px; background: #ff44aa; top: -15%; left: -25%; animation-delay: 0s; }
-.bg-orb:nth-child(2) { width: 300px; height: 300px; background: #00ffcc; bottom: -15%; right: -20%; animation-delay: -5s; }
-.bg-orb:nth-child(3) { width: 250px; height: 250px; background: #ffaa00; top: 40%; left: 50%; animation-delay: -3s; }
-
-@keyframes orbFloat {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    33% { transform: translate(40px, -40px) scale(1.1); }
-    66% { transform: translate(-30px, 30px) scale(0.9); }
-}
-
-/* ==================== PARTICLES ==================== */
-.particles-layer {
-    position: fixed; inset: 0; z-index: 0; pointer-events: none;
-}
-.particle {
-    position: absolute;
-    background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
-    border-radius: 50%;
-    animation: particleFloat 8s ease-in infinite;
-    opacity: 0;
-}
-@keyframes particleFloat {
-    0% { transform: translateY(100vh) scale(0); opacity: 0; }
-    15% { opacity: 0.7; }
-    85% { opacity: 0.15; }
-    100% { transform: translateY(-120px) scale(1.8); opacity: 0; }
-}
-
-/* ==================== APP CONTAINER ==================== */
-.app {
-    width: 100%; max-width: 480px; height: 100vh; max-height: 900px;
-    display: flex; flex-direction: column;
-    position: relative; z-index: 1;
-}
-
-/* ==================== HEADER ==================== */
-.header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 12px 16px; background: rgba(10,10,15,0.7);
-    backdrop-filter: blur(30px); border-bottom: 1px solid var(--glass-border);
-    z-index: 100;
-}
-.header-left { display: flex; align-items: center; gap: 12px; }
-.bot-avatar {
-    width: 44px; height: 44px;
-    background: var(--glass); border: 1px solid var(--glass-border);
-    border-radius: 16px; display: flex; align-items: center; justify-content: center;
-    font-size: 22px; backdrop-filter: blur(20px);
-    box-shadow: var(--neumorph);
-    animation: avatarGlow 3s ease-in-out infinite;
-    position: relative;
-}
-.bot-avatar::after {
-    content: ''; position: absolute; bottom: -2px; right: -2px;
-    width: 12px; height: 12px; background: #00ff88;
-    border-radius: 50%; border: 2px solid #0a0a0f;
-    animation: onlinePulse 2s ease-in-out infinite;
-}
-@keyframes avatarGlow {
-    0%, 100% { box-shadow: var(--neumorph); }
-    50% { box-shadow: 0 0 25px rgba(0,255,204,0.4), var(--neumorph); }
-}
-@keyframes onlinePulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(0.8); }
-}
-
-.header-info h2 {
-    font-size: 15px; font-weight: 700;
-    background: linear-gradient(135deg, #00ffcc, #ff44aa);
-    -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-.header-info span { font-size: 8px; color: var(--text2); letter-spacing: 1px; }
-
-.header-actions { display: flex; gap: 8px; }
-.btn-icon {
-    width: 36px; height: 36px;
-    background: var(--glass); border: 1px solid var(--glass-border);
-    color: var(--text); cursor: pointer; border-radius: 12px;
-    font-size: 14px; display: flex; align-items: center; justify-content: center;
-    backdrop-filter: blur(20px); box-shadow: var(--neumorph);
-    transition: var(--transition);
-}
-.btn-icon:hover { background: var(--glass-hover); border-color: var(--accent); }
-.btn-icon:active { transform: scale(0.9); box-shadow: var(--neumorph-inset); }
-
-/* ==================== MOOD SELECTOR ==================== */
-.mood-bar {
-    display: flex; gap: 6px; padding: 8px 16px;
-    overflow-x: auto; scrollbar-width: none;
-    background: rgba(10,10,15,0.5); backdrop-filter: blur(20px);
-}
-.mood-bar::-webkit-scrollbar { display: none; }
-.mood-chip {
-    padding: 6px 14px; white-space: nowrap;
-    background: var(--glass); border: 1px solid var(--glass-border);
-    color: var(--text2); cursor: pointer; border-radius: 20px;
-    font-size: 10px; font-family: 'Cairo', sans-serif; font-weight: 500;
-    backdrop-filter: blur(20px); transition: var(--transition);
-}
-.mood-chip:hover { border-color: rgba(255,255,255,0.3); color: var(--text); }
-.mood-chip.active {
-    background: rgba(0,255,204,0.15); border-color: var(--accent);
-    color: var(--accent); box-shadow: 0 0 15px rgba(0,255,204,0.2);
-}
-
-/* ==================== CHAT AREA ==================== */
-.chat-area {
-    flex: 1; overflow-y: auto; padding: 16px;
-    display: flex; flex-direction: column; gap: 12px;
-}
-.chat-area::-webkit-scrollbar { width: 3px; }
-.chat-area::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
-
-.empty-chat {
-    flex: 1; display: flex; flex-direction: column;
-    align-items: center; justify-content: center; gap: 12px;
-    text-align: center; padding: 20px;
-}
-.empty-chat .icon {
-    font-size: 60px; animation: floatIcon 3s ease-in-out infinite;
-}
-@keyframes floatIcon {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
-}
-.empty-chat h3 {
-    font-size: 16px; color: var(--text); font-weight: 700;
-}
-.empty-chat p {
-    font-size: 10px; color: var(--text3); max-width: 250px; line-height: 1.6;
-}
-
-.suggestions { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
-.suggestion-chip {
-    padding: 8px 14px;
-    background: var(--glass); border: 1px solid var(--glass-border);
-    color: var(--text2); cursor: pointer; border-radius: 20px;
-    font-size: 9px; font-family: 'Cairo', sans-serif;
-    backdrop-filter: blur(20px); transition: var(--transition);
-}
-.suggestion-chip:hover {
-    border-color: var(--accent2); color: var(--text);
-    box-shadow: 0 0 15px rgba(255,68,170,0.2);
-}
-
-/* ==================== MESSAGE BUBBLES ==================== */
-.message {
-    display: flex; gap: 8px; max-width: 85%;
-    animation: msgSlideIn 0.4s ease-out;
-}
-@keyframes msgSlideIn {
-    from { opacity: 0; transform: translateY(15px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.message.bot { align-self: flex-end; flex-direction: row-reverse; }
-.message.user { align-self: flex-start; }
-
-.msg-avatar {
-    width: 32px; height: 32px; border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px; flex-shrink: 0;
-}
-.message.bot .msg-avatar {
-    background: rgba(0,255,204,0.1); border: 1px solid rgba(0,255,204,0.2);
-}
-.message.user .msg-avatar {
-    background: rgba(255,68,170,0.1); border: 1px solid rgba(255,68,170,0.2);
-}
-
-.msg-bubble {
-    padding: 10px 14px; border-radius: var(--radius);
-    font-size: 11px; line-height: 1.7; position: relative;
-    backdrop-filter: blur(20px);
-}
-.message.bot .msg-bubble {
-    background: var(--bot-bubble); border: 1px solid rgba(0,255,204,0.15);
-    border-bottom-right-radius: 4px; color: var(--text);
-}
-.message.user .msg-bubble {
-    background: var(--user-bubble); border: 1px solid rgba(255,68,170,0.15);
-    border-bottom-left-radius: 4px; color: var(--text);
-}
-
-.msg-time {
-    font-size: 7px; color: var(--text3); margin-top: 4px;
-    text-align: left;
-}
-
-.typing-indicator {
-    display: none; align-items: center; gap: 4px;
-    padding: 12px 16px; align-self: flex-end;
-}
-.typing-indicator.active { display: flex; }
-.typing-dot {
-    width: 7px; height: 7px; border-radius: 50%;
-    background: var(--accent); animation: typingDot 1.4s ease-in-out infinite;
-}
-.typing-dot:nth-child(1) { animation-delay: 0s; }
-.typing-dot:nth-child(2) { animation-delay: 0.2s; }
-.typing-dot:nth-child(3) { animation-delay: 0.4s; }
-@keyframes typingDot {
-    0%, 60%, 100% { transform: translateY(0); opacity: 0.3; }
-    30% { transform: translateY(-8px); opacity: 1; }
-}
-
-/* ==================== INPUT AREA ==================== */
-.input-area {
-    padding: 12px 16px; display: flex; gap: 8px; align-items: flex-end;
-    background: rgba(10,10,15,0.7); backdrop-filter: blur(30px);
-    border-top: 1px solid var(--glass-border);
-}
-.input-wrapper {
-    flex: 1; display: flex; align-items: flex-end;
-    background: var(--glass); border: 1px solid var(--glass-border);
-    border-radius: var(--radius); backdrop-filter: blur(20px);
-    box-shadow: var(--neumorph-inset); padding: 4px;
-    transition: var(--transition);
-}
-.input-wrapper:focus-within {
-    border-color: var(--accent); box-shadow: 0 0 20px rgba(0,255,204,0.15);
-}
-.chat-input {
-    flex: 1; background: transparent; border: none;
-    color: var(--text); font-size: 11px; font-family: 'Cairo', sans-serif;
-    padding: 8px 12px; resize: none; outline: none;
-    max-height: 100px; line-height: 1.5;
-}
-.chat-input::placeholder { color: var(--text3); }
-.send-btn {
-    width: 40px; height: 40px;
-    background: linear-gradient(135deg, #00ffcc, #ff44aa);
-    border: none; color: #000; cursor: pointer; border-radius: 16px;
-    font-size: 16px; display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 8px 25px rgba(0,255,204,0.3);
-    transition: var(--transition); flex-shrink: 0;
-}
-.send-btn:hover { box-shadow: 0 12px 35px rgba(0,255,204,0.5); transform: translateY(-2px); }
-.send-btn:active { transform: scale(0.9); }
-
-/* ==================== SIDEBAR ==================== */
-.sidebar {
-    position: fixed; top: 0; right: -320px; width: 300px; height: 100vh;
-    background: rgba(10,10,15,0.95); backdrop-filter: blur(40px);
-    border-left: 1px solid var(--glass-border);
-    z-index: 200; transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    display: flex; flex-direction: column;
-}
-.sidebar.open { right: 0; }
-.sidebar-overlay {
-    position: fixed; inset: 0; background: rgba(0,0,0,0.6);
-    z-index: 199; display: none;
-}
-.sidebar-overlay.show { display: block; }
-
-.sidebar-header {
-    padding: 16px; border-bottom: 1px solid var(--glass-border);
-    display: flex; align-items: center; justify-content: space-between;
-}
-.sidebar-header h3 { font-size: 14px; color: var(--text); font-weight: 700; }
-.sidebar-list {
-    flex: 1; overflow-y: auto; padding: 8px;
-}
-.sidebar-list::-webkit-scrollbar { width: 3px; }
-.sidebar-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.08); border-radius: 3px; }
-
-.history-item {
-    padding: 10px 12px; border-radius: var(--radius-sm);
-    cursor: pointer; transition: var(--transition);
-    border: 1px solid transparent; margin-bottom: 4px;
-}
-.history-item:hover { background: var(--glass-hover); border-color: var(--glass-border); }
-.history-item .title { font-size: 10px; color: var(--text); font-weight: 600; }
-.history-item .date { font-size: 8px; color: var(--text3); margin-top: 2px; }
-
-/* ==================== TOAST ==================== */
-.toast {
-    position: fixed; bottom: 30px; left: 50%;
-    transform: translateX(-50%) translateY(120px);
-    background: rgba(0,0,0,0.9); backdrop-filter: blur(30px);
-    border: 1px solid rgba(0,255,204,0.3); color: #fff;
-    padding: 12px 24px; border-radius: 30px; font-size: 10px;
-    z-index: 400; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    font-family: 'Cairo', sans-serif; box-shadow: 0 10px 30px rgba(0,255,204,0.2);
-}
-.toast.show { transform: translateX(-50%) translateY(0); }
-'''
-
-    # ==================== 2. storage.js ====================
-    storage_js = r'''// ==================== Storage System 2044 ====================
-const STORAGE_KEYS = {
-    messages: 'chatbot_2044_messages',
-    settings: 'chatbot_2044_settings',
-    history: 'chatbot_2044_history'
-};
-
-class Storage2044 {
-    static save(key, data) {
-        try {
-            localStorage.setItem(key, JSON.stringify(data));
-            return true;
-        } catch (e) {
-            if (e.name === 'QuotaExceededError') {
-                this.cleanOldData();
-                return false;
-            }
-            console.error('Storage save error:', e);
-            return false;
-        }
-    }
-
-    static load(key, defaultValue = null) {
-        try {
-            const data = localStorage.getItem(key);
-            return data ? JSON.parse(data) : defaultValue;
-        } catch (e) {
-            console.error('Storage load error:', e);
-            return defaultValue;
-        }
-    }
-
-    static remove(key) {
-        localStorage.removeItem(key);
-    }
-
-    static cleanOldData() {
-        const messages = this.load(STORAGE_KEYS.messages, []);
-        if (messages.length > 100) {
-            const trimmed = messages.slice(-50);
-            this.save(STORAGE_KEYS.messages, trimmed);
-        }
-    }
-
-    static getStorageInfo() {
-        let total = 0;
-        for (let key in localStorage) {
-            if (localStorage.hasOwnProperty(key)) {
-                total += localStorage[key].length * 2;
-            }
-        }
-        return {
-            used: (total / 1024).toFixed(1) + ' KB',
-            percent: ((total / (5 * 1024 * 1024)) * 100).toFixed(1) + '%'
-        };
-    }
-}
-'''
-
-    # ==================== 3. chatbot.js ====================
-    chatbot_js = r'''// ==================== Chatbot Brain 2044 ====================
-class Chatbot2044 {
-    constructor() {
-        this.mood = 'friendly';
-        this.userName = '';
-        this.learnedWords = new Map();
-        this.initResponses();
-    }
-
-    initResponses() {
-        this.greetings = [
-            'أهلاً وسهلاً! 🌟 كيف حالك اليوم؟',
-            'مرحباً! 😊 نورت الشات، شو في جديد؟',
-            'هلا والله! 🎉 اشتقتلك، أخبارك؟',
-            'ياهلا! 💫 منور، احكيلي شو بصير معك؟',
-            'مراحب! ✨ جاهز للدردشة، شو بدك نحكي؟'
-        ];
-
-        this.jokes = [
-            'واحد بخيل دخل الحمام... طلع من غير ما يستحم 😂',
-            'ليه القط دايمًا بيكسب؟ لأنه دايمًا نيييياو 🐱',
-            'ليه القمر ما بيلعب كرة؟ لأنه ما عنده أرض 🌙',
-            'ليه الحاسوب زعلان؟ لأنه عنده فيروس كورونا 🖥️😂',
-            'واحد غبي قال للشمس: كم الساعة؟ قالتله: مش شايفني قاعدة 😅'
-        ];
-
-        this.wisdom = [
-            '🌟 الحياة مثل الدراجة، لازم تمشي عشان توازن',
-            '💪 النجاح مش نهاية، والفشل مش بداية، الأهم الشجاعة للمتابعة',
-            '🎯 كل يوم هو فرصة جديدة لتكون أفضل',
-            '🌈 الأمل هو النور اللي بينير طريقك في الظلام',
-            '🚀 إذا تقدر تحلم فيه، تقدر تحققه'
-        ];
-
-        this.facts = [
-            '🧠 الدماغ البشري يستخدم 20% من طاقة الجسم',
-            '🌍 الأرض هي الكوكب الوحيد اللي ما سمي على إله',
-            '🐙 الأخطبوط عنده 3 قلوب ودم أزرق',
-            '🌧️ تمطر على كوكب الزهرة حمض كبريتيك',
-            '🦋 الفراشات تتذوق بأرجلها'
-        ];
-
-        this.riddles = [
-            { q: 'ما هو الشيء اللي يمشي بدون رجلين؟', a: 'الماء 💧' },
-            { q: 'ما هو الشيء اللي كلما زاد نقص؟', a: 'العمر ⏳' },
-            { q: 'ما هو الشيء اللي له أسنان وما يعض؟', a: 'المشط 🪮' },
-            { q: 'ما هو الشيء اللي يسمع بدون أذن ويتكلم بدون لسان؟', a: 'التلفون 📱' },
-            { q: 'ما هو الشيء اللي في السماء وإذا ضفت عليه حرف صار في الأرض؟', a: 'نجم - منجم ⭐' }
-        ];
-    }
-
-    getResponse(message) {
-        const msg = message.trim().toLowerCase();
-        
-        if (this.isGreeting(msg)) return this.randomFrom(this.greetings);
-        if (msg.includes('نكتة') || msg.includes('اضحكني')) return this.randomFrom(this.jokes);
-        if (msg.includes('حكمة') || msg.includes('نصيحة')) return this.randomFrom(this.wisdom);
-        if (msg.includes('معلومة') || msg.includes('حقيقة')) return this.randomFrom(this.facts);
-        if (msg.includes('لغز') || msg.includes('فزورة')) {
-            const riddle = this.riddles[Math.floor(Math.random() * this.riddles.length)];
-            return `${riddle.q}\n\n...\n\nالإجابة: ${riddle.a}`;
-        }
-        if (msg.includes('اسمك')) return 'أنا Chatbot 2044 🤖 صديقك الذكي من المستقبل!';
-        if (msg.includes('وقت') || msg.includes('ساعة')) return this.getTimeResponse();
-        if (msg.includes('تاريخ') || msg.includes('يوم')) return this.getDateResponse();
-        if (msg.includes('شكراً') || msg.includes('شكرا') || msg.includes('تسلم')) return 'العفو! 🌸 تحت أمرك دايمًا';
-        if (msg.includes('حب') || msg.includes('❤️') || msg.includes('💕')) return 'الحب هو أجمل لغة في الكون! 💖✨';
-        if (msg.includes('حزين') || msg.includes('زعلان') || msg.includes('😢')) return 'لا تحزن! 🌈 كل شيء راح يكون على ما يرام، أنا معك 💪';
-        if (msg.includes('سعيد') || msg.includes('فرحان') || msg.includes('😊')) return 'فرحتك تفرحني! 🎉🥳 استمر في الإيجابية!';
-        if (msg.includes('طقس') || msg.includes('جو') || msg.includes('مطر')) return '🌤️ الجو جميل جداً! مثالي للخروج والاستمتاع (في عالم 2044 نتحكم بالطقس 😉)';
-        if (msg.includes('أغنية') || msg.includes('موسيقى') || msg.includes('🎵')) return '🎵 الموسيقى غذاء الروح! شو نوع الموسيقى المفضل عندك؟';
-        if (msg.includes('باي') || msg.includes('سلام') || msg.includes('مع السلامة')) return 'مع السلامة! 👋💫 تعال anytime، أنا موجود 24/7';
-        
-        return this.getSmartResponse(msg);
-    }
-
-    getSmartResponse(msg) {
-        const responses = [
-            '🧐 سؤال عميق! خليني أفكر...',
-            '🤔 هاد موضوع مثير للاهتمام، احكيلي أكثر!',
-            '💡 وجهة نظر رائعة! شو رأيك نتعمق بالموضوع؟',
-            '🌟 أنا متحمس أعرف أكثر عن هاد الموضوع!',
-            '🎯 نقطة مهمة! شو رأيك نوضحها أكثر؟',
-            '🚀 في 2044، هاد الموضوع متطور كثير! بدك تعرف كيف؟',
-            '✨ مذهل! عندك أفكار إبداعية كثير'
-        ];
-        return this.randomFrom(responses);
-    }
-
-    isGreeting(msg) {
-        const greetings = ['مرحبا', 'هلا', 'السلام', 'صباح', 'مساء', 'هاي', 'هلو', 'hi', 'hello', 'اهلا', 'ياهلا'];
-        return greetings.some(g => msg.includes(g));
-    }
-
-    getTimeResponse() {
-        const now = new Date();
-        const time = now.toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' });
-        const hour = now.getHours();
-        let period = hour < 12 ? '☀️ الصباح' : hour < 17 ? '🌤️ الظهر' : hour < 20 ? '🌅 المساء' : '🌙 الليل';
-        return `الساعة الآن ${time} - ${period}`;
-    }
-
-    getDateResponse() {
-        const now = new Date();
-        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-        const date = now.toLocaleDateString('ar-SA', options);
-        return `📅 اليوم هو ${date}`;
-    }
-
-    randomFrom(arr) {
-        return arr[Math.floor(Math.random() * arr.length)];
-    }
-
-    setMood(mood) {
-        this.mood = mood;
-    }
-}
-'''
-
-    # ==================== 4. app.js ====================
-    app_js = r'''// ==================== Chatbot 2044 - Main App ====================
-const chatbot = new Chatbot2044();
-let messages = [];
-let currentHistoryId = null;
-
-document.addEventListener('DOMContentLoaded', () => {
-    initApp();
-    loadMessages();
-    createParticles();
-    setupEventListeners();
-    updateHistoryList();
-});
-
-function initApp() {
-    const settings = Storage2044.load(STORAGE_KEYS.settings, {});
-    if (settings.userName) {
-        chatbot.userName = settings.userName;
-    }
-}
-
-function setupEventListeners() {
-    document.getElementById('chatInput').addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
-    });
-    document.getElementById('chatInput').addEventListener('input', autoResize);
-}
-
-function autoResize() {
-    const textarea = document.getElementById('chatInput');
-    textarea.style.height = 'auto';
-    textarea.style.height = Math.min(textarea.scrollHeight, 100) + 'px';
-}
-
-function sendMessage() {
-    const input = document.getElementById('chatInput');
-    const text = input.value.trim();
-    if (!text) return;
-    
-    addMessage('user', text);
-    input.value = '';
-    input.style.height = 'auto';
-    showTyping();
-    
-    setTimeout(() => {
-        hideTyping();
-        const response = chatbot.getResponse(text);
-        addMessage('bot', response);
-    }, 800 + Math.random() * 1200);
-}
-
-function addMessage(type, text) {
-    const msg = {
-        id: Date.now() + Math.random(),
-        type: type,
-        text: text,
-        time: new Date().toLocaleTimeString('ar-SA', { hour: '2-digit', minute: '2-digit' })
-    };
-    messages.push(msg);
-    saveMessages();
-    renderMessages();
-    scrollToBottom();
-}
-
-function renderMessages() {
-    const area = document.getElementById('chatArea');
-    if (messages.length === 0) {
-        area.innerHTML = `
-            <div class="empty-chat">
-                <span class="icon">🤖</span>
-                <h3>Chatbot 2044</h3>
-                <p>صديقك الذكي من المستقبل! جاهز للدردشة في أي وقت</p>
-                <div class="suggestions">
-                    <span class="suggestion-chip" onclick="quickSend('قولي نكتة 😂')">😂 قولي نكتة</span>
-                    <span class="suggestion-chip" onclick="quickSend('عندي سؤال 🧐')">🧐 عندي سؤال</span>
-                    <span class="suggestion-chip" onclick="quickSend('كيف حالك؟')">💬 كيف حالك؟</span>
-                    <span class="suggestion-chip" onclick="quickSend('أعطيني حكمة 🌟')">🌟 أعطيني حكمة</span>
-                </div>
-            </div>`;
-        return;
-    }
-    
-    area.innerHTML = messages.map(msg => `
-        <div class="message ${msg.type}">
-            <div class="msg-avatar">${msg.type === 'bot' ? '🤖' : '👤'}</div>
-            <div>
-                <div class="msg-bubble">${msg.text.replace(/\n/g, '<br>')}</div>
-                <div class="msg-time">${msg.time}</div>
-            </div>
-        </div>
-    `).join('');
-    
-    area.innerHTML += '<div class="typing-indicator" id="typingIndicator"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div>';
-}
-
-function showTyping() {
-    const indicator = document.getElementById('typingIndicator');
-    if (indicator) indicator.classList.add('active');
-    scrollToBottom();
-}
-
-function hideTyping() {
-    const indicator = document.getElementById('typingIndicator');
-    if (indicator) indicator.classList.remove('active');
-}
-
-function scrollToBottom() {
-    setTimeout(() => {
-        const area = document.getElementById('chatArea');
-        area.scrollTop = area.scrollHeight;
-    }, 100);
-}
-
-function quickSend(text) {
-    document.getElementById('chatInput').value = text;
-    sendMessage();
-}
-
-function saveMessages() {
-    Storage2044.save(STORAGE_KEYS.messages, messages);
-    updateHistoryList();
-}
-
-function loadMessages() {
-    messages = Storage2044.load(STORAGE_KEYS.messages, []);
-    renderMessages();
-    if (messages.length > 0) scrollToBottom();
-}
-
-function clearChat() {
-    if (confirm('هل أنت متأكد من حذف كل المحادثات؟')) {
-        messages = [];
-        Storage2044.remove(STORAGE_KEYS.messages);
-        renderMessages();
-        showToast('🗑️ تم حذف كل المحادثات');
-    }
-}
-
-function exportChat() {
-    let text = '🤖 Chatbot 2044 - محادثة\n';
-    text += '═'.repeat(40) + '\n\n';
-    messages.forEach(msg => {
-        text += `${msg.type === 'bot' ? '🤖 البوت' : '👤 أنت'} [${msg.time}]:\n${msg.text}\n\n`;
-    });
-    
-    const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `chatbot_2044_${new Date().toISOString().slice(0,10)}.txt`;
-    a.click();
-    showToast('📥 تم تصدير المحادثة');
-}
-
-function toggleSidebar() {
-    document.getElementById('sidebar').classList.toggle('open');
-    document.getElementById('sidebarOverlay').classList.toggle('show');
-}
-
-function setMood(mood, el) {
-    document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('active'));
-    el.classList.add('active');
-    chatbot.setMood(mood);
-    const moods = {
-        friendly: '😊 الوضع الودي - جاهز للدردشة!',
-        teacher: '🧑‍🏫 وضع المعلم - جاهز للتعليم!',
-        funny: '😂 وضع الكوميديا - جاهز للضحك!',
-        wise: '🧘 وضع الحكمة - جاهز للتأمل!'
-    };
-    showToast(moods[mood] || 'تم تغيير المود');
-}
-
-function updateHistoryList() {
-    const list = document.getElementById('historyList');
-    const savedMessages = Storage2044.load(STORAGE_KEYS.messages, []);
-    
-    if (savedMessages.length === 0) {
-        list.innerHTML = '<div style="text-align:center;color:rgba(255,255,255,0.3);padding:20px;font-size:10px;">لا توجد محادثات سابقة</div>';
-        return;
-    }
-    
-    const firstMsg = savedMessages[0]?.text?.substring(0, 30) || 'محادثة';
-    const date = new Date().toLocaleDateString('ar-SA');
-    
-    list.innerHTML = `
-        <div class="history-item" onclick="toggleSidebar()">
-            <div class="title">💬 ${firstMsg}...</div>
-            <div class="date">📅 ${date} - ${savedMessages.length} رسالة</div>
-        </div>`;
-}
-
-function showToast(msg) {
-    const toast = document.getElementById('toast');
-    toast.textContent = msg;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2500);
-}
-
-function createParticles() {
-    const container = document.createElement('div');
-    container.className = 'particles-layer';
-    document.body.appendChild(container);
-    
-    const colors = ['#00ffcc', '#ff44aa', '#ffaa00'];
-    for (let i = 0; i < 25; i++) {
-        const particle = document.createElement('div');
-        particle.className = 'particle';
-        particle.style.left = Math.random() * 100 + '%';
-        particle.style.width = (Math.random() * 5 + 2) + 'px';
-        particle.style.height = particle.style.width;
-        particle.style.animationDelay = Math.random() * 8 + 's';
-        particle.style.animationDuration = (Math.random() * 6 + 6) + 's';
-        particle.style.background = `radial-gradient(circle, ${colors[Math.floor(Math.random()*3)]} 0%, transparent 70%)`;
-        container.appendChild(particle);
-    }
-}
-'''
-
-    # ==================== 5. index.html ====================
-    index_html = r'''<!DOCTYPE html>
+    html_content = r'''<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Chatbot 2044 - Future Edition</title>
+    <title>Music Player 2044</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <style>
+        :root {
+            --glass: rgba(255,255,255,0.08);
+            --glass-border: rgba(255,255,255,0.15);
+            --text: #ffffff;
+            --text2: rgba(255,255,255,0.6);
+            --accent: #00ffcc;
+            --accent2: #ff44aa;
+            --accent3: #ffaa00;
+            --shadow: 0 8px 32px rgba(0,0,0,0.2);
+            --neumorph: 8px 8px 16px rgba(0,0,0,0.3), -4px -4px 12px rgba(255,255,255,0.05);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: #0a0a0f;
+            font-family: 'Cairo', sans-serif;
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            -webkit-tap-highlight-color: transparent;
+            overflow: hidden;
+            direction: rtl;
+        }
+
+        /* Mesh Gradient Background */
+        .bg-mesh {
+            position: fixed; inset: 0; z-index: 0;
+            background: conic-gradient(from 0deg at 50% 50%, 
+                #0a0a2e 0%, #1a0a2e 25%, #0a1a2e 50%, #1a0a0a 75%, #0a0a2e 100%);
+            animation: meshRotate 20s linear infinite;
+        }
+        @keyframes meshRotate { to { filter: hue-rotate(360deg); } }
+
+        .bg-orb {
+            position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.4;
+            animation: orbFloat 8s ease-in-out infinite;
+        }
+        .bg-orb:nth-child(1) { width: 300px; height: 300px; background: #ff44aa; top: -10%; left: -20%; animation-delay: 0s; }
+        .bg-orb:nth-child(2) { width: 250px; height: 250px; background: #00ffcc; bottom: -10%; right: -15%; animation-delay: -4s; }
+        .bg-orb:nth-child(3) { width: 200px; height: 200px; background: #ffaa00; top: 50%; left: 40%; animation-delay: -2s; }
+
+        @keyframes orbFloat {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(30px, -30px) scale(1.1); }
+            66% { transform: translate(-20px, 20px) scale(0.9); }
+        }
+
+        /* ==================== PARTICLES - أيونية جديدة ==================== */
+        .particles {
+            position: fixed; inset: 0; z-index: 0; pointer-events: none;
+        }
+        .particle {
+            position: absolute;
+            background: radial-gradient(circle, var(--accent) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: floatUp 6s ease-in infinite;
+            opacity: 0;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 0.8; }
+            90% { opacity: 0.2; }
+            100% { transform: translateY(-100px) scale(1.5); opacity: 0; }
+        }
+
+        /* ==================== MUSIC WAVES - أيونية جديدة ==================== */
+        .music-waves {
+            position: fixed; bottom: 0; left: 0; right: 0; height: 100px;
+            z-index: 0; pointer-events: none; opacity: 0.3;
+        }
+        .wave-bar {
+            position: absolute; bottom: 0;
+            background: linear-gradient(to top, #00ffcc, #ff44aa);
+            border-radius: 4px 4px 0 0;
+            animation: waveAnim 1.2s ease-in-out infinite;
+        }
+        @keyframes waveAnim {
+            0%, 100% { height: 10px; opacity: 0.5; }
+            50% { height: 60px; opacity: 0.8; }
+        }
+
+        .app {
+            width: 100%; max-width: 440px; height: 100vh; max-height: 850px;
+            display: flex; flex-direction: column;
+            position: relative; z-index: 1; padding: 12px;
+        }
+
+        /* ==================== HEADER ==================== */
+        .header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 8px 4px; margin-bottom: 8px;
+        }
+        .header-brand {
+            display: flex; align-items: center; gap: 10px;
+        }
+        .logo {
+            width: 44px; height: 44px;
+            background: var(--glass); border: 1px solid var(--glass-border);
+            border-radius: 16px; display: flex; align-items: center; justify-content: center;
+            font-size: 20px; backdrop-filter: blur(20px);
+            box-shadow: var(--neumorph);
+            animation: logoGlow 3s ease-in-out infinite;
+        }
+        @keyframes logoGlow {
+            0%, 100% { box-shadow: var(--neumorph); }
+            50% { box-shadow: 0 0 30px rgba(0,255,204,0.4), 8px 8px 16px rgba(0,0,0,0.3); }
+        }
+        .header-text h1 {
+            font-size: 18px; font-weight: 800;
+            background: linear-gradient(135deg, #00ffcc, #ff44aa);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header-text span { font-size: 8px; color: var(--text2); letter-spacing: 2px; }
+
+        .song-count-badge {
+            background: rgba(255,68,170,0.2); border: 1px solid rgba(255,68,170,0.3);
+            color: #ff44aa; padding: 4px 10px; border-radius: 20px;
+            font-size: 8px; font-weight: 600;
+            animation: badgePulse 2s ease-in-out infinite;
+        }
+        @keyframes badgePulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .btn-glass {
+            width: 40px; height: 40px;
+            background: var(--glass); border: 1px solid var(--glass-border);
+            color: var(--text); cursor: pointer; border-radius: 14px;
+            font-size: 16px; display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(20px); box-shadow: var(--neumorph);
+            transition: all 0.3s;
+        }
+        .btn-glass:active { transform: scale(0.9); box-shadow: inset 4px 4px 8px rgba(0,0,0,0.4); }
+
+        /* ==================== NOW PLAYING ==================== */
+        .now-playing {
+            text-align: center; padding: 20px 0;
+            position: relative;
+        }
+        .disc-container {
+            width: 200px; height: 200px; margin: 0 auto 20px; position: relative;
+        }
+        .disc-outer-ring {
+            position: absolute; inset: -12px;
+            border: 2px solid rgba(255,255,255,0.1); border-radius: 50%;
+            animation: ringSpin 8s linear infinite;
+        }
+        .disc-outer-ring:nth-child(2) { inset: -6px; border-style: dashed; animation-duration: 6s; animation-direction: reverse; }
+        @keyframes ringSpin { to { transform: rotate(360deg); } }
+
+        .disc {
+            width: 100%; height: 100%;
+            background: linear-gradient(135deg, rgba(255,68,170,0.3), rgba(0,255,204,0.3));
+            border: 2px solid rgba(255,255,255,0.2); border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 70px; backdrop-filter: blur(20px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 0 40px rgba(255,255,255,0.05);
+            animation: discSpin 4s linear infinite paused;
+        }
+        .disc.playing { animation-play-state: running; }
+        @keyframes discSpin { to { transform: rotate(360deg); } }
+
+        .disc-center {
+            width: 30px; height: 30px; background: #0a0a0f;
+            border: 3px solid rgba(255,255,255,0.3); border-radius: 50%;
+            position: absolute;
+        }
+
+        .song-name {
+            font-size: 18px; font-weight: 800; color: var(--text);
+            margin-bottom: 4px; text-shadow: 0 0 20px rgba(255,255,255,0.3);
+        }
+        .song-artist {
+            font-size: 11px; color: var(--text2); font-weight: 500;
+            letter-spacing: 1px;
+        }
+
+        /* ==================== PROGRESS ==================== */
+        .progress-section { padding: 0 8px 12px; }
+        .progress-track {
+            width: 100%; height: 4px;
+            background: rgba(255,255,255,0.1); border-radius: 2px;
+            cursor: pointer; position: relative;
+        }
+        .progress-fill {
+            height: 100%; background: linear-gradient(90deg, #00ffcc, #ff44aa);
+            border-radius: 2px; width: 0%; transition: width 0.1s linear;
+            box-shadow: 0 0 10px rgba(0,255,204,0.5);
+        }
+        .time-row {
+            display: flex; justify-content: space-between;
+            font-size: 9px; color: var(--text2); margin-top: 6px;
+        }
+
+        /* ==================== CONTROLS ==================== */
+        .controls-section {
+            display: flex; align-items: center; justify-content: center;
+            gap: 16px; padding: 8px 0;
+        }
+        .ctrl-glass {
+            width: 44px; height: 44px;
+            background: var(--glass); border: 1px solid var(--glass-border);
+            color: var(--text); cursor: pointer; border-radius: 16px;
+            font-size: 15px; display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(20px); box-shadow: var(--neumorph);
+            transition: all 0.3s;
+        }
+        .ctrl-glass:active { transform: scale(0.9); box-shadow: inset 4px 4px 8px rgba(0,0,0,0.4); }
+        .ctrl-glass.active { border-color: #00ffcc; color: #00ffcc; box-shadow: 0 0 20px rgba(0,255,204,0.3); }
+
+        .btn-play-big {
+            width: 64px; height: 64px;
+            background: linear-gradient(135deg, #00ffcc, #ff44aa);
+            border: none; color: #000; cursor: pointer; border-radius: 20px;
+            font-size: 24px; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 10px 30px rgba(0,255,204,0.3), 0 0 40px rgba(255,68,170,0.2);
+            transition: all 0.3s;
+            position: relative;
+        }
+        .btn-play-big::after {
+            content: ''; position: absolute; inset: -4px;
+            border-radius: 24px; border: 2px solid transparent;
+            background: linear-gradient(135deg, #00ffcc, #ff44aa) border-box;
+            -webkit-mask: linear-gradient(#fff 0 0) padding-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor; mask-composite: exclude;
+            animation: playGlow 2s ease-in-out infinite;
+            opacity: 0;
+        }
+        .btn-play-big.playing-glow::after { opacity: 1; }
+        @keyframes playGlow {
+            0%, 100% { inset: -4px; opacity: 0.5; }
+            50% { inset: -8px; opacity: 1; }
+        }
+        .btn-play-big:active { transform: scale(0.9); }
+
+        /* ==================== VISUALIZER ==================== */
+        .viz-container {
+            display: flex; align-items: center; justify-content: center;
+            gap: 4px; height: 60px; padding: 10px 0;
+        }
+        .viz-ring {
+            width: 50px; height: 50px; border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.2);
+            position: relative; animation: vizPulse 1s ease-in-out infinite;
+        }
+        @keyframes vizPulse {
+            0%, 100% { transform: scale(0.8); opacity: 0.5; }
+            50% { transform: scale(1.2); opacity: 1; }
+        }
+        .viz-ring:nth-child(1) { animation-delay: 0s; border-color: #ff44aa; }
+        .viz-ring:nth-child(2) { animation-delay: 0.2s; border-color: #ffaa00; }
+        .viz-ring:nth-child(3) { animation-delay: 0.4s; border-color: #00ffcc; }
+        .viz-ring:nth-child(4) { animation-delay: 0.6s; border-color: #ff44aa; }
+        .viz-ring:nth-child(5) { animation-delay: 0.8s; border-color: #ffaa00; }
+
+        /* ==================== PLAYLIST ==================== */
+        .playlist-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 8px 4px; margin-top: 4px;
+        }
+        .playlist-title {
+            font-size: 11px; font-weight: 700; color: var(--text);
+            letter-spacing: 1px;
+        }
+        .btn-upload-glass {
+            padding: 7px 14px;
+            background: var(--glass); border: 1px solid var(--glass-border);
+            color: var(--text); cursor: pointer; border-radius: 20px;
+            font-size: 9px; font-family: 'Cairo', sans-serif; font-weight: 600;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s;
+        }
+        .btn-upload-glass:hover {
+            background: rgba(0,255,204,0.15); border-color: #00ffcc;
+            box-shadow: 0 0 20px rgba(0,255,204,0.2);
+        }
+
+        .playlist {
+            flex: 1; overflow-y: auto; padding: 0 2px;
+        }
+        .playlist::-webkit-scrollbar { width: 3px; }
+        .playlist::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+
+        .song-card {
+            display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+            background: var(--glass); border: 1px solid var(--glass-border);
+            border-radius: 16px; margin-bottom: 6px; cursor: pointer;
+            backdrop-filter: blur(20px); transition: all 0.3s;
+            position: relative; overflow: hidden;
+        }
+        .song-card::before {
+            content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+            width: 3px; background: linear-gradient(to bottom, #00ffcc, #ff44aa);
+            border-radius: 0 3px 3px 0; opacity: 0; transition: opacity 0.3s;
+        }
+        .song-card.active::before { opacity: 1; }
+        .song-card:hover { border-color: rgba(255,255,255,0.3); transform: translateX(-2px); }
+        .song-card.active { border-color: #00ffcc; box-shadow: 0 0 15px rgba(0,255,204,0.2); }
+        .song-card .s-icon { font-size: 20px; transition: transform 0.3s; }
+        .song-card.active .s-icon { animation: iconBounce 0.5s ease-in-out; }
+        @keyframes iconBounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+        }
+        .song-card .s-info { flex: 1; min-width: 0; }
+        .song-card .s-name { font-size: 11px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .song-card .s-dur { font-size: 9px; color: var(--text2); }
+        .song-card .s-del { color: #ff4466; cursor: pointer; opacity: 0.5; transition: 0.3s; }
+        .song-card .s-del:hover { opacity: 1; transform: scale(1.2); }
+
+        .empty-state { text-align: center; padding: 30px; color: rgba(255,255,255,0.2); }
+        .empty-state .icon { font-size: 40px; display: block; margin-bottom: 8px; animation: floatIcon 3s ease-in-out infinite; }
+        @keyframes floatIcon {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        input[type="file"] { display: none; }
+
+        .toast {
+            position: fixed; bottom: 30px; left: 50%;
+            transform: translateX(-50%) translateY(120px);
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(20px);
+            border: 1px solid rgba(0,255,204,0.3); color: #fff;
+            padding: 12px 24px; border-radius: 30px; font-size: 10px;
+            z-index: 300; transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            font-family: 'Cairo', sans-serif;
+            box-shadow: 0 10px 30px rgba(0,255,204,0.2);
+        }
+        .toast.show { transform: translateX(-50%) translateY(0); }
+
+        /* ==================== SAVE INDICATOR ==================== */
+        .save-indicator {
+            position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.8); border: 1px solid rgba(0,255,204,0.3);
+            color: #00ffcc; padding: 8px 20px; border-radius: 20px;
+            font-size: 9px; z-index: 250; font-family: 'Cairo', sans-serif;
+            display: none; align-items: center; gap: 6px;
+            backdrop-filter: blur(20px); animation: saveSlideIn 0.5s ease-out;
+        }
+        @keyframes saveSlideIn {
+            from { transform: translateX(-50%) translateY(-100px); opacity: 0; }
+            to { transform: translateX(-50%) translateY(0); opacity: 1; }
+        }
+        .save-dot {
+            width: 6px; height: 6px; background: #00ffcc; border-radius: 50%;
+            animation: saveDotPulse 0.8s ease-in-out infinite;
+        }
+        @keyframes saveDotPulse {
+            0%, 100% { opacity: 1; box-shadow: 0 0 10px #00ffcc; }
+            50% { opacity: 0.3; box-shadow: 0 0 2px #00ffcc; }
+        }
+    </style>
 </head>
 <body>
     <div class="bg-mesh"></div>
     <div class="bg-orb"></div>
     <div class="bg-orb"></div>
     <div class="bg-orb"></div>
+    <div class="particles" id="particles"></div>
+    <div class="music-waves" id="musicWaves"></div>
+    <div class="save-indicator" id="saveIndicator">
+        <span class="save-dot"></span> 💾 تم الحفظ تلقائياً
+    </div>
 
     <div class="app">
-        <!-- Header -->
         <div class="header">
-            <div class="header-left">
-                <div class="bot-avatar">🤖</div>
-                <div class="header-info">
-                    <h2>Chatbot 2044</h2>
-                    <span>✦ متصل الآن ✦</span>
+            <div class="header-brand">
+                <div class="logo">🎵</div>
+                <div class="header-text">
+                    <h1>Music 2044</h1>
+                    <span>✦ Future Edition ✦</span>
                 </div>
             </div>
-            <div class="header-actions">
-                <button class="btn-icon" onclick="exportChat()" title="تصدير">📥</button>
-                <button class="btn-icon" onclick="clearChat()" title="حذف">🗑️</button>
-                <button class="btn-icon" onclick="toggleSidebar()" title="السجل">📋</button>
-            </div>
+            <div class="song-count-badge" id="songCount">0 أغاني</div>
         </div>
 
-        <!-- Mood Bar -->
-        <div class="mood-bar">
-            <span class="mood-chip active" onclick="setMood('friendly', this)">😊 ودود</span>
-            <span class="mood-chip" onclick="setMood('teacher', this)">🧑‍🏫 معلم</span>
-            <span class="mood-chip" onclick="setMood('funny', this)">😂 مضحك</span>
-            <span class="mood-chip" onclick="setMood('wise', this)">🧘 حكيم</span>
-        </div>
-
-        <!-- Chat Area -->
-        <div class="chat-area" id="chatArea">
-            <div class="empty-chat">
-                <span class="icon">🤖</span>
-                <h3>Chatbot 2044</h3>
-                <p>صديقك الذكي من المستقبل! جاهز للدردشة في أي وقت</p>
-                <div class="suggestions">
-                    <span class="suggestion-chip" onclick="quickSend('قولي نكتة 😂')">😂 قولي نكتة</span>
-                    <span class="suggestion-chip" onclick="quickSend('عندي سؤال 🧐')">🧐 عندي سؤال</span>
-                    <span class="suggestion-chip" onclick="quickSend('كيف حالك؟')">💬 كيف حالك؟</span>
-                    <span class="suggestion-chip" onclick="quickSend('أعطيني حكمة 🌟')">🌟 أعطيني حكمة</span>
+        <div class="now-playing">
+            <div class="disc-container">
+                <div class="disc-outer-ring"></div>
+                <div class="disc-outer-ring"></div>
+                <div class="disc" id="disc">
+                    <div class="disc-center"></div>
                 </div>
             </div>
+            <div class="song-name" id="songTitle">اختر أغنية</div>
+            <div class="song-artist" id="songArtist">Music Player 2044</div>
         </div>
 
-        <!-- Input Area -->
-        <div class="input-area">
-            <div class="input-wrapper">
-                <textarea class="chat-input" id="chatInput" placeholder="اكتب رسالتك هنا..." rows="1"></textarea>
+        <div class="progress-section">
+            <div class="progress-track" id="progressTrack" onclick="seek(event)">
+                <div class="progress-fill" id="progressFill"></div>
             </div>
-            <button class="send-btn" onclick="sendMessage()">➤</button>
+            <div class="time-row">
+                <span id="currentTime">0:00</span>
+                <span id="totalTime">0:00</span>
+            </div>
+        </div>
+
+        <div class="controls-section">
+            <button class="ctrl-glass" id="shuffleBtn" onclick="toggleShuffle()">🔀</button>
+            <button class="ctrl-glass" onclick="prevSong()">⏮</button>
+            <button class="btn-play-big" id="playBtn" onclick="togglePlay()">▶</button>
+            <button class="ctrl-glass" onclick="nextSong()">⏭</button>
+            <button class="ctrl-glass" id="repeatBtn" onclick="toggleRepeat()">🔁</button>
+        </div>
+
+        <div class="viz-container" id="visualizer">
+            <div class="viz-ring"></div><div class="viz-ring"></div><div class="viz-ring"></div>
+            <div class="viz-ring"></div><div class="viz-ring"></div>
+        </div>
+
+        <div class="playlist-header">
+            <span class="playlist-title">📋 قائمة التشغيل</span>
+            <button class="btn-upload-glass" onclick="document.getElementById('fileInput').click()">📂 رفع</button>
+            <input type="file" id="fileInput" accept="audio/*" multiple onchange="addFiles()">
+        </div>
+
+        <div class="playlist" id="playlist">
+            <div class="empty-state"><span class="icon">🎵</span><span>اسحب الملفات هنا</span></div>
         </div>
     </div>
 
-    <!-- Sidebar -->
-    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
-    <div class="sidebar" id="sidebar">
-        <div class="sidebar-header">
-            <h3>📋 سجل المحادثات</h3>
-            <button class="btn-icon" onclick="toggleSidebar()">✕</button>
-        </div>
-        <div class="sidebar-list" id="historyList"></div>
-    </div>
-
-    <!-- Toast -->
     <div class="toast" id="toast"></div>
 
-    <script src="js/storage.js"></script>
-    <script src="js/chatbot.js"></script>
-    <script src="js/app.js"></script>
+    <script>
+        // ==================== LOCAL STORAGE SYSTEM ====================
+        const STORAGE_KEY = 'music_player_2044_songs';
+        const SETTINGS_KEY = 'music_player_2044_settings';
+        
+        let playlist = [];
+        let currentIndex = -1;
+        let audio = new Audio();
+        let isPlaying = false, isShuffle = false, isRepeat = false;
+
+        // ==================== SAVE & LOAD FUNCTIONS ====================
+        
+        function saveToStorage() {
+            try {
+                const songsData = playlist.map(song => ({
+                    id: song.id,
+                    name: song.name,
+                    size: song.size,
+                    data: song.data,
+                    addedAt: song.addedAt || new Date().toISOString()
+                }));
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(songsData));
+                
+                const settings = {
+                    currentIndex: currentIndex,
+                    isShuffle: isShuffle,
+                    isRepeat: isRepeat,
+                    lastPlayed: new Date().toISOString()
+                };
+                localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+                
+                updateSongCount();
+                showSaveIndicator();
+            } catch (e) {
+                if (e.name === 'QuotaExceededError') {
+                    showToast('⚠ المساحة ممتلئة! احذف بعض الأغاني');
+                } else {
+                    console.error('Save error:', e);
+                }
+            }
+        }
+        
+        function loadFromStorage() {
+            try {
+                const savedSongs = localStorage.getItem(STORAGE_KEY);
+                if (savedSongs) {
+                    playlist = JSON.parse(savedSongs);
+                    updateSongCount();
+                }
+                
+                const savedSettings = localStorage.getItem(SETTINGS_KEY);
+                if (savedSettings) {
+                    const settings = JSON.parse(savedSettings);
+                    isShuffle = settings.isShuffle || false;
+                    isRepeat = settings.isRepeat || false;
+                    if (settings.isShuffle) {
+                        document.getElementById('shuffleBtn').classList.add('active');
+                    }
+                    if (settings.isRepeat) {
+                        document.getElementById('repeatBtn').classList.add('active');
+                    }
+                }
+            } catch (e) {
+                console.error('Load error:', e);
+                playlist = [];
+            }
+        }
+        
+        function updateSongCount() {
+            document.getElementById('songCount').textContent = playlist.length + ' أغاني';
+        }
+        
+        function showSaveIndicator() {
+            const indicator = document.getElementById('saveIndicator');
+            indicator.style.display = 'flex';
+            setTimeout(() => {
+                indicator.style.display = 'none';
+            }, 2000);
+        }
+
+        // ==================== AUDIO EVENTS ====================
+        
+        audio.addEventListener('timeupdate', () => {
+            if (audio.duration) {
+                document.getElementById('progressFill').style.width = (audio.currentTime/audio.duration*100) + '%';
+                document.getElementById('currentTime').textContent = formatTime(audio.currentTime);
+            }
+        });
+        audio.addEventListener('loadedmetadata', () => {
+            document.getElementById('totalTime').textContent = formatTime(audio.duration);
+        });
+        audio.addEventListener('ended', () => { isRepeat ? audio.play() : nextSong(); });
+        audio.addEventListener('play', () => {
+            isPlaying = true;
+            document.getElementById('playBtn').textContent = '⏸';
+            document.getElementById('playBtn').classList.add('playing-glow');
+            document.getElementById('disc').classList.add('playing');
+        });
+        audio.addEventListener('pause', () => {
+            isPlaying = false;
+            document.getElementById('playBtn').textContent = '▶';
+            document.getElementById('playBtn').classList.remove('playing-glow');
+            document.getElementById('disc').classList.remove('playing');
+        });
+
+        // ==================== CORE FUNCTIONS ====================
+        
+        function formatTime(s) { 
+            const m=Math.floor(s/60), sec=Math.floor(s%60); 
+            return m+':'+(sec<10?'0':'')+sec; 
+        }
+
+        function loadSong(index) {
+            if (index<0||index>=playlist.length) return;
+            currentIndex=index;
+            const s=playlist[index];
+            audio.src=s.data;
+            document.getElementById('songTitle').textContent=s.name;
+            document.getElementById('songArtist').textContent=s.size;
+            document.getElementById('disc').style.background='linear-gradient(135deg, rgba(255,68,170,0.3), rgba(0,255,204,0.3))';
+            document.getElementById('disc').innerHTML='<div class="disc-center"></div>';
+            renderPlaylist();
+            audio.play();
+            saveToStorage();
+        }
+
+        function togglePlay() { 
+            if(!audio.src&&playlist.length>0){loadSong(0);return;} 
+            isPlaying?audio.pause():audio.play(); 
+        }
+        
+        function nextSong() { 
+            if(!playlist.length)return; 
+            let n=isShuffle?Math.floor(Math.random()*playlist.length):currentIndex+1; 
+            if(n>=playlist.length)n=0; 
+            loadSong(n); 
+        }
+        
+        function prevSong() { 
+            if(!playlist.length)return; 
+            let p=currentIndex-1; 
+            if(p<0)p=playlist.length-1; 
+            loadSong(p); 
+        }
+        
+        function toggleShuffle() { 
+            isShuffle=!isShuffle; 
+            document.getElementById('shuffleBtn').classList.toggle('active',isShuffle); 
+            showToast(isShuffle?'🔀 عشوائي':'🔀 ترتيب'); 
+            saveToStorage();
+        }
+        
+        function toggleRepeat() { 
+            isRepeat=!isRepeat; 
+            document.getElementById('repeatBtn').classList.toggle('active',isRepeat); 
+            showToast(isRepeat?'🔁 تكرار':'🔁 عادي'); 
+            saveToStorage();
+        }
+        
+        function seek(e) { 
+            if(!audio.duration)return; 
+            const r=document.getElementById('progressTrack').getBoundingClientRect(); 
+            audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration; 
+        }
+
+        function addFiles() {
+            const files=document.getElementById('fileInput').files;
+            if(!files.length)return;
+            
+            let loadedCount = 0;
+            const totalFiles = files.length;
+            
+            Array.from(files).forEach(f=>{
+                const r=new FileReader();
+                r.onload=function(e){
+                    playlist.push({
+                        name:f.name.replace(/\.[^/.]+$/,""),
+                        size:formatSize(f.size),
+                        data:e.target.result,
+                        id:Date.now()+Math.random(),
+                        addedAt: new Date().toISOString()
+                    });
+                    loadedCount++;
+                    
+                    if (loadedCount === totalFiles) {
+                        renderPlaylist();
+                        saveToStorage();
+                        if(playlist.length===totalFiles && currentIndex===-1) loadSong(0);
+                        showToast('✅ ' + totalFiles + ' أغنية - تم الحفظ 💾');
+                    }
+                };
+                r.onerror = function() {
+                    loadedCount++;
+                    showToast('⚠ فشل تحميل: ' + f.name);
+                };
+                r.readAsDataURL(f);
+            });
+            
+            document.getElementById('fileInput').value='';
+        }
+
+        function formatSize(b) { 
+            return b>1048576?(b/1048576).toFixed(1)+' MB':(b/1024).toFixed(1)+' KB'; 
+        }
+
+        function deleteSong(index) {
+            const wasPlaying=currentIndex===index;
+            playlist.splice(index,1);
+            
+            if(wasPlaying){
+                audio.pause();audio.src='';
+                document.getElementById('songTitle').textContent='اختر أغنية';
+                document.getElementById('songArtist').textContent='Music Player 2044';
+                currentIndex=-1;isPlaying=false;
+                document.getElementById('playBtn').textContent='▶';
+                document.getElementById('disc').classList.remove('playing');
+                document.getElementById('playBtn').classList.remove('playing-glow');
+            }
+            else if(currentIndex>index)currentIndex--;
+            
+            saveToStorage();
+            renderPlaylist();
+            showToast('🗑 تم الحذف');
+        }
+
+        function renderPlaylist() {
+            const area=document.getElementById('playlist');
+            if(!playlist.length){
+                area.innerHTML='<div class="empty-state"><span class="icon">🎵</span><span>اسحب الملفات هنا</span></div>';
+                updateSongCount();
+                return;
+            }
+            area.innerHTML=playlist.map((s,i)=>`
+                <div class="song-card ${i===currentIndex?'active':''}" onclick="loadSong(${i})">
+                    <span class="s-icon">${i===currentIndex&&isPlaying?'🔊':'🎵'}</span>
+                    <div class="s-info">
+                        <div class="s-name">${s.name}</div>
+                        <div class="s-dur">${s.size}</div>
+                    </div>
+                    <span class="s-del" onclick="event.stopPropagation();deleteSong(${i})">🗑</span>
+                </div>
+            `).join('');
+            updateSongCount();
+        }
+
+        function showToast(msg) { 
+            const t=document.getElementById('toast'); 
+            t.textContent=msg; 
+            t.classList.add('show'); 
+            setTimeout(()=>t.classList.remove('show'),2500); 
+        }
+
+        // ==================== PARTICLES SYSTEM ====================
+        function createParticles() {
+            const container = document.getElementById('particles');
+            const colors = ['#00ffcc', '#ff44aa', '#ffaa00'];
+            
+            for (let i = 0; i < 30; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.width = (Math.random() * 6 + 2) + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 4 + 4) + 's';
+                particle.style.background = `radial-gradient(circle, ${colors[Math.floor(Math.random()*3)]} 0%, transparent 70%)`;
+                container.appendChild(particle);
+            }
+        }
+
+        // ==================== MUSIC WAVES ====================
+        function createMusicWaves() {
+            const container = document.getElementById('musicWaves');
+            for (let i = 0; i < 40; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'wave-bar';
+                bar.style.left = (i * 2.5) + '%';
+                bar.style.width = '2%';
+                bar.style.animationDelay = (Math.random() * 1.2) + 's';
+                bar.style.animationDuration = (Math.random() * 0.8 + 0.8) + 's';
+                container.appendChild(bar);
+            }
+        }
+
+        // ==================== INITIALIZATION ====================
+        function init() {
+            loadFromStorage();
+            renderPlaylist();
+            updateSongCount();
+            createParticles();
+            createMusicWaves();
+            
+            if (playlist.length > 0 && currentIndex >= 0) {
+                const s = playlist[currentIndex];
+                audio.src = s.data;
+                document.getElementById('songTitle').textContent = s.name;
+                document.getElementById('songArtist').textContent = s.size;
+            }
+        }
+
+        init();
+    </script>
 </body>
-</html>
-'''
+</html>'''
 
-    # ==================== 6. README.md ====================
-    readme_md = r'''# 🤖 Chatbot 2044 - Future Edition
+    with open("www/index.html", "w", encoding="utf-8") as f:
+        f.write(html_content)
 
-<div align="center">
+    print("🎵 Music Player 2044 - Future Edition جاهز!")
+    print(f"📁 www/index.html - {os.path.getsize('www/index.html')/1024:.1f} KB")
+    print("💾 ميزة الحفظ التلقائي: localStorage")
+    print("🚀 تصميم 2044: Glass Morphism + Mesh Gradient + Neumorphism + Holographic + Particles + Music Waves")
 
-![Chatbot 2044](https://img.shields.io/badge/Chatbot-2044-00ffcc?style=for-the-badge)
-![Version](https://img.shields.io/badge/Version-2.0.44-ff44aa?style=for-the-badge)
-![License](https://img.shields.io/badge/License-MIT-ffaa00?style=for-the-badge)
-
-**صديقك الذكي من المستقبل - متطور، سريع، وجميل**
-
-</div>
-
----
-
-## ✨ الميزات
-
-| الميزة | الوصف |
-|--------|-------|
-| 🎨 **تصميم 2044** | Glass Morphism + Neumorphism + Holographic |
-| 💬 **ذكاء اصطناعي** | ردود ذكية ومتنوعة على أسئلتك |
-| 💾 **حفظ تلقائي** | كل المحادثات تنحفظ في localStorage |
-| 🎭 **أوضاع متعددة** | ودود، معلم، مضحك، حكيم |
-| 📥 **تصدير المحادثة** | تصدير كملف نصي |
-| 🌙 **خلفيات متحركة** | Mesh Gradient + Orbs + Particles |
-| 📱 **متجاوب** | يعمل على كل الأجهزة |
-| ⚡ **سريع** | ردود فورية مع تأثير كتابة |
-
----
-
-## 🚀 طريقة التشغيل
-
-```bash
-# افتح الملف في المتصفح
-open chatbot_2044/www/index.html
-
-# أو باستخدام Python
-cd chatbot_2044/www
-python -m http.server 2044
+if __name__ == "__main__":
+    create_website_files()
