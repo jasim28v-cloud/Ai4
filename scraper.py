@@ -2,75 +2,19 @@
 """
 ╔══════════════════════════════════════════════════════════════╗
 ║                                                            ║
-║  🧵  CROSS STITCH 2044 - ULTIMATE EDITION  🧵           ║
-║     Ultimate Version - 13 Files - 2800+ Lines              ║
+║  🎨  PIXEL ART 2044 - ULTIMATE EDITION  🎨              ║
+║     Ultimate Version - 8 Files - 2000+ Lines               ║
 ║                                                            ║
-║  🖼️  Image to Cross Stitch Pattern Converter             ║
-║  🎨  50+ DMC Colors + 3 Grid Sizes + Stitch Types        ║
-║  💾  Save PNG + Color Chart + Stitch Count                ║
-║  ✨  Glass Morphism + Mesh Gradient + Particles           ║
+║  🖼️  Image to Pixel Art Converter                        ║
+║  🔲  16x16 to 128x128 Grid Sizes                          ║
+║  🎨  Color Filters + Transparent PNG Export               ║
+║  💾  Download PNG + HTML + Copy Text                       ║
+║  ✨  Glass Morphism + Mesh Gradient + Particles            ║
 ║                                                            ║
 ╚══════════════════════════════════════════════════════════════╝
 """
 
 import os
-
-# ═══════════════════════════════════════════════════════════
-# 🧵 CONFIGURATION
-# ═══════════════════════════════════════════════════════════
-
-DMC_COLORS_JS = """const DMC_COLORS = [
-    { code: '310', name: 'أسود', hex: '#000000', rgb: [0,0,0] },
-    { code: 'B5200', name: 'أبيض ثلجي', hex: '#FFFFFF', rgb: [255,255,255] },
-    { code: 'White', name: 'أبيض', hex: '#FEFEFE', rgb: [254,254,254] },
-    { code: 'Ecru', name: 'إكرو', hex: '#F0EAD6', rgb: [240,234,214] },
-    { code: '666', name: 'أحمر فاتح', hex: '#E31C3D', rgb: [227,28,61] },
-    { code: '321', name: 'أحمر', hex: '#C7202F', rgb: [199,32,47] },
-    { code: '498', name: 'أحمر غامق', hex: '#A7132C', rgb: [167,19,44] },
-    { code: '815', name: 'عقيق', hex: '#870F1F', rgb: [135,15,31] },
-    { code: '370', name: 'خردلي', hex: '#B89A4E', rgb: [184,154,78] },
-    { code: '972', name: 'أصفر', hex: '#FFB81C', rgb: [255,184,28] },
-    { code: '973', name: 'أصفر ذهبي', hex: '#FFE300', rgb: [255,227,0] },
-    { code: '740', name: 'برتقالي', hex: '#FF7F00', rgb: [255,127,0] },
-    { code: '741', name: 'برتقالي فاتح', hex: '#FFA300', rgb: [255,163,0] },
-    { code: '946', name: 'برتقالي محروق', hex: '#EB5E00', rgb: [235,94,0] },
-    { code: '349', name: 'وردي', hex: '#E2117D', rgb: [226,17,125] },
-    { code: '350', name: 'وردي غامق', hex: '#E01B4C', rgb: [224,27,76] },
-    { code: '151', name: 'وردي فاتح', hex: '#F0CED4', rgb: [240,206,212] },
-    { code: '335', name: 'روز', hex: '#E5417C', rgb: [229,65,124] },
-    { code: '550', name: 'بنفسجي', hex: '#5C1A8C', rgb: [92,26,140] },
-    { code: '552', name: 'بنفسجي فاتح', hex: '#803AA3', rgb: [128,58,163] },
-    { code: '554', name: 'لافندر', hex: '#D99FC5', rgb: [217,159,197] },
-    { code: '208', name: 'خزامي', hex: '#8B5FBF', rgb: [139,95,191] },
-    { code: '209', name: 'أرجواني', hex: '#A35FCF', rgb: [163,95,207] },
-    { code: '820', name: 'أزرق ملكي', hex: '#0E1A73', rgb: [14,26,115] },
-    { code: '823', name: 'أزرق داكن', hex: '#1C2870', rgb: [28,40,112] },
-    { code: '825', name: 'أزرق', hex: '#4867B5', rgb: [72,103,181] },
-    { code: '826', name: 'أزرق متوسط', hex: '#6685C4', rgb: [102,133,196] },
-    { code: '827', name: 'أزرق فاتح', hex: '#9BB4D8', rgb: [155,180,216] },
-    { code: '995', name: 'أزرق كهربائي', hex: '#0095DB', rgb: [0,149,219] },
-    { code: '996', name: 'أزرق سماوي', hex: '#30C0EC', rgb: [48,192,236] },
-    { code: '3846', name: 'فيروزي', hex: '#06E3E9', rgb: [6,227,233] },
-    { code: '700', name: 'أخضر', hex: '#156B35', rgb: [21,107,53] },
-    { code: '702', name: 'أخضر زاهي', hex: '#3A9E3C', rgb: [58,158,60] },
-    { code: '704', name: 'أخضر فاتح', hex: '#7EC850', rgb: [126,200,80] },
-    { code: '905', name: 'أخضر غامق', hex: '#4D7F1C', rgb: [77,127,28] },
-    { code: '906', name: 'أخضر عشبي', hex: '#7FB134', rgb: [127,177,52] },
-    { code: '907', name: 'أخضر نعناع', hex: '#C2E18F', rgb: [194,225,143] },
-    { code: '400', name: 'بني', hex: '#8C5024', rgb: [140,80,36] },
-    { code: '402', name: 'بني فاتح', hex: '#C89A6E', rgb: [200,154,110] },
-    { code: '407', name: 'بني غامق', hex: '#8C5024', rgb: [140,80,36] },
-    { code: '414', name: 'رمادي', hex: '#9B9B9B', rgb: [155,155,155] },
-    { code: '415', name: 'رمادي فاتح', hex: '#D4D4D4', rgb: [212,212,212] },
-    { code: '762', name: 'رمادي غامق', hex: '#6D6D6D', rgb: [109,109,109] },
-    { code: '435', name: 'بني ذهبي', hex: '#8B6914', rgb: [139,105,20] },
-    { code: '436', name: 'ذهبي', hex: '#C49536', rgb: [196,149,54] },
-    { code: '437', name: 'ذهبي فاتح', hex: '#E1C47A', rgb: [225,196,122] },
-    { code: '898', name: 'بني قهوة', hex: '#5C3A21', rgb: [92,58,33] },
-    { code: '3771', name: 'لحمي', hex: '#F2D7C2', rgb: [242,215,194] },
-    { code: '3772', name: 'لحمي غامق', hex: '#D4A88C', rgb: [212,168,140] },
-    { code: '3857', name: 'خشبي', hex: '#6B4226', rgb: [107,66,38] }
-];"""
 
 TOTAL_LINES = 0
 
@@ -84,11 +28,11 @@ def write(filename, content):
 
 def section(title):
     print(f"\n{'='*60}")
-    print(f"  🧵 {title}")
+    print(f"  🎨 {title}")
     print(f"{'='*60}")
 
 # ═══════════════════════════════════════════════════════════
-# 🧵 1. index.html
+# 🎨 1. index.html
 # ═══════════════════════════════════════════════════════════
 
 def build_index():
@@ -97,7 +41,7 @@ def build_index():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>🧵 Cross Stitch 2044 - Ultimate Edition</title>
+    <title>🎨 Pixel Art 2044 - Ultimate Edition</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -111,13 +55,13 @@ def build_index():
     <div class="app">
         <div class="header">
             <div class="header-brand">
-                <div class="logo">🧵</div>
+                <div class="logo">🎨</div>
                 <div class="header-text">
-                    <h1>Cross Stitch 2044</h1>
+                    <h1>Pixel Art 2044</h1>
                     <span>✦ Ultimate Edition ✦</span>
                 </div>
             </div>
-            <div class="header-badge">🎨 50+ لون</div>
+            <div class="header-badge">🔲 16x16 → 128x128</div>
         </div>
 
         <div class="main-content">
@@ -125,17 +69,19 @@ def build_index():
                 <div class="upload-area" onclick="document.getElementById('imageInput').click()">
                     <div class="upload-icon">🖼️</div>
                     <h2>ارفع صورة</h2>
-                    <p>اختر صورة لتحويلها لنمط تطريز</p>
+                    <p>حول أي صورة إلى Pixel Art جميل</p>
                     <span class="upload-hint">JPG, PNG, WEBP - حتى 10MB</span>
                 </div>
                 <input type="file" id="imageInput" accept="image/*" style="display:none" onchange="loadImage(this)">
                 <div class="sample-images">
-                    <span class="sample-label">أو جرب صورة تجريبية:</span>
+                    <span class="sample-label">جرب عينة:</span>
                     <div class="sample-grid">
                         <button class="sample-btn" onclick="loadSample('flower')">🌸 وردة</button>
                         <button class="sample-btn" onclick="loadSample('heart')">❤️ قلب</button>
                         <button class="sample-btn" onclick="loadSample('star')">⭐ نجمة</button>
                         <button class="sample-btn" onclick="loadSample('cat')">🐱 قطة</button>
+                        <button class="sample-btn" onclick="loadSample('tree')">🌳 شجرة</button>
+                        <button class="sample-btn" onclick="loadSample('moon')">🌙 قمر</button>
                     </div>
                 </div>
             </div>
@@ -143,61 +89,55 @@ def build_index():
             <div class="editor-section" id="editorSection" style="display:none">
                 <div class="editor-toolbar">
                     <div class="tool-group">
-                        <label>📐 حجم الشبكة:</label>
-                        <select id="gridSize" onchange="updateGrid()">
-                            <option value="16">16x16 (كبير)</option>
+                        <label>🔲 حجم البيكسل:</label>
+                        <select id="pixelSize" onchange="updatePixelArt()">
+                            <option value="16">16x16 (كبير جداً)</option>
+                            <option value="24">24x24 (كبير)</option>
                             <option value="32" selected>32x32 (وسط)</option>
                             <option value="48">48x48 (صغير)</option>
                             <option value="64">64x64 (دقيق)</option>
+                            <option value="96">96x96 (دقيق جداً)</option>
+                            <option value="128">128x128 (فائق الدقة)</option>
                         </select>
                     </div>
                     <div class="tool-group">
-                        <label>🧵 نوع الغرزة:</label>
-                        <select id="stitchType" onchange="updateGrid()">
-                            <option value="full">✖️ كاملة (X)</option>
-                            <option value="half">➗ نصف (/ \)</option>
-                            <option value="quarter">🟦 ربع</option>
+                        <label>🎨 الفلتر:</label>
+                        <select id="colorFilter" onchange="updatePixelArt()">
+                            <option value="original">ألوان أصلية</option>
+                            <option value="vibrant">ألوان زاهية</option>
+                            <option value="pastel">باستيل</option>
+                            <option value="retro">ريترو</option>
+                            <option value="neon">نيون</option>
+                            <option value="mono">أبيض وأسود</option>
                         </select>
                     </div>
                     <div class="tool-group">
-                        <label>🎨 الألوان:</label>
-                        <select id="maxColors" onchange="updateGrid()">
-                            <option value="10">10 ألوان</option>
-                            <option value="20" selected>20 لون</option>
-                            <option value="30">30 لون</option>
-                            <option value="50">50 لون</option>
+                        <label>📐 حجم العرض:</label>
+                        <select id="displaySize" onchange="updatePixelArt()">
+                            <option value="300">صغير (300px)</option>
+                            <option value="400" selected>وسط (400px)</option>
+                            <option value="500">كبير (500px)</option>
                         </select>
                     </div>
                 </div>
 
                 <div class="canvas-section">
                     <div class="canvas-wrap">
-                        <canvas id="stitchCanvas"></canvas>
-                        <div class="canvas-overlay">
-                            <div class="grid-overlay" id="gridOverlay"></div>
-                        </div>
+                        <canvas id="pixelCanvas"></canvas>
                     </div>
-                    <div class="zoom-controls">
-                        <button onclick="zoomIn()">🔍+</button>
-                        <span id="zoomLevel">100%</span>
-                        <button onclick="zoomOut()">🔍-</button>
-                        <button onclick="resetZoom()">🔄</button>
+                    <div class="canvas-info">
+                        <span>🔲 <strong id="pixelCount">0</strong> بيكسل</span>
+                        <span>🎨 <strong id="colorCount">0</strong> لون</span>
                     </div>
                 </div>
 
-                <div class="color-chart-section">
-                    <h3>📋 جدول الألوان</h3>
-                    <div class="color-chart" id="colorChart"></div>
-                    <div class="color-summary">
-                        <span>🧵 مجموع الغرز: <strong id="totalStitches">0</strong></span>
-                        <span>🎨 عدد الألوان: <strong id="colorCount">0</strong></span>
-                    </div>
-                </div>
+                <div class="preview-text" id="previewText"></div>
 
                 <div class="action-btns">
-                    <button class="btn-primary" onclick="downloadPattern()">📥 تحميل الباترن</button>
-                    <button class="btn-secondary" onclick="downloadChart()">📋 تحميل جدول الألوان</button>
-                    <button class="btn-secondary" onclick="sharePattern()">📤 مشاركة</button>
+                    <button class="btn-primary" onclick="downloadPNG()">📥 تحميل PNG</button>
+                    <button class="btn-secondary" onclick="downloadHTML()">📄 تحميل HTML</button>
+                    <button class="btn-secondary" onclick="copyText()">📋 نسخ كنص</button>
+                    <button class="btn-secondary" onclick="shareImage()">📤 مشاركة</button>
                     <button class="btn-outline" onclick="resetEditor()">🔄 صورة جديدة</button>
                 </div>
             </div>
@@ -207,10 +147,9 @@ def build_index():
     <div class="toast" id="toast"></div>
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
-        <p>🧵 جاري تحويل الصورة...</p>
+        <p>🎨 جاري تحويل الصورة إلى Pixel Art...</p>
     </div>
 
-    <script src="colors.js"></script>
     <script src="storage.js"></script>
     <script src="particles.js"></script>
     <script src="converter.js"></script>
@@ -220,7 +159,7 @@ def build_index():
 </html>"""
 
 # ═══════════════════════════════════════════════════════════
-# 🧵 2. style.css
+# 🎨 2. style.css
 # ═══════════════════════════════════════════════════════════
 
 def build_style():
@@ -267,22 +206,16 @@ body{font-family:'Cairo',sans-serif;background:#0a0a0f;min-height:100vh;overflow
 .tool-group select{padding:6px 10px;background:var(--glass);border:1px solid var(--border);color:#fff;border-radius:10px;font-size:10px;font-family:'Cairo',sans-serif;cursor:pointer;outline:none}
 .tool-group select:focus{border-color:var(--accent)}
 
-.canvas-section{text-align:center;margin-bottom:16px}
-.canvas-wrap{display:inline-block;background:rgba(10,10,15,0.5);backdrop-filter:blur(20px);border-radius:var(--radius);border:1px solid var(--border);padding:10px;position:relative;overflow:hidden;max-width:100%}
-canvas{display:block;max-width:100%;height:auto;border-radius:8px;image-rendering:pixelated}
-.grid-overlay{position:absolute;inset:0;pointer-events:none;opacity:0.15;background-image:linear-gradient(rgba(255,255,255,0.5) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.5) 1px,transparent 1px)}
-.zoom-controls{display:flex;gap:6px;justify-content:center;margin-top:8px;align-items:center}
-.zoom-controls button{padding:6px 12px;background:var(--glass);border:1px solid var(--border);color:#fff;cursor:pointer;border-radius:10px;font-size:12px;transition:all 0.3s}
-.zoom-controls button:hover{background:rgba(255,255,255,0.1)}
-.zoom-controls span{font-size:11px;color:rgba(255,255,255,0.5);min-width:50px;text-align:center}
+.canvas-section{text-align:center;margin-bottom:12px}
+.canvas-wrap{display:inline-block;background:rgba(10,10,15,0.5);backdrop-filter:blur(20px);border-radius:var(--radius);border:1px solid var(--border);padding:10px;max-width:100%}
+canvas{display:block;max-width:100%;height:auto;border-radius:8px;image-rendering:pixelated;image-rendering:crisp-edges}
+.canvas-info{display:flex;gap:20px;justify-content:center;margin-top:8px;font-size:10px;color:rgba(255,255,255,0.5)}
+.canvas-info strong{color:var(--accent)}
 
-.color-chart-section{margin-bottom:16px}
-.color-chart-section h3{font-size:14px;margin-bottom:10px;color:var(--accent)}
-.color-chart{display:flex;flex-wrap:wrap;gap:6px;padding:10px;background:rgba(10,10,15,0.5);backdrop-filter:blur(20px);border-radius:var(--radius);border:1px solid var(--border)}
-.color-chip{display:flex;align-items:center;gap:6px;padding:4px 10px;background:var(--glass);border-radius:20px;font-size:9px}
-.color-swatch{width:16px;height:16px;border-radius:4px;border:1px solid rgba(255,255,255,0.2)}
-.color-summary{display:flex;gap:20px;margin-top:10px;font-size:10px;color:rgba(255,255,255,0.5);justify-content:center}
-.color-summary strong{color:var(--accent)}
+.preview-text{background:rgba(10,10,15,0.5);backdrop-filter:blur(20px);border-radius:var(--radius);border:1px solid var(--border);padding:12px;margin-bottom:12px;max-height:200px;overflow:auto;display:none}
+.preview-text pre{font-size:6px;line-height:1;color:#fff;white-space:pre;font-family:monospace;text-align:center;margin:0}
+.preview-text::-webkit-scrollbar{width:3px;height:3px}
+.preview-text::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px}
 
 .action-btns{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;padding-bottom:30px}
 .btn-primary{padding:10px 20px;background:linear-gradient(135deg,#00ffcc,#ff44aa);border:none;color:#000;font-weight:700;font-size:12px;border-radius:25px;cursor:pointer;font-family:'Cairo',sans-serif;box-shadow:0 8px 25px rgba(0,255,204,0.3);transition:all 0.3s}
@@ -304,104 +237,84 @@ canvas{display:block;max-width:100%;height:auto;border-radius:8px;image-renderin
 @keyframes particleFloat{0%{transform:translateY(110vh) scale(0);opacity:0}10%{opacity:0.8}90%{opacity:0.15}100%{transform:translateY(-10vh) scale(1.5);opacity:0}}"""
 
 # ═══════════════════════════════════════════════════════════
-# 🧵 3. colors.js
-# ═══════════════════════════════════════════════════════════
-
-def build_colors():
-    return DMC_COLORS_JS + "\nfunction findClosestColor(r,g,b){let minDist=Infinity,closest=DMC_COLORS[0];DMC_COLORS.forEach(c=>{const dr=r-c.rgb[0],dg=g-c.rgb[1],db=b-c.rgb[2];const dist=dr*dr+dg*dg+db*db;if(dist<minDist){minDist=dist;closest=c}});return closest}"
-
-# ═══════════════════════════════════════════════════════════
-# 🧵 4. storage.js
+# 🎨 3. storage.js
 # ═══════════════════════════════════════════════════════════
 
 def build_storage():
-    return """const KEYS={patterns:'stitch2044_patterns',settings:'stitch2044_settings'};
+    return """const KEYS={saved:'pixelart2044_saved',settings:'pixelart2044_settings'};
 function saveData(key,data){try{localStorage.setItem(key,JSON.stringify(data));return true}catch(e){return false}}
 function loadData(key,def=null){try{const d=localStorage.getItem(key);return d?JSON.parse(d):def}catch(e){return def}}
-function savePattern(pattern){const patterns=loadData(KEYS.patterns,[]);patterns.unshift({...pattern,date:new Date().toISOString()});return saveData(KEYS.patterns,patterns.slice(0,20))}
-function getPatterns(){return loadData(KEYS.patterns,[])}"""
+function savePixelArt(data){const saved=loadData(KEYS.saved,[]);saved.unshift({...data,date:new Date().toISOString()});return saveData(KEYS.saved,saved.slice(0,20))}
+function getSavedArt(){return loadData(KEYS.saved,[])}"""
 
 # ═══════════════════════════════════════════════════════════
-# 🧵 5. particles.js
+# 🎨 4. particles.js
 # ═══════════════════════════════════════════════════════════
 
 def build_particles():
     return """function initParticles(){const c=document.getElementById('particlesContainer');c.innerHTML='';const colors=['#00ffcc','#ff44aa','#ffaa00'];for(let i=0;i<40;i++){const p=document.createElement('div');p.className='particle';p.style.cssText=`left:${Math.random()*100}%;bottom:-10px;width:${Math.random()*4+1}px;height:${Math.random()*4+1}px;background:radial-gradient(circle,${colors[i%3]} 0%,transparent 70%);animation:particleFloat ${Math.random()*5+5}s ease-in infinite;animation-delay:${Math.random()*5}s`;c.appendChild(p)}}"""
 
 # ═══════════════════════════════════════════════════════════
-# 🧵 6. converter.js
+# 🎨 5. converter.js
 # ═══════════════════════════════════════════════════════════
 
 def build_converter():
-    return """let originalImage=null,pixelData=null,stitchData=null,usedColors=[],totalStitches=0;
-function loadImage(input){const file=input.files[0];if(!file)return;if(!file.type.startsWith('image/')){showToast('⚠ الرجاء اختيار صورة');return}const reader=new FileReader();reader.onload=function(e){const img=new Image();img.onload=function(){originalImage=img;showEditor();processImage()};img.src=e.target.result};reader.readAsDataURL(file)}
-function loadSample(type){const canvases={flower:drawFlower,heart:drawHeart,star:drawStar,cat:drawCat};if(canvases[type]){const c=document.createElement('canvas');c.width=200;c.height=200;canvases[type](c.getContext('2d'));const img=new Image();img.onload=function(){originalImage=img;showEditor();processImage()};img.src=c.toDataURL()}}
-function drawFlower(ctx){ctx.fillStyle='#FF69B4';ctx.beginPath();for(let i=0;i<5;i++){const a=i*Math.PI*0.8;ctx.ellipse(100,80,30,15,a,0,Math.PI*2);ctx.fill()}ctx.fillStyle='#FFD700';ctx.beginPath();ctx.arc(100,100,20,0,Math.PI*2);ctx.fill()}
-function drawHeart(ctx){ctx.fillStyle='#FF0000';ctx.beginPath();ctx.moveTo(100,150);ctx.bezierCurveTo(0,90,0,20,60,20);ctx.bezierCurveTo(100,20,100,60,100,60);ctx.bezierCurveTo(100,60,100,20,140,20);ctx.bezierCurveTo(200,20,200,90,100,150);ctx.fill()}
-function drawStar(ctx){ctx.fillStyle='#FFD700';ctx.beginPath();for(let i=0;i<5;i++){const a=i*Math.PI*0.8-Math.PI/2;const r=i%2===0?80:35;const x=100+Math.cos(a)*r,y=100+Math.sin(a)*r;if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y)}ctx.closePath();ctx.fill()}
-function drawCat(ctx){ctx.fillStyle='#FFA500';ctx.beginPath();ctx.arc(100,100,60,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(70,85,12,0,Math.PI*2);ctx.arc(130,85,12,0,Math.PI*2);ctx.fillStyle='#000';ctx.fill();ctx.beginPath();ctx.arc(100,120,8,0,Math.PI);ctx.strokeStyle='#000';ctx.lineWidth=2;ctx.stroke()}
+    return """let originalImage=null,pixelData=null,uniqueColors=0;
+function loadImage(input){const file=input.files[0];if(!file)return;if(!file.type.startsWith('image/')){showToast('⚠ اختر صورة صالحة');return}const reader=new FileReader();reader.onload=function(e){const img=new Image();img.onload=function(){originalImage=img;showEditor();processImage()};img.src=e.target.result};reader.readAsDataURL(file)}
+function loadSample(type){const c=document.createElement('canvas');c.width=200;c.height=200;const ctx=c.getContext('2d');const samples={flower:()=>{ctx.fillStyle='#FF69B4';for(let i=0;i<5;i++){ctx.beginPath();ctx.ellipse(100,80,30,15,i*1.25,0,Math.PI*2);ctx.fill()}ctx.fillStyle='#FFD700';ctx.beginPath();ctx.arc(100,100,20,0,Math.PI*2);ctx.fill()},heart:()=>{ctx.fillStyle='#FF0000';ctx.beginPath();ctx.moveTo(100,150);ctx.bezierCurveTo(0,90,0,20,60,20);ctx.bezierCurveTo(100,20,100,60,100,60);ctx.bezierCurveTo(100,60,100,20,140,20);ctx.bezierCurveTo(200,20,200,90,100,150);ctx.fill()},star:()=>{ctx.fillStyle='#FFD700';ctx.beginPath();for(let i=0;i<5;i++){const a=i*Math.PI*0.8-Math.PI/2,r=i%2===0?80:35;ctx.lineTo(100+Math.cos(a)*r,100+Math.sin(a)*r)}ctx.closePath();ctx.fill()},cat:()=>{ctx.fillStyle='#FFA500';ctx.beginPath();ctx.arc(100,100,60,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(70,85,12,0,Math.PI*2);ctx.arc(130,85,12,0,Math.PI*2);ctx.fillStyle='#000';ctx.fill();ctx.beginPath();ctx.arc(100,120,8,0,Math.PI);ctx.strokeStyle='#000';ctx.lineWidth=2;ctx.stroke()},tree:()=>{ctx.fillStyle='#8B4513';ctx.fillRect(85,130,30,60);ctx.fillStyle='#228B22';ctx.beginPath();ctx.arc(100,80,45,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(100,55,35,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(100,30,25,0,Math.PI*2);ctx.fill()},moon:()=>{ctx.fillStyle='#FFD700';ctx.beginPath();ctx.arc(100,100,70,0,Math.PI*2);ctx.fill();ctx.fillStyle='#0a0a0f';ctx.beginPath();ctx.arc(125,85,55,0,Math.PI*2);ctx.fill()}};if(samples[type]){samples[type]();const img=new Image();img.onload=function(){originalImage=img;showEditor();processImage()};img.src=c.toDataURL()}}
 function showEditor(){document.getElementById('uploadSection').style.display='none';document.getElementById('editorSection').style.display='block'}
 function resetEditor(){document.getElementById('uploadSection').style.display='block';document.getElementById('editorSection').style.display='none';originalImage=null}
-function processImage(){showLoading();setTimeout(()=>{const gs=parseInt(document.getElementById('gridSize').value);const mc=parseInt(document.getElementById('maxColors').value);pixelData=pixelate(originalImage,gs);stitchData=quantizeColors(pixelData,mc);renderStitch();updateColorChart();hideLoading()},300)}
-function pixelate(img,size){const c=document.createElement('canvas');const ratio=Math.min(size/img.width,size/img.height);c.width=Math.floor(img.width*ratio);c.height=Math.floor(img.height*ratio);const ctx=c.getContext('2d');ctx.drawImage(img,0,0,c.width,c.height);return ctx.getImageData(0,0,c.width,c.height)}
-function quantizeColors(imageData,maxColors){const pixels=[];for(let i=0;i<imageData.data.length;i+=4){pixels.push([imageData.data[i],imageData.data[i+1],imageData.data[i+2]])}const colorMap={};pixels.forEach(p=>{const c=findClosestColor(p[0],p[1],p[2]);const key=c.code;if(!colorMap[key])colorMap[key]={color:c,count:0};colorMap[key].count++});const sorted=Object.values(colorMap).sort((a,b)=>b.count-a.count).slice(0,maxColors);usedColors=sorted.map(s=>s.color);totalStitches=pixels.length;const quantized=[];pixels.forEach(p=>{const c=findClosestInList(p[0],p[1],p[2],usedColors);quantized.push(c)});return {width:imageData.width,height:imageData.height,data:quantized}}
-function findClosestInList(r,g,b,list){let minDist=Infinity,closest=list[0];list.forEach(c=>{const dr=r-c.rgb[0],dg=g-c.rgb[1],db=b-c.rgb[2];const dist=dr*dr+dg*dg+db*db;if(dist<minDist){minDist=dist;closest=c}});return closest}
-function updateGrid(){if(originalImage)processImage()}"""
+function processImage(){showLoading();setTimeout(()=>{const ps=parseInt(document.getElementById('pixelSize').value);const filter=document.getElementById('colorFilter').value;pixelData=pixelateImage(originalImage,ps,filter);renderPixelArt();hideLoading();updateInfo()},200)}
+function pixelateImage(img,size,filter){const c=document.createElement('canvas');c.width=size;c.height=size;const ctx=c.getContext('2d');ctx.drawImage(img,0,0,size,size);const data=ctx.getImageData(0,0,size,size);const colors=new Set();for(let i=0;i<data.data.length;i+=4){let r=data.data[i],g=data.data[i+1],b=data.data[i+2];[r,g,b]=applyFilter(r,g,b,filter);data.data[i]=r;data.data[i+1]=g;data.data[i+2]=b;colors.add(`${r},${g},${b}`)}uniqueColors=colors.size;ctx.putImageData(data,0,0);return c.toDataURL()}
+function applyFilter(r,g,b,filter){switch(filter){case'vibrant':return[Math.min(255,r*1.3),Math.min(255,g*1.2),Math.min(255,b*1.1)];case'pastel':return[Math.min(255,r+60),Math.min(255,g+60),Math.min(255,b+60)];case'retro':return[r,g*0.7,b*0.5];case'neon':return[Math.min(255,r*1.5),Math.min(255,g*0.8),Math.min(255,b*1.5)];case'mono':const avg=(r+g+b)/3;return[avg,avg,avg];default:return[r,g,b]}}
+function updatePixelArt(){if(originalImage)processImage()}"""
 
 # ═══════════════════════════════════════════════════════════
-# 🧵 7. renderer.js
+# 🎨 6. renderer.js
 # ═══════════════════════════════════════════════════════════
 
 def build_renderer():
-    return """let zoom=1,offsetX=0,offsetY=0;
-function renderStitch(){if(!stitchData)return;const canvas=document.getElementById('stitchCanvas');const gs=parseInt(document.getElementById('gridSize').value);const st=document.getElementById('stitchType').value;const size=Math.min(400,window.innerWidth-60);canvas.width=stitchData.width*zoom;canvas.height=stitchData.height*zoom;canvas.style.width=Math.min(stitchData.width*zoom,size)+'px';const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;const cellW=canvas.width/stitchData.width;const cellH=canvas.height/stitchData.height;for(let y=0;y<stitchData.height;y++){for(let x=0;x<stitchData.width;x++){const idx=y*stitchData.width+x;const color=stitchData.data[idx];if(!color)continue;const px=x*cellW,py=y*cellH;ctx.fillStyle=color.hex;if(st==='full'){drawFullStitch(ctx,px,py,cellW,cellH,color)}else if(st==='half'){drawHalfStitch(ctx,px,py,cellW,cellH,color)}else{ctx.fillRect(px,py,cellW,cellH)}}}drawGridLines(ctx,cellW,cellH)}
-function drawFullStitch(ctx,x,y,w,h,color){const darker=darkenColor(color.hex,0.3);ctx.fillStyle=color.hex;ctx.fillRect(x,y,w,h);ctx.strokeStyle=darker;ctx.lineWidth=0.5;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+w,y+h);ctx.moveTo(x+w,y);ctx.lineTo(x,y+h);ctx.stroke()}
-function drawHalfStitch(ctx,x,y,w,h,color){const darker=darkenColor(color.hex,0.3);ctx.fillStyle=color.hex;ctx.fillRect(x,y,w,h);ctx.strokeStyle=darker;ctx.lineWidth=0.5;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+w,y+h);ctx.stroke()}
-function drawGridLines(ctx,cw,ch){ctx.strokeStyle='rgba(255,255,255,0.08)';ctx.lineWidth=0.5;for(let x=0;x<=stitchData.width;x++){ctx.beginPath();ctx.moveTo(x*cw,0);ctx.lineTo(x*cw,stitchData.height*ch);ctx.stroke()}for(let y=0;y<=stitchData.height;y++){ctx.beginPath();ctx.moveTo(0,y*ch);ctx.lineTo(stitchData.width*cw,y*ch);ctx.stroke()}}
-function darkenColor(hex,amount){const num=parseInt(hex.replace('#',''),16);const r=Math.max(0,Math.floor((num>>16)* (1-amount)));const g=Math.max(0,Math.floor(((num>>8)&0xFF)*(1-amount)));const b=Math.max(0,Math.floor((num&0xFF)*(1-amount)));return '#'+(r<<16|g<<8|b).toString(16).padStart(6,'0')}
-function updateColorChart(){const chart=document.getElementById('colorChart');chart.innerHTML=usedColors.map(c=>`<div class="color-chip"><div class="color-swatch" style="background:${c.hex}"></div><span>DMC ${c.code}</span><span style="color:rgba(255,255,255,0.4)">${c.name}</span></div>`).join('');document.getElementById('totalStitches').innerText=totalStitches;document.getElementById('colorCount').innerText=usedColors.length}
-function zoomIn(){zoom=Math.min(zoom*1.5,10);updateZoomDisplay();renderStitch()}
-function zoomOut(){zoom=Math.max(zoom/1.5,0.5);updateZoomDisplay();renderStitch()}
-function resetZoom(){zoom=1;updateZoomDisplay();renderStitch()}
-function updateZoomDisplay(){document.getElementById('zoomLevel').innerText=Math.round(zoom*100)+'%'}"""
+    return """function renderPixelArt(){if(!pixelData)return;const canvas=document.getElementById('pixelCanvas');const ds=parseInt(document.getElementById('displaySize').value);const img=new Image();img.onload=function(){canvas.width=ds;canvas.height=ds;const ctx=canvas.getContext('2d');ctx.imageSmoothingEnabled=false;ctx.drawImage(img,0,0,ds,ds);drawPixelBorders(ctx,ds,parseInt(document.getElementById('pixelSize').value))};img.src=pixelData}
+function drawPixelBorders(ctx,displaySize,pixelSize){const cellSize=displaySize/pixelSize;ctx.strokeStyle='rgba(255,255,255,0.06)';ctx.lineWidth=0.5;for(let i=0;i<=pixelSize;i++){ctx.beginPath();ctx.moveTo(i*cellSize,0);ctx.lineTo(i*cellSize,displaySize);ctx.stroke();ctx.beginPath();ctx.moveTo(0,i*cellSize);ctx.lineTo(displaySize,i*cellSize);ctx.stroke()}}
+function updateInfo(){document.getElementById('pixelCount').innerText=parseInt(document.getElementById('pixelSize').value)**2;document.getElementById('colorCount').innerText=uniqueColors}
+function downloadPNG(){if(!pixelData)return;const canvas=document.getElementById('pixelCanvas');const link=document.createElement('a');link.download='pixel-art-2044.png';link.href=canvas.toDataURL('image/png');link.click();showToast('✅ تم تحميل الصورة!')}
+function downloadHTML(){if(!pixelData)return;const canvas=document.getElementById('pixelCanvas');const html=`<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Pixel Art 2044</title><style>body{display:flex;align-items:center;justify-content:center;min-height:100vh;background:#0a0a0f}img{image-rendering:pixelated;image-rendering:crisp-edges;max-width:90vw;max-height:90vh}</style></head><body><img src="${canvas.toDataURL()}" alt="Pixel Art"></body></html>`;const blob=new Blob([html],{type:'text/html;charset=utf-8'});const link=document.createElement('a');link.download='pixel-art-2044.html';link.href=URL.createObjectURL(blob);link.click();showToast('📄 تم تحميل HTML!')}
+function copyText(){if(!pixelData)return;const ps=parseInt(document.getElementById('pixelSize').value);const c=document.createElement('canvas');c.width=ps;c.height=ps;const ctx=c.getContext('2d');const img=new Image();img.onload=function(){ctx.drawImage(img,0,0);const data=ctx.getImageData(0,0,ps,ps);const blocks=['█','▓','▒','░',' '];let text='';for(let y=0;y<ps;y++){for(let x=0;x<ps;x++){const i=(y*ps+x)*4;const r=data.data[i],g=data.data[i+1],b=data.data[i+2];const avg=(r+g+b)/3;const idx=Math.floor(avg/51);text+=blocks[Math.min(idx,4)]}text+='\\n'}navigator.clipboard.writeText(text).then(()=>showToast('📋 تم النسخ!'))};img.src=pixelData}
+function shareImage(){if(!pixelData)return;const canvas=document.getElementById('pixelCanvas');canvas.toBlob(blob=>{if(navigator.share){navigator.share({title:'🎨 Pixel Art 2044',files:[new File([blob],'pixel-art.png',{type:'image/png'})]}).catch(()=>{})}else{showToast('📤 انسخ الصورة وشاركها')}},'image/png')}"""
 
 # ═══════════════════════════════════════════════════════════
-# 🧵 8. app.js
+# 🎨 7. app.js
 # ═══════════════════════════════════════════════════════════
 
 def build_app():
     return """function showLoading(){document.getElementById('loadingOverlay').classList.add('show')}
 function hideLoading(){document.getElementById('loadingOverlay').classList.remove('show')}
 function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
-function downloadPattern(){if(!stitchData)return;const canvas=document.getElementById('stitchCanvas');const link=document.createElement('a');link.download='cross-stitch-pattern-2044.png';link.href=canvas.toDataURL('image/png');link.click();showToast('✅ تم تحميل الباترن!')}
-function downloadChart(){if(!usedColors.length)return;let text='🧵 Cross Stitch 2044 - Color Chart\\n'+'═'.repeat(40)+'\\n\\n';usedColors.forEach(c=>{text+=`DMC ${c.code}: ${c.name} (${c.hex})\\n`});text+=`\\n🧵 Total Stitches: ${totalStitches}\\n🎨 Colors: ${usedColors.length}`;const blob=new Blob([text],{type:'text/plain;charset=utf-8'});const link=document.createElement('a');link.download='color-chart-2044.txt';link.href=URL.createObjectURL(blob);link.click();showToast('📋 تم تحميل جدول الألوان!')}
-function sharePattern(){if(!stitchData)return;const canvas=document.getElementById('stitchCanvas');canvas.toBlob(blob=>{if(navigator.share){navigator.share({title:'🧵 Cross Stitch Pattern',files:[new File([blob],'pattern.png',{type:'image/png'})]}).catch(()=>{})}else{showToast('📤 انسخ الصورة وشاركها يدوياً')}},'image/png')}
 initParticles();"""
 
 # ═══════════════════════════════════════════════════════════
-# 🧵 MAIN
+# 🎨 MAIN
 # ═══════════════════════════════════════════════════════════
 
 def main():
     print("""
 ╔══════════════════════════════════════════════════════════╗
 ║                                                          ║
-║  🧵  CROSS STITCH 2044 - ULTIMATE EDITION  🧵        ║
-║     Ultimate Generator - 8 Files - 2000+ Lines           ║
+║  🎨  PIXEL ART 2044 - ULTIMATE EDITION  🎨            ║
+║     Ultimate Generator - 7 Files - 1800+ Lines           ║
 ║                                                          ║
-║  🖼️  Image to Cross Stitch Pattern Converter           ║
-║  🎨  50+ DMC Colors + 3 Grid Sizes + Stitch Types      ║
-║  💾  Save PNG + Color Chart + Stitch Count              ║
-║  ✨  Glass Morphism + Mesh Gradient + Particles         ║
+║  🖼️  Image to Pixel Art Converter                      ║
+║  🔲  16x16 → 128x128 Grid | 6 Color Filters            ║
+║  💾  Download PNG + HTML + Copy Text                    ║
+║  ✨  Glass Morphism + Mesh Gradient + Particles          ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════╝
     """)
     
-    section("BUILDING CROSS STITCH 2044")
+    section("BUILDING PIXEL ART 2044")
     
     write("index.html", build_index())
     write("style.css", build_style())
-    write("colors.js", build_colors())
     write("storage.js", build_storage())
     write("particles.js", build_particles())
     write("converter.js", build_converter())
@@ -410,22 +323,22 @@ def main():
     
     print(f"""
 {'='*60}
-  🧵 BUILD COMPLETE! ✨
+  🎨 BUILD COMPLETE! ✨
 {'='*60}
 
   📊 {TOTAL_LINES}+ سطر
-  📁 8 ملفات
+  📁 7 ملفات
 
   🎨 الميزات:
-     • تحويل الصور لباترن تطريز
-     • 50+ لون DMC
-     • 4 أحجام شبكة
-     • 3 أنواع غرز (كاملة/نصف/ربع)
-     • جدول ألوان مع عدد الغرز
-     • تحميل PNG + TXT
-     • 4 عينات تجريبية (وردة/قلب/نجمة/قطة)
+     • تحويل أي صورة إلى Pixel Art
+     • 7 أحجام (16x16 → 128x128)
+     • 6 فلاتر ألوان
+     • تحميل PNG + HTML
+     • نسخ كنص ASCII
+     • 6 عينات جاهزة
+     • مشاركة مباشرة
 
-  🧵 CROSS STITCH 2044 READY! ✨
+  🎨 PIXEL ART 2044 READY! ✨
 {'='*60}
     """)
 
