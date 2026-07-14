@@ -1,31 +1,18 @@
 """
 ╔══════════════════════════════════════════════════════════════╗
-║              🎵 MUSIC VAULT 2044 - Local Server 🎵          ║
-║            Future Storage System - Professional             ║
+║         🎵 MUSIC PLAYER 2044 - Builder Script 🎵           ║
+║            Generate App Files - Professional               ║
 ║              Made with ♥️ for my friend                     ║
 ╚══════════════════════════════════════════════════════════════╝
 """
 
 import os
 import json
-import base64
 import shutil
-import hashlib
-import http.server
-import socketserver
-import threading
-import webbrowser
 from pathlib import Path
 from datetime import datetime
-from urllib.parse import urlparse, parse_qs
-from http import HTTPStatus
-import mimetypes
-import secrets
-
-# ==================== التهيئة ====================
 
 class Colors:
-    """ألوان الطرفية 2044"""
     HEADER = '\033[95m'
     CYAN = '\033[96m'
     GREEN = '\033[92m'
@@ -35,347 +22,314 @@ class Colors:
     BOLD = '\033[1m'
     RESET = '\033[0m'
 
-class MusicVault2044:
+def create_app_files():
     """
-    🎵 Music Vault 2044 - نظام تخزين موسيقى احترافي
-    
-    الميزات:
-    - تخزين دائم للأغاني على القرص
-    - خادم HTTP محلي للـ API
-    - قاعدة بيانات JSON للمكتبة
-    - دعم رفع وحذف وتحميل الملفات
-    - واجهة WebSocket للاتصال المباشر
-    - تشغيل تلقائي للمتصفح
+    إنشاء جميع ملفات التطبيق
+    Music Player 2044 - Future Edition
     """
     
-    def __init__(self, music_dir="music_vault_2044", port=2044):
-        self.music_dir = Path(music_dir)
-        self.port = port
-        self.db_file = self.music_dir / "library_2044.json"
-        self.www_dir = self.music_dir / "www"
-        
-        # إنشاء المجلدات
-        self.music_dir.mkdir(parents=True, exist_ok=True)
-        self.www_dir.mkdir(parents=True, exist_ok=True)
-        
-        # تحميل المكتبة
-        self.library = self._load_library()
-        
-        # إعداد السيرفر
-        self.server = None
-        self.server_thread = None
+    # ==================== إنشاء المجلدات ====================
+    dirs = [
+        "app/src/main/assets/www",
+        "app/src/main/res/values",
+        "app/src/main/res/drawable",
+        "app/src/main/res/mipmap-hdpi",
+        "app/src/main/res/xml",
+        "app/src/main/java/com/musicplayer2044/app",
+        "gradle/wrapper"
+    ]
     
-    def _load_library(self) -> dict:
-        """تحميل مكتبة الموسيقى"""
-        if self.db_file.exists():
-            try:
-                with open(self.db_file, 'r', encoding='utf-8') as f:
-                    return json.load(f)
-            except:
-                pass
-        return {"songs": {}, "playlists": {}, "settings": {"volume": 0.8, "theme": "2044"}}
+    for d in dirs:
+        Path(d).mkdir(parents=True, exist_ok=True)
     
-    def _save_library(self):
-        """حفظ مكتبة الموسيقى"""
-        with open(self.db_file, 'w', encoding='utf-8') as f:
-            json.dump(self.library, f, indent=2, ensure_ascii=False)
+    print(f"{Colors.CYAN}📁 Folders created successfully!{Colors.RESET}")
     
-    def add_song(self, song_id: str, name: str, artist: str, data_base64: str) -> bool:
-        """إضافة أغنية للمكتبة"""
-        try:
-            # فك تشفير base64
-            if ',' in data_base64:
-                data_base64 = data_base64.split(',')[1]
-            
-            song_data = base64.b64decode(data_base64)
-            
-            # حفظ الملف
-            safe_name = self._safe_filename(f"{artist} - {name}")
-            file_path = self.music_dir / f"{safe_name}.mp3"
-            
-            with open(file_path, 'wb') as f:
-                f.write(song_data)
-            
-            # تحديث المكتبة
-            self.library["songs"][song_id] = {
-                "id": song_id,
-                "name": name,
-                "artist": artist,
-                "file_path": str(file_path.relative_to(self.music_dir)),
-                "size": len(song_data),
-                "added_date": datetime.now().isoformat(),
-                "plays": 0,
-                "favorite": False
-            }
-            
-            self._save_library()
-            return True
-            
-        except Exception as e:
-            print(f"{Colors.RED}✗ Error adding song: {e}{Colors.RESET}")
-            return False
+    # ==================== ملفات Gradle ====================
     
-    def delete_song(self, song_id: str) -> bool:
-        """حذف أغنية من المكتبة"""
-        try:
-            if song_id in self.library["songs"]:
-                song_info = self.library["songs"][song_id]
-                file_path = self.music_dir / song_info["file_path"]
-                
-                # حذف الملف
-                if file_path.exists():
-                    file_path.unlink()
-                
-                # حذف من المكتبة
-                del self.library["songs"][song_id]
-                self._save_library()
-                return True
-        except Exception as e:
-            print(f"{Colors.RED}✗ Error deleting song: {e}{Colors.RESET}")
-        return False
-    
-    def get_song_file(self, song_id: str) -> Path:
-        """الحصول على مسار ملف الأغنية"""
-        if song_id in self.library["songs"]:
-            file_path = self.music_dir / self.library["songs"][song_id]["file_path"]
-            if file_path.exists():
-                # تحديث عداد التشغيل
-                self.library["songs"][song_id]["plays"] += 1
-                self._save_library()
-                return file_path
-        return None
-    
-    def _safe_filename(self, filename: str) -> str:
-        """تنظيف اسم الملف"""
-        safe = "".join(c if c.isalnum() or c in " .-_()[]{}" else "_" for c in filename)
-        return safe.strip()[:100] or "unknown"
-    
-    def get_all_songs(self) -> list:
-        """الحصول على كل الأغاني"""
-        return [
-            {
-                "id": song_id,
-                "name": info["name"],
-                "artist": info["artist"],
-                "size": self._format_size(info["size"]),
-                "added_date": info["added_date"],
-                "plays": info["plays"],
-                "favorite": info["favorite"]
-            }
-            for song_id, info in self.library["songs"].items()
-        ]
-    
-    def _format_size(self, size_bytes: int) -> str:
-        """تنسيق الحجم"""
-        for unit in ['B', 'KB', 'MB', 'GB']:
-            if size_bytes < 1024:
-                return f"{size_bytes:.1f} {unit}"
-            size_bytes /= 1024
-        return f"{size_bytes:.1f} TB"
-    
-    def print_banner(self):
-        """طباعة بانر 2044"""
-        banner = f"""
-{Colors.CYAN}
-╔══════════════════════════════════════════════════════════════╗
-║                                                              ║
-║   ███╗   ███╗██╗   ██╗███████╗██╗ ██████╗  ██╗   ██╗ █████╗ 
-║   ████╗ ████║██║   ██║██╔════╝██║██╔════╝  ██║   ██║██╔══██╗
-║   ██╔████╔██║██║   ██║███████╗██║██║       ██║   ██║███████║
-║   ██║╚██╔╝██║██║   ██║╚════██║██║██║       ╚██╗ ██╔╝██╔══██║
-║   ██║ ╚═╝ ██║╚██████╔╝███████║██║╚██████╗   ╚████╔╝ ██║  ██║
-║   ╚═╝     ╚═╝ ╚═════╝ ╚══════╝╚═╝ ╚═════╝    ╚═══╝  ╚═╝  ╚═╝
-║                                                              ║
-║              🎵 MUSIC VAULT 2044 - Local Server 🎵           ║
-║                     Professional v2.0.44                     ║
-║                                                              ║
-║      📁 Storage: {str(self.music_dir):<43} ║
-║      🌐 Server:  http://localhost:{self.port:<37} ║
-║      📚 Library: {len(self.library['songs']):<3} songs{:37} ║
-║                                                              ║
-╚══════════════════════════════════════════════════════════════╝
-{Colors.RESET}
-        """
-        print(banner)
+    # build.gradle (Project)
+    build_gradle = """// Top-level build file
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.2.0'
+    }
+}
 
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
 
-class MusicAPIHandler(http.server.SimpleHTTPRequestHandler):
-    """معالج HTTP للـ API"""
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
+"""
     
-    vault = None  # سيتم تعيينه من الخارج
+    with open("build.gradle", "w", encoding="utf-8") as f:
+        f.write(build_gradle)
     
-    def do_OPTIONS(self):
-        """معالجة CORS"""
-        self.send_response(200)
-        self._send_cors_headers()
-        self.end_headers()
-    
-    def do_GET(self):
-        """معالجة طلبات GET"""
-        parsed = urlparse(self.path)
-        
-        # API Routes
-        if parsed.path == '/api/songs':
-            self._handle_get_songs()
-        elif parsed.path.startswith('/api/download/'):
-            song_id = parsed.path.split('/')[-1]
-            self._handle_download(song_id)
-        elif parsed.path.startswith('/api/stream/'):
-            song_id = parsed.path.split('/')[-1]
-            self._handle_stream(song_id)
-        else:
-            # ملفات ثابتة
-            super().do_GET()
-    
-    def do_POST(self):
-        """معالجة طلبات POST"""
-        parsed = urlparse(self.path)
-        
-        if parsed.path == '/api/upload':
-            self._handle_upload()
-        elif parsed.path == '/api/delete':
-            self._handle_delete()
-        else:
-            self.send_error(404)
-    
-    def _send_cors_headers(self):
-        """إرسال هيدرات CORS"""
-        self.send_header('Access-Control-Allow-Origin', '*')
-        self.send_header('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'Content-Type')
-    
-    def _send_json(self, data, status=200):
-        """إرسال استجابة JSON"""
-        self.send_response(status)
-        self._send_cors_headers()
-        self.send_header('Content-Type', 'application/json; charset=utf-8')
-        self.end_headers()
-        self.wfile.write(json.dumps(data, ensure_ascii=False).encode('utf-8'))
-    
-    def _handle_get_songs(self):
-        """API: الحصول على قائمة الأغاني"""
-        songs = self.vault.get_all_songs()
-        self._send_json({"songs": songs, "total": len(songs)})
-    
-    def _handle_upload(self):
-        """API: رفع أغنية"""
-        content_length = int(self.headers.get('Content-Length', 0))
-        body = self.rfile.read(content_length)
-        
-        try:
-            data = json.loads(body)
-            song_id = data.get('id', secrets.token_hex(8))
-            name = data.get('name', 'Unknown')
-            artist = data.get('artist', 'Unknown')
-            audio_data = data.get('data', '')
-            
-            success = self.vault.add_song(song_id, name, artist, audio_data)
-            
-            if success:
-                self._send_json({"status": "success", "id": song_id, "message": "✅ Song added to vault!"})
-            else:
-                self._send_json({"status": "error", "message": "Failed to save song"}, 500)
-                
-        except Exception as e:
-            self._send_json({"status": "error", "message": str(e)}, 400)
-    
-    def _handle_delete(self):
-        """API: حذف أغنية"""
-        content_length = int(self.headers.get('Content-Length', 0))
-        body = self.rfile.read(content_length)
-        
-        try:
-            data = json.loads(body)
-            song_id = data.get('id', '')
-            
-            if self.vault.delete_song(song_id):
-                self._send_json({"status": "success", "message": "🗑 Song deleted!"})
-            else:
-                self._send_json({"status": "error", "message": "Song not found"}, 404)
-                
-        except Exception as e:
-            self._send_json({"status": "error", "message": str(e)}, 400)
-    
-    def _handle_stream(self, song_id):
-        """API: تشغيل أغنية"""
-        file_path = self.vault.get_song_file(song_id)
-        
-        if file_path and file_path.exists():
-            self.send_response(200)
-            self._send_cors_headers()
-            self.send_header('Content-Type', 'audio/mpeg')
-            self.send_header('Content-Length', str(file_path.stat().st_size))
-            self.end_headers()
-            
-            with open(file_path, 'rb') as f:
-                self.wfile.write(f.read())
-        else:
-            self._send_json({"error": "Song not found"}, 404)
-    
-    def _handle_download(self, song_id):
-        """API: تحميل أغنية"""
-        file_path = self.vault.get_song_file(song_id)
-        
-        if file_path and file_path.exists():
-            self.send_response(200)
-            self._send_cors_headers()
-            self.send_header('Content-Type', 'application/octet-stream')
-            self.send_header('Content-Disposition', f'attachment; filename="{file_path.name}"')
-            self.send_header('Content-Length', str(file_path.stat().st_size))
-            self.end_headers()
-            
-            with open(file_path, 'rb') as f:
-                self.wfile.write(f.read())
-        else:
-            self._send_json({"error": "Song not found"}, 404)
-    
-    def log_message(self, format, *args):
-        """تخصيص رسائل السجل"""
-        print(f"{Colors.PURPLE}[2044]{Colors.RESET} {format % args}")
+    # app/build.gradle
+    app_build_gradle = """plugins {
+    id 'com.android.application'
+}
 
+android {
+    namespace 'com.musicplayer2044.app'
+    compileSdk 34
 
-class MusicVaultServer:
-    """خادم Music Vault"""
-    
-    def __init__(self, vault: MusicVault2044):
-        self.vault = vault
-        MusicAPIHandler.vault = vault
-        self.httpd = None
-    
-    def start(self):
-        """تشغيل الخادم"""
-        # تغيير مجلد العمل للملفات الثابتة
-        os.chdir(self.vault.www_dir)
-        
-        self.httpd = socketserver.ThreadingTCPServer(
-            ("localhost", self.vault.port),
-            MusicAPIHandler
-        )
-        
-        print(f"{Colors.GREEN}🚀 Music Vault 2044 Server is running!{Colors.RESET}")
-        print(f"{Colors.CYAN}🌐 Open: http://localhost:{self.vault.port}{Colors.RESET}")
-        print(f"{Colors.YELLOW}📚 {len(self.vault.library['songs'])} songs in library{Colors.RESET}")
-        print(f"{Colors.PURPLE}Press Ctrl+C to stop the server{Colors.RESET}\n")
-        
-        # فتح المتصفح تلقائياً
-        webbrowser.open(f"http://localhost:{self.vault.port}")
-        
-        try:
-            self.httpd.serve_forever()
-        except KeyboardInterrupt:
-            print(f"\n{Colors.YELLOW}🛑 Shutting down server...{Colors.RESET}")
-            self.httpd.shutdown()
+    defaultConfig {
+        applicationId "com.musicplayer2044.app"
+        minSdk 21
+        targetSdk 34
+        versionCode 1
+        versionName "1.0.0"
+    }
 
-
-def create_website_files(vault: MusicVault2044):
-    """إنشاء ملفات الموقع"""
+    buildTypes {
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
+        }
+    }
     
-    html_content = '''<!DOCTYPE html>
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    implementation 'androidx.webkit:webkit:1.8.0'
+}
+"""
+    
+    with open("app/build.gradle", "w", encoding="utf-8") as f:
+        f.write(app_build_gradle)
+    
+    # settings.gradle
+    settings_gradle = """pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+rootProject.name = "MusicPlayer2044"
+include ':app'
+"""
+    
+    with open("settings.gradle", "w", encoding="utf-8") as f:
+        f.write(settings_gradle)
+    
+    # gradle.properties
+    gradle_properties = """org.gradle.jvmargs=-Xmx2048m -Dfile.encoding=UTF-8
+android.useAndroidX=true
+android.nonTransitiveRClass=true
+"""
+    
+    with open("gradle.properties", "w", encoding="utf-8") as f:
+        f.write(gradle_properties)
+    
+    print(f"{Colors.GREEN}✓ Gradle files created{Colors.RESET}")
+    
+    # ==================== AndroidManifest.xml ====================
+    manifest = """<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_MEDIA_AUDIO" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="Music 2044"
+        android:roundIcon="@mipmap/ic_launcher"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.MusicPlayer2044"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="34">
+        
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
+"""
+    
+    with open("app/src/main/AndroidManifest.xml", "w", encoding="utf-8") as f:
+        f.write(manifest)
+    
+    # ==================== MainActivity.java ====================
+    main_activity = """package com.musicplayer2044.app;
+
+import android.app.Activity;
+import android.os.Bundle;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.view.WindowManager;
+import android.view.View;
+import android.content.pm.ActivityInfo;
+import android.os.Build;
+
+public class MainActivity extends Activity {
+    private WebView webView;
+    
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        // Full Screen
+        getWindow().setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN
+        );
+        
+        // Hide navigation bar
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
+                View.SYSTEM_UI_FLAG_FULLSCREEN
+            );
+        }
+        
+        webView = new WebView(this);
+        setContentView(webView);
+        
+        // Configure WebView
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webSettings.setDomStorageEnabled(true);
+        webSettings.setAllowFileAccess(true);
+        webSettings.setAllowContentAccess(true);
+        webSettings.setMediaPlaybackRequiresUserGesture(false);
+        webSettings.setCacheMode(WebSettings.LOAD_NO_CACHE);
+        webSettings.setUseWideViewPort(true);
+        webSettings.setLoadWithOverviewMode(true);
+        webSettings.setSupportZoom(false);
+        webSettings.setBuiltInZoomControls(false);
+        
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            webSettings.setAllowFileAccessFromFileURLs(true);
+            webSettings.setAllowUniversalAccessFromFileURLs(true);
+        }
+        
+        webView.setWebViewClient(new WebViewClient());
+        webView.setWebChromeClient(new WebChromeClient());
+        
+        // Load the app
+        webView.loadUrl("file:///android_asset/www/index.html");
+    }
+    
+    @Override
+    public void onBackPressed() {
+        if (webView.canGoBack()) {
+            webView.goBack();
+        } else {
+            super.onBackPressed();
+        }
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY |
+                View.SYSTEM_UI_FLAG_FULLSCREEN
+            );
+        }
+    }
+}
+"""
+    
+    with open("app/src/main/java/com/musicplayer2044/app/MainActivity.java", "w", encoding="utf-8") as f:
+        f.write(main_activity)
+    
+    print(f"{Colors.GREEN}✓ Android files created{Colors.RESET}")
+    
+    # ==================== ملفات Android Resources ====================
+    
+    # styles.xml
+    styles = """<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.MusicPlayer2044" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+        <item name="android:windowBackground">#FF0A0A0F</item>
+    </style>
+</resources>
+"""
+    
+    with open("app/src/main/res/values/styles.xml", "w", encoding="utf-8") as f:
+        f.write(styles)
+    
+    # colors.xml
+    colors = """<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary">#FF00FFCC</color>
+    <color name="secondary">#FFFF44AA</color>
+    <color name="background">#FF0A0A0F</color>
+</resources>
+"""
+    
+    with open("app/src/main/res/values/colors.xml", "w", encoding="utf-8") as f:
+        f.write(colors)
+    
+    # network_security_config.xml
+    network_config = """<?xml version="1.0" encoding="utf-8"?>
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true">
+        <trust-anchors>
+            <certificates src="system" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
+"""
+    
+    with open("app/src/main/res/xml/network_security_config.xml", "w", encoding="utf-8") as f:
+        f.write(network_config)
+    
+    print(f"{Colors.GREEN}✓ Resource files created{Colors.RESET}")
+    
+    # ==================== ملف HTML الرئيسي ====================
+    html_content = r'''<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Music Vault 2044</title>
+    <title>Music Player 2044</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -395,22 +349,33 @@ def create_website_files(vault: MusicVault2044):
         body {
             background: #0a0a0f;
             font-family: 'Cairo', sans-serif;
-            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             -webkit-tap-highlight-color: transparent;
             overflow: hidden;
             direction: rtl;
         }
 
+        /* Mesh Gradient Background */
         .bg-mesh {
-            position: fixed; inset: 0; z-index: 0;
+            position: fixed;
+            inset: 0;
+            z-index: 0;
             background: conic-gradient(from 0deg at 50% 50%, 
                 #0a0a2e 0%, #1a0a2e 25%, #0a1a2e 50%, #1a0a0a 75%, #0a0a2e 100%);
             animation: meshRotate 20s linear infinite;
         }
-        @keyframes meshRotate { to { filter: hue-rotate(360deg); } }
+        @keyframes meshRotate {
+            to { filter: hue-rotate(360deg); }
+        }
 
         .bg-orb {
-            position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.4;
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.4;
             animation: orbFloat 8s ease-in-out infinite;
         }
         .bg-orb:nth-child(1) { width: 300px; height: 300px; background: #ff44aa; top: -10%; left: -20%; animation-delay: 0s; }
@@ -424,138 +389,258 @@ def create_website_files(vault: MusicVault2044):
         }
 
         .app {
-            width: 100%; max-width: 440px; height: 100vh; max-height: 850px;
-            display: flex; flex-direction: column;
-            position: relative; z-index: 1; padding: 12px;
+            width: 100%;
+            max-width: 440px;
+            height: 100vh;
+            max-height: 850px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+            padding: 12px;
         }
 
+        /* ==================== HEADER ==================== */
         .header {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 8px 4px; margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 4px;
+            margin-bottom: 8px;
         }
-        .header-brand { display: flex; align-items: center; gap: 10px; }
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
         .logo {
-            width: 44px; height: 44px;
-            background: var(--glass); border: 1px solid var(--glass-border);
-            border-radius: 16px; display: flex; align-items: center; justify-content: center;
-            font-size: 20px; backdrop-filter: blur(20px);
+            width: 44px;
+            height: 44px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            backdrop-filter: blur(20px);
             box-shadow: var(--neumorph);
         }
         .header-text h1 {
-            font-size: 18px; font-weight: 800;
+            font-size: 18px;
+            font-weight: 800;
             background: linear-gradient(135deg, #00ffcc, #ff44aa);
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        .header-text span { font-size: 8px; color: var(--text2); letter-spacing: 2px; }
+        .header-text span {
+            font-size: 8px;
+            color: var(--text2);
+            letter-spacing: 2px;
+        }
 
         .vault-badge {
-            background: rgba(0,255,204,0.1); border: 1px solid rgba(0,255,204,0.3);
-            color: #00ffcc; padding: 4px 10px; border-radius: 20px;
-            font-size: 8px; font-weight: 600;
+            background: rgba(0,255,204,0.1);
+            border: 1px solid rgba(0,255,204,0.3);
+            color: #00ffcc;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 8px;
+            font-weight: 600;
         }
 
         .btn-glass {
-            width: 40px; height: 40px;
-            background: var(--glass); border: 1px solid var(--glass-border);
-            color: var(--text); cursor: pointer; border-radius: 14px;
-            font-size: 16px; display: flex; align-items: center; justify-content: center;
-            backdrop-filter: blur(20px); box-shadow: var(--neumorph);
+            width: 40px;
+            height: 40px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+            cursor: pointer;
+            border-radius: 14px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--neumorph);
             transition: all 0.3s;
         }
-        .btn-glass:active { transform: scale(0.9); box-shadow: inset 4px 4px 8px rgba(0,0,0,0.4); }
+        .btn-glass:active {
+            transform: scale(0.9);
+            box-shadow: inset 4px 4px 8px rgba(0,0,0,0.4);
+        }
 
+        /* ==================== NOW PLAYING ==================== */
         .now-playing {
-            text-align: center; padding: 20px 0;
+            text-align: center;
+            padding: 20px 0;
             position: relative;
         }
         .disc-container {
-            width: 200px; height: 200px; margin: 0 auto 20px; position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            position: relative;
         }
         .disc-outer-ring {
-            position: absolute; inset: -12px;
-            border: 2px solid rgba(255,255,255,0.1); border-radius: 50%;
+            position: absolute;
+            inset: -12px;
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 50%;
             animation: ringSpin 8s linear infinite;
         }
-        .disc-outer-ring:nth-child(2) { inset: -6px; border-style: dashed; animation-duration: 6s; animation-direction: reverse; }
-        @keyframes ringSpin { to { transform: rotate(360deg); } }
+        .disc-outer-ring:nth-child(2) {
+            inset: -6px;
+            border-style: dashed;
+            animation-duration: 6s;
+            animation-direction: reverse;
+        }
+        @keyframes ringSpin {
+            to { transform: rotate(360deg); }
+        }
 
         .disc {
-            width: 100%; height: 100%;
+            width: 100%;
+            height: 100%;
             background: linear-gradient(135deg, rgba(255,68,170,0.3), rgba(0,255,204,0.3));
-            border: 2px solid rgba(255,255,255,0.2); border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 70px; backdrop-filter: blur(20px);
+            border: 2px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 70px;
+            backdrop-filter: blur(20px);
             box-shadow: 0 20px 60px rgba(0,0,0,0.4), inset 0 0 40px rgba(255,255,255,0.05);
             animation: discSpin 4s linear infinite paused;
         }
-        .disc.playing { animation-play-state: running; }
-        @keyframes discSpin { to { transform: rotate(360deg); } }
+        .disc.playing {
+            animation-play-state: running;
+        }
+        @keyframes discSpin {
+            to { transform: rotate(360deg); }
+        }
 
         .disc-center {
-            width: 30px; height: 30px; background: #0a0a0f;
-            border: 3px solid rgba(255,255,255,0.3); border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            background: #0a0a0f;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
             position: absolute;
         }
 
         .song-name {
-            font-size: 18px; font-weight: 800; color: var(--text);
-            margin-bottom: 4px; text-shadow: 0 0 20px rgba(255,255,255,0.3);
+            font-size: 18px;
+            font-weight: 800;
+            color: var(--text);
+            margin-bottom: 4px;
+            text-shadow: 0 0 20px rgba(255,255,255,0.3);
         }
         .song-artist {
-            font-size: 11px; color: var(--text2); font-weight: 500;
+            font-size: 11px;
+            color: var(--text2);
+            font-weight: 500;
             letter-spacing: 1px;
         }
 
-        .progress-section { padding: 0 8px 12px; }
+        /* ==================== PROGRESS ==================== */
+        .progress-section {
+            padding: 0 8px 12px;
+        }
         .progress-track {
-            width: 100%; height: 4px;
-            background: rgba(255,255,255,0.1); border-radius: 2px;
-            cursor: pointer; position: relative;
+            width: 100%;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            cursor: pointer;
+            position: relative;
         }
         .progress-fill {
-            height: 100%; background: linear-gradient(90deg, #00ffcc, #ff44aa);
-            border-radius: 2px; width: 0%; transition: width 0.1s linear;
+            height: 100%;
+            background: linear-gradient(90deg, #00ffcc, #ff44aa);
+            border-radius: 2px;
+            width: 0%;
+            transition: width 0.1s linear;
             box-shadow: 0 0 10px rgba(0,255,204,0.5);
         }
         .time-row {
-            display: flex; justify-content: space-between;
-            font-size: 9px; color: var(--text2); margin-top: 6px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 9px;
+            color: var(--text2);
+            margin-top: 6px;
         }
 
+        /* ==================== CONTROLS ==================== */
         .controls-section {
-            display: flex; align-items: center; justify-content: center;
-            gap: 16px; padding: 8px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            padding: 8px 0;
         }
         .ctrl-glass {
-            width: 44px; height: 44px;
-            background: var(--glass); border: 1px solid var(--glass-border);
-            color: var(--text); cursor: pointer; border-radius: 16px;
-            font-size: 15px; display: flex; align-items: center; justify-content: center;
-            backdrop-filter: blur(20px); box-shadow: var(--neumorph);
+            width: 44px;
+            height: 44px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+            cursor: pointer;
+            border-radius: 16px;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(20px);
+            box-shadow: var(--neumorph);
             transition: all 0.3s;
         }
-        .ctrl-glass:active { transform: scale(0.9); box-shadow: inset 4px 4px 8px rgba(0,0,0,0.4); }
-        .ctrl-glass.active { border-color: #00ffcc; color: #00ffcc; box-shadow: 0 0 20px rgba(0,255,204,0.3); }
+        .ctrl-glass:active {
+            transform: scale(0.9);
+            box-shadow: inset 4px 4px 8px rgba(0,0,0,0.4);
+        }
+        .ctrl-glass.active {
+            border-color: #00ffcc;
+            color: #00ffcc;
+            box-shadow: 0 0 20px rgba(0,255,204,0.3);
+        }
 
         .btn-play-big {
-            width: 64px; height: 64px;
+            width: 64px;
+            height: 64px;
             background: linear-gradient(135deg, #00ffcc, #ff44aa);
-            border: none; color: #000; cursor: pointer; border-radius: 20px;
-            font-size: 24px; display: flex; align-items: center; justify-content: center;
+            border: none;
+            color: #000;
+            cursor: pointer;
+            border-radius: 20px;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             box-shadow: 0 10px 30px rgba(0,255,204,0.3), 0 0 40px rgba(255,68,170,0.2);
             transition: all 0.3s;
         }
-        .btn-play-big:active { transform: scale(0.9); }
+        .btn-play-big:active {
+            transform: scale(0.9);
+        }
 
+        /* ==================== VISUALIZER ==================== */
         .viz-container {
-            display: flex; align-items: center; justify-content: center;
-            gap: 4px; height: 60px; padding: 10px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+            height: 60px;
+            padding: 10px 0;
         }
         .viz-ring {
-            width: 50px; height: 50px; border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
             border: 2px solid rgba(255,255,255,0.2);
-            position: relative; animation: vizPulse 1s ease-in-out infinite;
+            position: relative;
+            animation: vizPulse 1s ease-in-out infinite;
         }
         @keyframes vizPulse {
             0%, 100% { transform: scale(0.8); opacity: 0.5; }
@@ -567,76 +652,128 @@ def create_website_files(vault: MusicVault2044):
         .viz-ring:nth-child(4) { animation-delay: 0.6s; border-color: #ff44aa; }
         .viz-ring:nth-child(5) { animation-delay: 0.8s; border-color: #ffaa00; }
 
+        /* ==================== PLAYLIST ==================== */
         .playlist-header {
-            display: flex; justify-content: space-between; align-items: center;
-            padding: 8px 4px; margin-top: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 4px;
+            margin-top: 4px;
         }
         .playlist-title {
-            font-size: 11px; font-weight: 700; color: var(--text);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--text);
             letter-spacing: 1px;
         }
         .btn-upload-glass {
             padding: 7px 14px;
-            background: var(--glass); border: 1px solid var(--glass-border);
-            color: var(--text); cursor: pointer; border-radius: 20px;
-            font-size: 9px; font-family: 'Cairo', sans-serif; font-weight: 600;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+            cursor: pointer;
+            border-radius: 20px;
+            font-size: 9px;
+            font-family: 'Cairo', sans-serif;
+            font-weight: 600;
             backdrop-filter: blur(20px);
         }
 
         .playlist {
-            flex: 1; overflow-y: auto; padding: 0 2px;
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 2px;
         }
-        .playlist::-webkit-scrollbar { width: 3px; }
-        .playlist::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+        .playlist::-webkit-scrollbar {
+            width: 3px;
+        }
+        .playlist::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+        }
 
         .song-card {
-            display: flex; align-items: center; gap: 10px; padding: 10px 12px;
-            background: var(--glass); border: 1px solid var(--glass-border);
-            border-radius: 16px; margin-bottom: 6px; cursor: pointer;
-            backdrop-filter: blur(20px); transition: all 0.3s;
-            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            margin-bottom: 6px;
+            cursor: pointer;
+            backdrop-filter: blur(20px);
+            transition: all 0.3s;
         }
-        .song-card:hover { border-color: rgba(255,255,255,0.3); }
-        .song-card.active { border-color: #00ffcc; box-shadow: 0 0 15px rgba(0,255,204,0.2); }
-        .song-card .s-icon { font-size: 20px; }
-        .song-card .s-info { flex: 1; min-width: 0; }
-        .song-card .s-name { font-size: 11px; font-weight: 600; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .song-card .s-artist { font-size: 8px; color: var(--text2); }
-        .song-card .s-dur { font-size: 9px; color: var(--text2); }
-        .song-card .s-del { color: #ff4466; cursor: pointer; opacity: 0.5; transition: 0.3s; }
-        .song-card .s-del:hover { opacity: 1; }
-
-        .saved-badge {
-            position: absolute; top: 4px; right: 4px;
-            background: rgba(0,255,204,0.2); color: #00ffcc;
-            font-size: 7px; padding: 2px 6px; border-radius: 10px;
+        .song-card:hover {
+            border-color: rgba(255,255,255,0.3);
+        }
+        .song-card.active {
+            border-color: #00ffcc;
+            box-shadow: 0 0 15px rgba(0,255,204,0.2);
+        }
+        .song-card .s-icon {
+            font-size: 20px;
+        }
+        .song-card .s-info {
+            flex: 1;
+            min-width: 0;
+        }
+        .song-card .s-name {
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--text);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .song-card .s-dur {
+            font-size: 9px;
+            color: var(--text2);
+        }
+        .song-card .s-del {
+            color: #ff4466;
+            cursor: pointer;
+            opacity: 0.5;
+            transition: 0.3s;
+        }
+        .song-card .s-del:hover {
+            opacity: 1;
         }
 
-        .empty-state { text-align: center; padding: 30px; color: rgba(255,255,255,0.2); }
-        .empty-state .icon { font-size: 40px; display: block; margin-bottom: 8px; }
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: rgba(255,255,255,0.2);
+        }
+        .empty-state .icon {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 8px;
+        }
 
-        input[type="file"] { display: none; }
+        input[type="file"] {
+            display: none;
+        }
 
         .toast {
-            position: fixed; bottom: 30px; left: 50%;
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
             transform: translateX(-50%) translateY(120px);
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(20px);
-            border: 1px solid rgba(255,255,255,0.2); color: #fff;
-            padding: 12px 24px; border-radius: 30px; font-size: 10px;
-            z-index: 300; transition: transform 0.4s; font-family: 'Cairo', sans-serif;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 30px;
+            font-size: 10px;
+            z-index: 300;
+            transition: transform 0.4s;
+            font-family: 'Cairo', sans-serif;
         }
-        .toast.show { transform: translateX(-50%) translateY(0); }
-
-        .sync-indicator {
-            position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
-            background: rgba(0,255,204,0.2); border: 1px solid rgba(0,255,204,0.3);
-            color: #00ffcc; padding: 6px 16px; border-radius: 20px;
-            font-size: 9px; z-index: 200; display: none;
-            animation: syncPulse 2s ease-in-out infinite;
-        }
-        @keyframes syncPulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
         }
     </style>
 </head>
@@ -646,18 +783,16 @@ def create_website_files(vault: MusicVault2044):
     <div class="bg-orb"></div>
     <div class="bg-orb"></div>
 
-    <div class="sync-indicator" id="syncIndicator">💾 جاري الحفظ في Vault...</div>
-
     <div class="app">
         <div class="header">
             <div class="header-brand">
                 <div class="logo">🎵</div>
                 <div class="header-text">
-                    <h1>Music Vault</h1>
-                    <span>✦ 2044 Edition ✦</span>
+                    <h1>Music 2044</h1>
+                    <span>✦ Future Edition ✦</span>
                 </div>
             </div>
-            <div class="vault-badge">💾 VAULT</div>
+            <div class="vault-badge">💾 APK</div>
         </div>
 
         <div class="now-playing">
@@ -669,7 +804,7 @@ def create_website_files(vault: MusicVault2044):
                 </div>
             </div>
             <div class="song-name" id="songTitle">اختر أغنية</div>
-            <div class="song-artist" id="songArtist">Music Vault 2044</div>
+            <div class="song-artist" id="songArtist">Music Player 2044</div>
         </div>
 
         <div class="progress-section">
@@ -691,8 +826,11 @@ def create_website_files(vault: MusicVault2044):
         </div>
 
         <div class="viz-container" id="visualizer">
-            <div class="viz-ring"></div><div class="viz-ring"></div><div class="viz-ring"></div>
-            <div class="viz-ring"></div><div class="viz-ring"></div>
+            <div class="viz-ring"></div>
+            <div class="viz-ring"></div>
+            <div class="viz-ring"></div>
+            <div class="viz-ring"></div>
+            <div class="viz-ring"></div>
         </div>
 
         <div class="playlist-header">
@@ -709,202 +847,127 @@ def create_website_files(vault: MusicVault2044):
     <div class="toast" id="toast"></div>
 
     <script>
-        // ==================== Music Vault 2044 - Client ====================
-        
-        const API_BASE = '';
         let playlist = [], currentIndex = -1;
         let audio = new Audio();
         let isPlaying = false, isShuffle = false, isRepeat = false;
-        let savedSongs = new Set(); // تتبع الأغاني المحفوظة
 
-        // تحميل الأغاني المحفوظة من السيرفر عند البداية
-        async function loadSavedSongs() {
-            try {
-                const response = await fetch(`${API_BASE}/api/songs`);
-                const data = await response.json();
-                
-                data.songs.forEach(song => {
-                    playlist.push({
-                        id: song.id,
-                        name: song.name,
-                        artist: song.artist,
-                        size: song.size,
-                        streamUrl: `${API_BASE}/api/stream/${song.id}`,
-                        isSaved: true
-                    });
-                    savedSongs.add(song.id);
-                });
-                
-                renderPlaylist();
-                if (playlist.length > 0 && currentIndex === -1) {
-                    loadSong(0);
-                }
-            } catch (e) {
-                console.log('No saved songs found or server not available');
-            }
-        }
-
-        // حفظ أغنية في السيرفر
-        async function saveToVault(songData, blobUrl) {
-            showSyncIndicator(true);
-            try {
-                // تحويل blob إلى base64
-                const response = await fetch(blobUrl);
-                const blob = await response.blob();
-                const reader = new FileReader();
-                
-                const base64Data = await new Promise((resolve) => {
-                    reader.onloadend = () => resolve(reader.result);
-                    reader.readAsDataURL(blob);
-                });
-                
-                const saveResponse = await fetch(`${API_BASE}/api/upload`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        id: songData.id,
-                        name: songData.name,
-                        artist: songData.artist || 'Unknown Artist',
-                        data: base64Data
-                    })
-                });
-                
-                const result = await saveResponse.json();
-                if (result.status === 'success') {
-                    savedSongs.add(songData.id);
-                    showToast('💾 تم الحفظ في Vault!');
-                    renderPlaylist();
-                }
-            } catch (e) {
-                console.error('Save to vault failed:', e);
-                showToast('⚠ فشل الحفظ في Vault');
-            } finally {
-                showSyncIndicator(false);
-            }
-        }
-
-        // حذف أغنية من السيرفر
-        async function deleteFromVault(songId) {
-            try {
-                await fetch(`${API_BASE}/api/delete`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: songId })
-                });
-                savedSongs.delete(songId);
-            } catch (e) {
-                console.error('Delete from vault failed:', e);
-            }
-        }
-
-        function showSyncIndicator(show) {
-            document.getElementById('syncIndicator').style.display = show ? 'block' : 'none';
-        }
-
-        // ==================== Audio Controls ====================
-        
         audio.addEventListener('timeupdate', () => {
             if (audio.duration) {
                 document.getElementById('progressFill').style.width = (audio.currentTime/audio.duration*100) + '%';
                 document.getElementById('currentTime').textContent = formatTime(audio.currentTime);
             }
         });
+        
         audio.addEventListener('loadedmetadata', () => {
             document.getElementById('totalTime').textContent = formatTime(audio.duration);
         });
+        
         audio.addEventListener('ended', () => { isRepeat ? audio.play() : nextSong(); });
+        
         audio.addEventListener('play', () => {
             isPlaying = true;
             document.getElementById('playBtn').textContent = '⏸';
             document.getElementById('disc').classList.add('playing');
         });
+        
         audio.addEventListener('pause', () => {
             isPlaying = false;
             document.getElementById('playBtn').textContent = '▶';
             document.getElementById('disc').classList.remove('playing');
         });
 
-        function formatTime(s) { const m=Math.floor(s/60), sec=Math.floor(s%60); return m+':'+(sec<10?'0':'')+sec; }
+        function formatTime(s) { 
+            const m=Math.floor(s/60), sec=Math.floor(s%60); 
+            return m+':'+(sec<10?'0':'')+sec; 
+        }
 
         function loadSong(index) {
             if (index<0||index>=playlist.length) return;
             currentIndex=index;
             const s=playlist[index];
-            
-            // استخدام stream URL إذا كانت محفوظة، وإلا استخدام data URL
-            audio.src = s.streamUrl || s.data;
+            audio.src=s.data;
             document.getElementById('songTitle').textContent=s.name;
-            document.getElementById('songArtist').textContent=s.artist || s.size;
+            document.getElementById('songArtist').textContent=s.size;
             document.getElementById('disc').style.background='linear-gradient(135deg, rgba(255,68,170,0.3), rgba(0,255,204,0.3))';
             document.getElementById('disc').innerHTML='<div class="disc-center"></div>';
             renderPlaylist();
             audio.play();
         }
 
-        function togglePlay() { if(!audio.src&&playlist.length>0){loadSong(0);return;} isPlaying?audio.pause():audio.play(); }
-        function nextSong() { if(!playlist.length)return; let n=isShuffle?Math.floor(Math.random()*playlist.length):currentIndex+1; if(n>=playlist.length)n=0; loadSong(n); }
-        function prevSong() { if(!playlist.length)return; let p=currentIndex-1; if(p<0)p=playlist.length-1; loadSong(p); }
-        function toggleShuffle() { isShuffle=!isShuffle; document.getElementById('shuffleBtn').classList.toggle('active',isShuffle); showToast(isShuffle?'🔀 عشوائي':'🔀 ترتيب'); }
-        function toggleRepeat() { isRepeat=!isRepeat; document.getElementById('repeatBtn').classList.toggle('active',isRepeat); showToast(isRepeat?'🔁 تكرار':'🔁 عادي'); }
-        function seek(e) { if(!audio.duration)return; const r=document.getElementById('progressTrack').getBoundingClientRect(); audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration; }
+        function togglePlay() { 
+            if(!audio.src&&playlist.length>0){loadSong(0);return;} 
+            isPlaying?audio.pause():audio.play(); 
+        }
+        
+        function nextSong() { 
+            if(!playlist.length)return; 
+            let n=isShuffle?Math.floor(Math.random()*playlist.length):currentIndex+1; 
+            if(n>=playlist.length)n=0; 
+            loadSong(n); 
+        }
+        
+        function prevSong() { 
+            if(!playlist.length)return; 
+            let p=currentIndex-1; 
+            if(p<0)p=playlist.length-1; 
+            loadSong(p); 
+        }
+        
+        function toggleShuffle() { 
+            isShuffle=!isShuffle; 
+            document.getElementById('shuffleBtn').classList.toggle('active',isShuffle); 
+            showToast(isShuffle?'🔀 عشوائي':'🔀 ترتيب'); 
+        }
+        
+        function toggleRepeat() { 
+            isRepeat=!isRepeat; 
+            document.getElementById('repeatBtn').classList.toggle('active',isRepeat); 
+            showToast(isRepeat?'🔁 تكرار':'🔁 عادي'); 
+        }
+        
+        function seek(e) { 
+            if(!audio.duration)return; 
+            const r=document.getElementById('progressTrack').getBoundingClientRect(); 
+            audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration; 
+        }
 
         function addFiles() {
             const files=document.getElementById('fileInput').files;
             if(!files.length)return;
-            
             Array.from(files).forEach(f=>{
                 const r=new FileReader();
-                r.onload=async function(e){
-                    const songId = Date.now().toString(36) + Math.random().toString(36).substr(2);
-                    const songData = {
-                        id: songId,
-                        name: f.name.replace(/\.[^/.]+$/,""),
-                        artist: 'Unknown Artist',
-                        size: formatSize(f.size),
-                        data: e.target.result
-                    };
-                    
-                    playlist.push(songData);
+                r.onload=function(e){
+                    playlist.push({
+                        name:f.name.replace(/\.[^/.]+$/,""),
+                        size:formatSize(f.size),
+                        data:e.target.result,
+                        id:Date.now()+Math.random()
+                    });
                     renderPlaylist();
-                    
-                    if(playlist.length===1) loadSong(0);
-                    
-                    // حفظ تلقائي في Vault
-                    await saveToVault(songData, e.target.result);
+                    if(playlist.length===1)loadSong(0);
                 };
                 r.readAsDataURL(f);
             });
-            
             document.getElementById('fileInput').value='';
             showToast('✅ '+files.length+' أغنية');
         }
 
-        function formatSize(b) { return b>1048576?(b/1048576).toFixed(1)+' MB':(b/1024).toFixed(1)+' KB'; }
+        function formatSize(b) { 
+            return b>1048576?(b/1048576).toFixed(1)+' MB':(b/1024).toFixed(1)+' KB'; 
+        }
 
-        async function deleteSong(index) {
-            const song = playlist[index];
-            const wasPlaying = currentIndex === index;
-            
-            // حذف من السيرفر إذا كانت محفوظة
-            if (song.isSaved || savedSongs.has(song.id)) {
-                await deleteFromVault(song.id);
-            }
-            
+        function deleteSong(index) {
+            const wasPlaying=currentIndex===index;
             playlist.splice(index,1);
-            
             if(wasPlaying){
-                audio.pause();
-                audio.src='';
+                audio.pause();audio.src='';
                 document.getElementById('songTitle').textContent='اختر أغنية';
-                document.getElementById('songArtist').textContent='Music Vault 2044';
-                currentIndex=-1;
-                isPlaying=false;
+                document.getElementById('songArtist').textContent='Music Player 2044';
+                currentIndex=-1;isPlaying=false;
                 document.getElementById('playBtn').textContent='▶';
                 document.getElementById('disc').classList.remove('playing');
-            } else if(currentIndex>index) {
-                currentIndex--;
             }
-            
+            else if(currentIndex>index)currentIndex--;
             renderPlaylist();
             showToast('🗑 تم الحذف');
         }
@@ -915,56 +978,88 @@ def create_website_files(vault: MusicVault2044):
                 area.innerHTML='<div class="empty-state"><span class="icon">🎵</span><span>اسحب الملفات هنا</span></div>';
                 return;
             }
-            
             area.innerHTML=playlist.map((s,i)=>`
                 <div class="song-card ${i===currentIndex?'active':''}" onclick="loadSong(${i})">
-                    ${(s.isSaved || savedSongs.has(s.id)) ? '<span class="saved-badge">💾 Vault</span>' : ''}
                     <span class="s-icon">${i===currentIndex&&isPlaying?'🔊':'🎵'}</span>
-                    <div class="s-info">
-                        <div class="s-name">${s.name}</div>
-                        <div class="s-artist">${s.artist || ''}</div>
-                    </div>
+                    <div class="s-info"><div class="s-name">${s.name}</div></div>
                     <div class="s-dur">${s.size}</div>
                     <span class="s-del" onclick="event.stopPropagation();deleteSong(${i})">🗑</span>
                 </div>
             `).join('');
         }
 
-        function showToast(msg) {
-            const t=document.getElementById('toast');
-            t.textContent=msg;
-            t.classList.add('show');
-            setTimeout(()=>t.classList.remove('show'),2000);
+        function showToast(msg) { 
+            const t=document.getElementById('toast'); 
+            t.textContent=msg; 
+            t.classList.add('show'); 
+            setTimeout(()=>t.classList.remove('show'),2000); 
         }
 
-        // تحميل الأغاني المحفوظة عند البداية
-        loadSavedSongs();
         renderPlaylist();
     </script>
 </body>
 </html>'''
     
-    # كتابة ملف HTML
-    index_path = vault.www_dir / "index.html"
-    with open(index_path, "w", encoding="utf-8") as f:
+    with open("app/src/main/assets/www/index.html", "w", encoding="utf-8") as f:
         f.write(html_content)
     
-    return index_path
-
-
-def main():
-    """الدالة الرئيسية"""
-    vault = MusicVault2044(music_dir="music_vault_2044", port=2044)
-    vault.print_banner()
+    # ==================== gradle-wrapper.properties ====================
+    gradle_wrapper_props = """distributionBase=GRADLE_USER_HOME
+distributionPath=wrapper/dists
+distributionUrl=https\://services.gradle.org/distributions/gradle-8.5-bin.zip
+networkTimeout=10000
+validateDistributionUrl=true
+zipStoreBase=GRADLE_USER_HOME
+zipStorePath=wrapper/dists
+"""
     
-    # إنشاء ملفات الموقع
-    index_path = create_website_files(vault)
-    print(f"{Colors.GREEN}✓ Website created: {index_path}{Colors.RESET}")
+    with open("gradle/wrapper/gradle-wrapper.properties", "w", encoding="utf-8") as f:
+        f.write(gradle_wrapper_props)
     
-    # تشغيل الخادم
-    server = MusicVaultServer(vault)
-    server.start()
+    # ==================== إنشاء أيقونة Launcher ====================
+    # أيقونة بسيطة (نقطة ملونة)
+    icon_svg = """<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FF00FFCC"
+        android:pathData="M54,54m-40,0a40,40 0,1 1,80 0a40,40 0,1 1,-80 0"/>
+    <path
+        android:fillColor="#FF0A0A0F"
+        android:pathData="M54,54m-20,0a20,20 0,1 1,40 0a20,20 0,1 1,-40 0"/>
+    <path
+        android:fillColor="#FFFF44AA"
+        android:pathData="M54,54m-8,0a8,8 0,1 1,16 0a8,8 0,1 1,-16 0"/>
+</vector>
+"""
+    
+    with open("app/src/main/res/drawable/ic_launcher_foreground.xml", "w", encoding="utf-8") as f:
+        f.write(icon_svg)
+    
+    # ==================== proguard-rules.pro ====================
+    proguard = """# Music Player 2044 ProGuard Rules
+-keep class com.musicplayer2044.app.** { *; }
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable
+"""
+    
+    with open("app/proguard-rules.pro", "w", encoding="utf-8") as f:
+        f.write(proguard)
+    
+    # ==================== إحصائيات ====================
+    total_files = sum(1 for _ in Path(".").rglob("*") if _.is_file())
+    total_size = sum(f.stat().st_size for f in Path(".").rglob("*") if f.is_file())
+    
+    print(f"\n{Colors.BOLD}{Colors.CYAN}{'═' * 50}{Colors.RESET}")
+    print(f"{Colors.BOLD}{Colors.PURPLE}  🎵 Music Player 2044 - Build Complete!{Colors.RESET}")
+    print(f"{Colors.GREEN}  ✓ Total Files: {total_files}{Colors.RESET}")
+    print(f"{Colors.GREEN}  ✓ Total Size: {total_size/1024:.1f} KB{Colors.RESET}")
+    print(f"{Colors.CYAN}  ✓ Ready for APK Build!{Colors.RESET}")
+    print(f"{Colors.BOLD}{Colors.CYAN}{'═' * 50}{Colors.RESET}\n")
 
 
 if __name__ == "__main__":
-    main()
+    create_app_files()
