@@ -1,0 +1,2 @@
+-keep class com.tv2044.app.** { *; }
+-keepattributes *Annotation*
