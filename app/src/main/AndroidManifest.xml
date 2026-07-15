@@ -1,26 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
-
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-feature android:name="android.hardware.tv.tuner" android:required="false" />
-
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="TV Antenna 2044"
-        android:roundIcon="@mipmap/ic_launcher"
+        android:label="TV 2044"
         android:supportsRtl="true"
-        android:theme="@style/Theme.TVAntenna2044"
-        android:usesCleartextTraffic="true"
-        android:hardwareAccelerated="true"
-        tools:targetApi="34">
-
+        android:theme="@style/Theme.TV2044"
+        android:usesCleartextTraffic="true">
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
-            android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

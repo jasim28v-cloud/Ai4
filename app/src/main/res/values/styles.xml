@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.TVAntenna2044" parent="android:Theme.Material.NoActionBar">
+    <style name="Theme.TV2044" parent="android:Theme.Material.NoActionBar">
         <item name="android:windowFullscreen">true</item>
-        <item name="android:windowNoTitle">true</item>
         <item name="android:statusBarColor">@android:color/black</item>
         <item name="android:navigationBarColor">@android:color/black</item>
-        <item name="android:windowBackground">#FF08080C</item>
     </style>
 </resources>

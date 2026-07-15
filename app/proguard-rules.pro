@@ -1,3 +1,2 @@
--keep class com.tvantenna2044.app.** { *; }
+-keep class com.tv2044.app.** { *; }
 -keepattributes *Annotation*
--keepattributes SourceFile,LineNumberTable

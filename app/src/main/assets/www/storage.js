@@ -1,12 +1,10 @@
-const KEYS={channels:'tv2044_channels',favorites:'tv2044_favs',lastChannel:'tv2044_last',volume:'tv2044_vol'};
-function saveData(key,data){try{localStorage.setItem(key,JSON.stringify(data));return true}catch(e){return false}}
-function loadData(key,def=null){try{const d=localStorage.getItem(key);return d?JSON.parse(d):def}catch(e){return def}}
-function getChannels(){return loadData(KEYS.channels,[])}
-function saveChannels(chs){saveData(KEYS.channels,chs)}
-function getFavorites(){return loadData(KEYS.favorites,[])}
-function toggleFavChannel(num){let f=getFavorites();const i=f.indexOf(num);i>-1?f.splice(i,1):f.push(num);saveData(KEYS.favorites,f);return f}
-function isFavChannel(num){return getFavorites().includes(num)}
-function saveLastChannel(num){saveData(KEYS.lastChannel,num)}
-function getLastChannel(){return loadData(KEYS.lastChannel,1)}
-function saveVolume(v){saveData(KEYS.volume,v)}
-function getVolume(){return loadData(KEYS.volume,70)}
+const K={ch:'tv2044_ch',fav:'tv2044_fav',last:'tv2044_last'};
+function save(k,v){try{localStorage.setItem(k,JSON.stringify(v));return 1}catch(e){return 0}}
+function load(k,d=null){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function getChannels(){return load(K.ch,[])}
+function saveChannels(ch){save(K.ch,ch)}
+function getFavorites(){return load(K.fav,[])}
+function toggleFav(n){let f=getFavorites();const i=f.indexOf(n);i>-1?f.splice(i,1):f.push(n);save(K.fav,f);return f}
+function isFav(n){return getFavorites().includes(n)}
+function saveLast(n){save(K.last,n)}
+function getLast(){return load(K.last,0)}

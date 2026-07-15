@@ -1,0 +1,18 @@
+let channels=[],ci=0,on=false,scanning=false,cancel=false;
+function init(){channels=getChannels();if(channels.length){ci=getLast();if(ci>=channels.length)ci=0}update();render()}
+function toggleTV(){on?off():turnOn()}
+function turnOn(){on=true;document.body.classList.add('tv-on');document.getElementById('powerBtn').innerText='⏹';update();show('📺 تم التشغيل')}
+function off(){on=false;document.body.classList.remove('tv-on');document.getElementById('powerBtn').innerText='▶';document.getElementById('channelNum').innerText='--';document.getElementById('channelName').innerText='TV 2044';document.getElementById('channelInfo').innerText='📡 متوقف';show('📺 تم الإيقاف')}
+function update(){if(!channels.length){document.getElementById('channelNum').innerText='--';document.getElementById('channelName').innerText='لا قنوات';return}const c=channels[ci];document.getElementById('channelNum').innerText=c.num;document.getElementById('channelName').innerText=c.name;document.getElementById('channelInfo').innerText=c.country;updateSignal();saveLast(ci)}
+function nextChannel(){if(!channels.length)return;ci=(ci+1)%channels.length;update();show(channels[ci].name)}
+function prevChannel(){if(!channels.length)return;ci=(ci-1+channels.length)%channels.length;update();show(channels[ci].name)}
+function selectChannel(i){ci=i;update()}
+function scanChannels(){if(scanning)return;scanning=true;cancel=false;document.getElementById('scanOverlay').classList.add('show');document.getElementById('scanFill').style.width='0%';document.getElementById('scanCount').innerText='0';setTimeout(()=>simulate(0),200)}
+function simulate(i){if(cancel||i>=15){done();return}const p=((i+1)/15)*100;document.getElementById('scanFill').style.width=p+'%';document.getElementById('scanCount').innerText=(i+1)+' قناة';setTimeout(()=>simulate(i+1),100)}
+function done(){scanning=false;document.getElementById('scanOverlay').classList.remove('show');if(!cancel){channels=[{name:'القناة الأولى',country:'🇸🇦',num:1},{name:'MBC 1',country:'🇸🇦',num:2},{name:'MBC 2',country:'🇸🇦',num:3},{name:'MBC 3',country:'🇸🇦',num:4},{name:'MBC 4',country:'🇸🇦',num:5},{name:'MBC Action',country:'🇸🇦',num:6},{name:'MBC Max',country:'🇸🇦',num:7},{name:'Al Jazeera',country:'🇶🇦',num:8},{name:'BBC Arabic',country:'🇬🇧',num:9},{name:'CN Arabia',country:'🇸🇦',num:10},{name:'Rotana Cinema',country:'🇸🇦',num:11},{name:'Rotana Music',country:'🇸🇦',num:12},{name:'Rotana Khalijia',country:'🇸🇦',num:13},{name:'Spacetoon',country:'🇸🇦',num:14},{name:'Cartoon Network',country:'🇺🇸',num:15}];saveChannels(channels);ci=0;update();render();show('✅ '+channels.length+' قناة')}}
+function cancelScan(){cancel=true;done()}
+function toggleFav(){if(!channels.length)return;const c=channels[ci];toggleFav(c.num);render();show(isFav(c.num)?'⭐ مفضلة':'🗑 أزيلت')}
+function updateSignal(){const s=on?Math.floor(Math.random()*3)+3:0;document.querySelectorAll('.s-bar').forEach((b,i)=>{b.classList.toggle('on',i<s)})}
+function render(){const g=document.getElementById('channelsGrid');if(!channels.length){g.innerHTML='<div class="empty-state">📺<br>لا توجد قنوات<br><small>اضغط مسح القنوات</small></div>';return}g.innerHTML=channels.map((c,i)=>`<div class="channel-card ${i===ci?'active':''}" onclick="selectChannel(${i})"><div class="ch-num">${c.num}</div><div class="ch-name">${c.name}</div><div class="ch-country">${c.country} ${isFav(c.num)?'⭐':''}</div></div>`).join('')}
+function show(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200)}
+setInterval(()=>{if(on)updateSignal()},1500);

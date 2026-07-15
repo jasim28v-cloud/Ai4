@@ -1,1 +1,1 @@
-initParticles();initTV();document.getElementById('volumeSlider').value=getVolume();
+initParticles();init();

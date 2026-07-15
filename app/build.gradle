@@ -1,9 +1,9 @@
 plugins { id 'com.android.application' }
 android {
-    namespace 'com.tvantenna2044.app'
+    namespace 'com.tv2044.app'
     compileSdk 34
     defaultConfig {
-        applicationId "com.tvantenna2044.app"
+        applicationId "com.tv2044.app"
         minSdk 21
         targetSdk 34
         versionCode 1
@@ -11,7 +11,6 @@ android {
     }
     buildTypes {
         release { minifyEnabled true; proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro' }
-        debug { debuggable true }
     }
     compileOptions { sourceCompatibility JavaVersion.VERSION_1_8; targetCompatibility JavaVersion.VERSION_1_8 }
 }

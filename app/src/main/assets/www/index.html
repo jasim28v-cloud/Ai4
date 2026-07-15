@@ -2,9 +2,9 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>📺 TV Antenna 2044</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Playfair+Display:wght@600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -16,18 +16,13 @@
         <div class="header">
             <div class="header-left">
                 <div class="logo">📺</div>
-                <div class="header-text"><h1>TV Antenna 2044</h1><span>✦ Digital Terrestrial ✦</span></div>
+                <div class="header-text"><h1>TV Antenna 2044</h1><span>✦ Digital TV ✦</span></div>
             </div>
-            <div class="header-badge" id="statusBadge">📡 DVB-T</div>
-        </div>
-
-        <div class="headphone-alert" id="headphoneAlert">
-            <div class="alert-icon">🎧</div>
-            <div class="alert-text"><strong>الرجاء توصيل السماعة</strong><p>السماعة تعمل كهوائي لاستقبال القنوات</p></div>
+            <div class="header-badge">📡 DVB-T</div>
         </div>
 
         <div class="tv-device">
-            <div class="antenna-crystal">
+            <div class="antenna">
                 <div class="antenna-pole"></div>
                 <div class="antenna-v"></div>
             </div>
@@ -35,73 +30,50 @@
                 <div class="tv-frame">
                     <div class="tv-screen" id="tvScreen">
                         <div class="tv-static" id="tvStatic"></div>
-                        <div class="tv-info-overlay">
-                            <div class="channel-number" id="channelNumber">--</div>
-                            <div class="channel-name" id="channelName">TV Antenna 2044</div>
-                            <div class="channel-country" id="channelCountry">📡 جاهز للاستقبال</div>
-                        </div>
-                        <div class="signal-badge" id="signalBadge">
-                            <span class="sig-icon">📶</span>
-                            <span class="sig-val" id="sigVal">0%</span>
+                        <div class="tv-info">
+                            <div class="channel-num" id="channelNum">--</div>
+                            <div class="channel-name" id="channelName">TV 2044</div>
+                            <div class="channel-info" id="channelInfo">📡 جاهز</div>
                         </div>
                     </div>
                 </div>
-                <div class="tv-controls">
-                    <button class="ctrl-gold" onclick="prevChannel()">⏮</button>
-                    <button class="ctrl-play-gold" id="powerBtn" onclick="toggleTV()">
-                        <span id="powerIcon">▶</span>
-                    </button>
-                    <button class="ctrl-gold" onclick="nextChannel()">⏭</button>
+                <div class="tv-buttons">
+                    <button class="btn-gold" onclick="prevChannel()">⏮</button>
+                    <button class="btn-power" id="powerBtn" onclick="toggleTV()">▶</button>
+                    <button class="btn-gold" onclick="nextChannel()">⏭</button>
                 </div>
                 <div class="tv-actions">
                     <button class="btn-tune" onclick="scanChannels()">🔍 مسح القنوات</button>
-                    <button class="btn-tune" onclick="toggleFavorite()">⭐ حفظ</button>
+                    <button class="btn-tune" onclick="toggleFav()">⭐ حفظ</button>
                 </div>
-                <div class="tv-knobs">
-                    <div class="volume-wrap">
-                        <span class="vol-icon">🔈</span>
-                        <input type="range" class="gold-slider" id="volumeSlider" min="0" max="100" value="70" oninput="setVolume(this.value)">
-                        <span class="vol-icon">🔊</span>
-                    </div>
+                <div class="signal-bars" id="signalBars">
+                    <span class="s-bar"></span><span class="s-bar"></span><span class="s-bar"></span><span class="s-bar"></span><span class="s-bar"></span>
                 </div>
-                <div class="signal-meter">
-                    <div class="signal-label">📶 قوة الإشارة</div>
-                    <div class="signal-bars">
-                        <span class="sig-bar" id="sig1"></span><span class="sig-bar" id="sig2"></span>
-                        <span class="sig-bar" id="sig3"></span><span class="sig-bar" id="sig4"></span>
-                        <span class="sig-bar" id="sig5"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="tv-feet">
-                <div class="foot-gold"></div>
-                <div class="foot-gold"></div>
             </div>
         </div>
 
         <div class="channels-section">
-            <div class="section-header"><h3>📋 القنوات</h3></div>
+            <h3>📋 القنوات</h3>
             <div class="channels-grid" id="channelsGrid">
-                <div class="empty-state"><span class="empty-icon">📺</span><p>لا توجد قنوات</p><span style="font-size:9px;color:var(--text3)">اضغط "مسح القنوات" للبحث</span></div>
+                <div class="empty-state">📺<br>لا توجد قنوات<br><small>اضغط مسح القنوات</small></div>
             </div>
         </div>
     </div>
 
     <div class="toast" id="toast"></div>
     <div class="scan-overlay" id="scanOverlay">
-        <div class="scan-content">
+        <div class="scan-box">
             <div class="scan-icon">📡</div>
-            <div class="scan-title">جاري مسح القنوات...</div>
-            <div class="scan-progress"><div class="scan-fill" id="scanFill"></div></div>
+            <div class="scan-title">جاري المسح...</div>
+            <div class="scan-bar"><div class="scan-fill" id="scanFill"></div></div>
             <div class="scan-count" id="scanCount">0 قناة</div>
-            <button class="btn-cancel-scan" onclick="cancelScan()">إلغاء</button>
+            <button class="btn-cancel" onclick="cancelScan()">إلغاء</button>
         </div>
     </div>
 
     <script src="storage.js"></script>
     <script src="particles.js"></script>
-    <script src="tvAntenna.js"></script>
-    <script src="player.js"></script>
+    <script src="tv.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
