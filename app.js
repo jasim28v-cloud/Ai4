@@ -1,3 +1,1 @@
-function toggleTheme(){document.body.classList.toggle('dark');const btn=document.querySelector('.btn-icon');btn.textContent=document.body.classList.contains('dark')?'☀️':'🌙';localStorage.setItem('radio2044_theme',document.body.classList.contains('dark')?'dark':'light')}
-function initTheme(){if(localStorage.getItem('radio2044_theme')==='dark'){document.body.classList.add('dark');document.querySelector('.btn-icon').textContent='☀️'}}
-initParticles();initTheme();initPlayer();
+initParticles();initFMRadio();startVisualizer();document.getElementById('volumeSlider').value=getVolume();

@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>📻 Radio 2044 - Premium Edition</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <title>📻 FM Radio 2044</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="bg-elegant"></div>
-    <div class="bg-glow"></div>
+    <div class="bg-luxury"></div>
+    <div class="bg-gold-glow"></div>
+    <div class="bg-gold-glow2"></div>
     <div id="particlesContainer"></div>
 
     <div class="app">
@@ -18,92 +20,135 @@
             <div class="header-left">
                 <div class="logo">📻</div>
                 <div class="header-text">
-                    <h1>Radio 2044</h1>
-                    <span>✦ Premium Edition ✦</span>
+                    <h1>FM Radio 2044</h1>
+                    <span>✦ Offline Edition ✦</span>
                 </div>
             </div>
-            <div class="header-right">
-                <button class="btn-icon" onclick="toggleTheme()" title="الوضع الليلي">🌙</button>
+            <div class="header-badge" id="statusBadge">🎧 وصل السماعة</div>
+        </div>
+
+        <!-- Headphone Alert -->
+        <div class="headphone-alert" id="headphoneAlert">
+            <div class="alert-icon">🎧</div>
+            <div class="alert-text">
+                <strong>الرجاء توصيل السماعة السلكية</strong>
+                <p>السماعة تعمل كهوائي (Antenna) لاستقبال إشارات الراديو</p>
             </div>
         </div>
 
         <!-- Radio Device -->
         <div class="radio-device">
-            <div class="antenna">
-                <div class="antenna-line"></div>
-                <div class="antenna-ball"></div>
+            <div class="antenna-crystal">
+                <div class="crystal-line"></div>
+                <div class="crystal-tip">
+                    <div class="crystal-glow"></div>
+                </div>
             </div>
             <div class="radio-body">
                 <div class="radio-screen">
-                    <div class="screen-header">
-                        <span class="screen-dot"></span>
-                        <span class="screen-label">FM 2044</span>
+                    <div class="screen-top">
+                        <div class="screen-dot" id="statusDot"></div>
+                        <span class="screen-label">FM RADIO</span>
+                        <span class="screen-label">OFFLINE</span>
                     </div>
                     <div class="frequency-display">
                         <span class="freq-num" id="freqDisplay">87.5</span>
                         <span class="freq-unit">MHz</span>
                     </div>
                     <div class="station-info">
-                        <div class="station-name" id="stationName">اختر محطة</div>
-                        <div class="station-location" id="stationLocation">Radio 2044</div>
+                        <div class="station-name" id="stationName">FM Radio 2044</div>
+                        <div class="station-location" id="stationSignal">📶 جاهز للاستقبال</div>
                     </div>
-                    <div class="visualizer" id="visualizer">
-                        <span class="viz-bar"></span><span class="viz-bar"></span><span class="viz-bar"></span>
-                        <span class="viz-bar"></span><span class="viz-bar"></span><span class="viz-bar"></span>
-                        <span class="viz-bar"></span><span class="viz-bar"></span><span class="viz-bar"></span>
-                        <span class="viz-bar"></span><span class="viz-bar"></span><span class="viz-bar"></span>
-                        <span class="viz-bar"></span><span class="viz-bar"></span><span class="viz-bar"></span>
-                        <span class="viz-bar"></span><span class="viz-bar"></span><span class="viz-bar"></span>
-                        <span class="viz-bar"></span><span class="viz-bar"></span><span class="viz-bar"></span>
+                    <div class="gold-visualizer" id="visualizer">
+                        <span class="g-bar"></span><span class="g-bar"></span><span class="g-bar"></span>
+                        <span class="g-bar"></span><span class="g-bar"></span><span class="g-bar"></span>
+                        <span class="g-bar"></span><span class="g-bar"></span><span class="g-bar"></span>
+                        <span class="g-bar"></span><span class="g-bar"></span><span class="g-bar"></span>
+                        <span class="g-bar"></span><span class="g-bar"></span><span class="g-bar"></span>
+                        <span class="g-bar"></span><span class="g-bar"></span><span class="g-bar"></span>
+                        <span class="g-bar"></span><span class="g-bar"></span><span class="g-bar"></span>
                     </div>
                 </div>
                 <div class="radio-controls">
-                    <button class="ctrl-dial" onclick="prevStation()" title="المحطة السابقة">⏮</button>
-                    <button class="ctrl-play" id="playBtn" onclick="togglePlay()" title="تشغيل/إيقاف">
-                        <span class="play-icon">▶</span>
+                    <button class="ctrl-gold" onclick="tuneDown()" onmousedown="startTune('down')" onmouseup="stopTune()" ontouchstart="startTune('down')" ontouchend="stopTune()">
+                        <i class="fas fa-search-minus"></i>
                     </button>
-                    <button class="ctrl-dial" onclick="nextStation()" title="المحطة التالية">⏭</button>
+                    <button class="ctrl-play-gold" id="playBtn" onclick="toggleRadio()">
+                        <i class="fas fa-power-off" id="playIcon"></i>
+                    </button>
+                    <button class="ctrl-gold" onclick="tuneUp()" onmousedown="startTune('up')" onmouseup="stopTune()" ontouchstart="startTune('up')" ontouchend="stopTune()">
+                        <i class="fas fa-search-plus"></i>
+                    </button>
+                </div>
+                <div class="tune-controls">
+                    <button class="btn-tune" onclick="seekDown()"><i class="fas fa-backward-step"></i> محطة سابقة</button>
+                    <button class="btn-tune" onclick="autoScan()"><i class="fas fa-search"></i> مسح تلقائي</button>
+                    <button class="btn-tune" onclick="seekUp()"><i class="fas fa-forward-step"></i> محطة تالية</button>
                 </div>
                 <div class="radio-knobs">
                     <div class="knob-group">
-                        <input type="range" class="volume-slider" id="volumeSlider" min="0" max="100" value="70" oninput="setVolume(this.value)" title="الصوت">
-                        <span class="knob-label">🔊 الصوت</span>
+                        <div class="volume-wrap">
+                            <i class="fas fa-volume-low vol-icon"></i>
+                            <input type="range" class="gold-slider" id="volumeSlider" min="0" max="100" value="70" oninput="setVolume(this.value)">
+                            <i class="fas fa-volume-high vol-icon"></i>
+                        </div>
                     </div>
-                    <div class="knob-group">
-                        <button class="btn-fav" id="favBtn" onclick="toggleFavorite()" title="المفضلة">
-                            <span class="heart-icon">🤍</span>
-                        </button>
-                        <span class="knob-label">❤️ حفظ</span>
+                    <button class="btn-fav-gold" id="favBtn" onclick="toggleFavorite()">
+                        <i class="fas fa-star" id="favIcon"></i>
+                    </button>
+                </div>
+                <div class="signal-meter">
+                    <div class="signal-label">📶 قوة الإشارة</div>
+                    <div class="signal-bars">
+                        <span class="sig-bar" id="sig1"></span>
+                        <span class="sig-bar" id="sig2"></span>
+                        <span class="sig-bar" id="sig3"></span>
+                        <span class="sig-bar" id="sig4"></span>
+                        <span class="sig-bar" id="sig5"></span>
                     </div>
                 </div>
             </div>
-            <div class="radio-feet">
-                <div class="foot"></div>
-                <div class="foot"></div>
+            <div class="radio-base">
+                <div class="base-line"></div>
+                <div class="base-feet">
+                    <div class="foot-gold"></div>
+                    <div class="foot-gold"></div>
+                </div>
             </div>
         </div>
 
-        <!-- Station List -->
+        <!-- Saved Stations -->
         <div class="stations-section">
             <div class="section-header">
-                <h3>📋 المحطات</h3>
-                <div class="section-tabs">
-                    <button class="tab-btn active" onclick="filterStations('all', this)">الكل</button>
-                    <button class="tab-btn" onclick="filterStations('arabic', this)">🇸🇦 عربية</button>
-                    <button class="tab-btn" onclick="filterStations('music', this)">🎵 موسيقى</button>
-                    <button class="tab-btn" onclick="filterStations('news', this)">📰 أخبار</button>
-                    <button class="tab-btn" onclick="filterStations('favorites', this)">❤️ مفضلتي</button>
+                <h3><i class="fas fa-star"></i> المحطات المحفوظة</h3>
+                <button class="tab-gold active" onclick="showSavedStations()">❤️ المفضلة</button>
+            </div>
+            <div class="saved-stations" id="savedStations">
+                <div class="empty-state">
+                    <span class="empty-icon">📻</span>
+                    <p>لا توجد محطات محفوظة</p>
+                    <span style="font-size:9px;color:var(--text3)">اضغط ⭐ لحفظ المحطة الحالية</span>
                 </div>
             </div>
-            <div class="stations-grid" id="stationsGrid"></div>
         </div>
     </div>
 
     <div class="toast" id="toast"></div>
+    <div class="scan-overlay" id="scanOverlay">
+        <div class="scan-content">
+            <div class="scan-icon">📡</div>
+            <div class="scan-title">جاري المسح التلقائي...</div>
+            <div class="scan-freq" id="scanFreq">87.5 MHz</div>
+            <div class="scan-progress">
+                <div class="scan-fill" id="scanFill"></div>
+            </div>
+            <button class="btn-cancel-scan" onclick="cancelScan()">إلغاء</button>
+        </div>
+    </div>
 
-    <script src="stations.js"></script>
     <script src="storage.js"></script>
     <script src="particles.js"></script>
+    <script src="fMRadio.js"></script>
     <script src="player.js"></script>
     <script src="app.js"></script>
 </body>

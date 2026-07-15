@@ -1,17 +1,3 @@
-let audio=new Audio(),currentStationIndex=0,isPlaying=false;
-function initPlayer(){audio.volume=getVolume()/100;document.getElementById('volumeSlider').value=getVolume();const lastIdx=getLastStation();if(lastIdx<STATIONS.length){loadStation(lastIdx)}updateStationsGrid();startVisualizer()}
-function loadStation(index){if(index<0||index>=STATIONS.length)return;currentStationIndex=index;const s=STATIONS[index];document.getElementById('freqDisplay').innerText=s.freq;document.getElementById('stationName').innerText=s.name;document.getElementById('stationLocation').innerText=s.location+' '+s.icon;updateFavButton();updateStationsGrid();saveLastStation(index)}
-function togglePlay(){if(isPlaying){pauseRadio()}else{playRadio()}}
-function playRadio(){const s=STATIONS[currentStationIndex];showToast('📡 جاري الاتصال...');audio.src=s.url;audio.play().then(()=>{isPlaying=true;updatePlayButton();document.body.classList.add('playing');document.body.classList.remove('paused')}).catch(()=>{showToast('⚠ تعذر تشغيل المحطة');isPlaying=false;updatePlayButton()})}
-function pauseRadio(){audio.pause();isPlaying=false;updatePlayButton();document.body.classList.remove('playing');document.body.classList.add('paused')}
-function updatePlayButton(){const btn=document.getElementById('playBtn');btn.querySelector('.play-icon').textContent=isPlaying?'⏸':'▶'}
-function nextStation(){const next=(currentStationIndex+1)%STATIONS.length;loadStation(next);if(isPlaying){pauseRadio();setTimeout(playRadio,200)}}
-function prevStation(){const prev=(currentStationIndex-1+STATIONS.length)%STATIONS.length;loadStation(prev);if(isPlaying){pauseRadio();setTimeout(playRadio,200)}}
-function setVolume(val){audio.volume=val/100;saveVolume(val)}
-function toggleFavorite(){const s=STATIONS[currentStationIndex];toggleFav(s.name);updateFavButton();updateStationsGrid();showToast(isFavorite(s.name)?'❤️ أضيفت للمفضلة':'🤍 أزيلت من المفضلة')}
-function updateFavButton(){const s=STATIONS[currentStationIndex];const btn=document.getElementById('favBtn');btn.querySelector('.heart-icon').textContent=isFavorite(s.name)?'❤️':'🤍';btn.classList.toggle('active',isFavorite(s.name))}
-function selectStation(index){loadStation(index);if(isPlaying){pauseRadio()}setTimeout(playRadio,200)}
-function filterStations(cat,btn){document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');updateStationsGrid(cat)}
-function updateStationsGrid(filter='all'){const grid=document.getElementById('stationsGrid');let filtered=STATIONS;if(filter==='favorites'){filtered=STATIONS.filter(s=>isFavorite(s.name))}else if(filter!=='all'){filtered=STATIONS.filter(s=>s.category===filter)}grid.innerHTML=filtered.map((s,i)=>{const origIdx=STATIONS.indexOf(s);const active=origIdx===currentStationIndex?'active':'';return`<div class="station-card ${active}" onclick="selectStation(${origIdx})"><div class="st-icon">${s.icon}</div><div class="st-name">${s.name}</div><div class="st-loc">${s.location}</div><div class="st-tag">${s.freq} MHz</div></div>`}).join('')}
-function startVisualizer(){setInterval(()=>{if(!isPlaying)return;const bars=document.querySelectorAll('.viz-bar');bars.forEach(b=>{b.style.height=(Math.random()*30+4)+'px'})},200)}
-function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+function startVisualizer(){setInterval(()=>{if(!isRadioOn)return;document.querySelectorAll('.g-bar').forEach(b=>{b.style.height=(Math.random()*28+4)+'px'})},180)}
+function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
+setInterval(()=>{if(isRadioOn)updateSignalBars()},2000);
