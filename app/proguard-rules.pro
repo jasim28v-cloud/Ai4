@@ -1,0 +1,3 @@
+-keep class com.fmradio2044.app.** { *; }
+-keepattributes *Annotation*
+-keepattributes SourceFile,LineNumberTable

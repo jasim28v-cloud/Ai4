@@ -1,0 +1,13 @@
+{
+  "app_name": "FM Radio 2044",
+  "package": "com.fmradio2044.app",
+  "version": "1.0.0",
+  "files": 20,
+  "features": [
+    "Real FM Radio",
+    "Wired Headset Required",
+    "Auto Scan",
+    "Favorites",
+    "Black & Gold UI"
+  ]
+}
