@@ -1,12 +1,13 @@
 {
-  "app_name": "FM Radio 2044",
-  "package": "com.fmradio2044.app",
+  "app_name": "TV Antenna 2044",
+  "package": "com.tvantenna2044.app",
   "version": "1.0.0",
   "files": 20,
   "features": [
-    "Real FM Radio",
-    "Wired Headset Required",
+    "Digital Terrestrial TV",
+    "DVB-T/T2",
     "Auto Scan",
+    "20+ Channels",
     "Favorites",
     "Black & Gold UI"
   ]

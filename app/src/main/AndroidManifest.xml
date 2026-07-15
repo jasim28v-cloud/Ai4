@@ -3,15 +3,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-feature android:name="android.hardware.fmradio" android:required="false" />
+    <uses-feature android:name="android.hardware.tv.tuner" android:required="false" />
 
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
-        android:label="FM Radio 2044"
+        android:label="TV Antenna 2044"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/Theme.FMRadio2044"
+        android:theme="@style/Theme.TVAntenna2044"
         android:usesCleartextTraffic="true"
         android:hardwareAccelerated="true"
         tools:targetApi="34">

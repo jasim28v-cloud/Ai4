@@ -1,9 +1,9 @@
 plugins { id 'com.android.application' }
 android {
-    namespace 'com.fmradio2044.app'
+    namespace 'com.tvantenna2044.app'
     compileSdk 34
     defaultConfig {
-        applicationId "com.fmradio2044.app"
+        applicationId "com.tvantenna2044.app"
         minSdk 21
         targetSdk 34
         versionCode 1

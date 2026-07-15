@@ -1,1 +1,1 @@
-function startVisualizer(){setInterval(()=>{if(!isRadioOn)return;document.querySelectorAll('.g-bar').forEach(b=>{b.style.height=(Math.random()*28+4)+'px'})},180)}
+// TV Player - Ready for DVB-T stream

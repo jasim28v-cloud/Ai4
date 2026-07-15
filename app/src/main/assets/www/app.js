@@ -1,1 +1,1 @@
-initParticles();initFMRadio();startVisualizer();document.getElementById('volumeSlider').value=getVolume();
+initParticles();initTV();document.getElementById('volumeSlider').value=getVolume();
