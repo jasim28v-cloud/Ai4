@@ -1,4 +1,1 @@
-let currentTab='generate',currentGeneratedImage=null,currentPrompt='',currentStyle='',currentModalIndex=null;
-function switchTab(tab){currentTab=tab;document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.btn-icon').forEach(b=>b.classList.remove('active'));document.getElementById('tabContent'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active');const tabMap={generate:0,filters:1,gallery:2};const btns=document.querySelectorAll('.btn-icon');if(btns[tabMap[tab]])btns[tabMap[tab]].classList.add('active');if(tab==='gallery')renderGallery()}
-function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}
-initParticles();renderGallery();
+initParticles();initVisualizer();initEQ();initPlayer();

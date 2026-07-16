@@ -1,0 +1,7 @@
+let eqBands=[0,0,0,0,0,0,0,0,0,0],bassBoost=30,spatial=50;
+function initEQ(){const eq=loadEQ();eqBands=eq.bands||eqBands;bassBoost=eq.bass||30;spatial=eq.spatial||50;for(let i=0;i<10;i++){const s=document.getElementById('eq'+i);if(s)s.value=eqBands[i]}document.getElementById('bassBoost').value=bassBoost;document.getElementById('spatial').value=spatial}
+function updateEQ(){for(let i=0;i<10;i++){const s=document.getElementById('eq'+i);if(s)eqBands[i]=parseInt(s.value)}saveEQ({bands:eqBands,bass:bassBoost,spatial})}
+function updateBass(){bassBoost=parseInt(document.getElementById('bassBoost').value);saveEQ({bands:eqBands,bass:bassBoost,spatial})}
+function updateSpatial(){spatial=parseInt(document.getElementById('spatial').value);saveEQ({bands:eqBands,bass:bassBoost,spatial})}
+function setPreset(preset,el){document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');const presets={flat:[0,0,0,0,0,0,0,0,0,0],bass:[10,8,6,3,0,-2,-4,-2,0,2],treble:[-3,-2,0,2,5,7,9,10,10,12],vocal:[-5,-3,0,3,6,4,2,0,-2,-4],rock:[6,4,2,0,-2,2,4,6,8,10]};eqBands=presets[preset]||presets.flat;for(let i=0;i<10;i++){const s=document.getElementById('eq'+i);if(s)s.value=eqBands[i]}saveEQ({bands:eqBands,bass:bassBoost,spatial})}
+function toggleEQ(){const p=document.getElementById('eqPanel');p.style.display=p.style.display==='none'?'block':'none';document.getElementById('btnEQ').classList.toggle('active',p.style.display==='block')}

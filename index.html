@@ -3,156 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>🎨 AI Art Studio 2044</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <title>🎧 Sonic 2044</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="bg-mesh"></div>
-    <div class="bg-orb bg-orb-1"></div>
-    <div class="bg-orb bg-orb-2"></div>
-    <div class="bg-orb bg-orb-3"></div>
+    <div class="bg-void"></div>
+    <div class="bg-ring bg-ring-1"></div>
+    <div class="bg-ring bg-ring-2"></div>
+    <div class="bg-ring bg-ring-3"></div>
     <div id="particlesContainer"></div>
 
     <div class="app">
         <!-- Header -->
         <div class="header">
             <div class="header-left">
-                <div class="logo">🎨</div>
+                <div class="logo">🎧</div>
                 <div class="header-text">
-                    <h1>AI Art Studio 2044</h1>
-                    <span>✦ Ultimate Edition ✦</span>
+                    <h1>Sonic 2044</h1>
+                    <span>✦ Ultimate Player ✦</span>
                 </div>
             </div>
             <div class="header-right">
-                <button class="btn-icon" onclick="switchTab('generate')" id="tabGenerate"><i class="fas fa-wand-magic-sparkles"></i></button>
-                <button class="btn-icon" onclick="switchTab('filters')" id="tabFilters"><i class="fas fa-filter"></i></button>
-                <button class="btn-icon" onclick="switchTab('gallery')" id="tabGallery"><i class="fas fa-images"></i></button>
+                <button class="btn-icon" onclick="toggleEQ()" id="btnEQ"><i class="fas fa-sliders"></i></button>
+                <button class="btn-icon" onclick="toggleLyrics()" id="btnLyrics"><i class="fas fa-microphone"></i></button>
             </div>
         </div>
 
-        <!-- Tab: Generate -->
-        <div class="tab-content active" id="tabContentGenerate">
-            <div class="generate-section">
-                <div class="prompt-card">
-                    <div class="card-header">
-                        <i class="fas fa-wand-magic-sparkles"></i>
-                        <span>توليد بالذكاء الاصطناعي</span>
-                    </div>
-                    <textarea class="prompt-input" id="promptInput" placeholder="اكتب وصف للصورة... مثال: غروب شمس على شاطئ استوائي بأسلوب سايبربانك"></textarea>
-                    <div class="style-chips">
-                        <span class="style-label">الأسلوب:</span>
-                        <button class="style-chip active" onclick="selectStyle('realistic', this)">📷 واقعي</button>
-                        <button class="style-chip" onclick="selectStyle('cyberpunk', this)">🌃 سايبربانك</button>
-                        <button class="style-chip" onclick="selectStyle('anime', this)">🎌 أنمي</button>
-                        <button class="style-chip" onclick="selectStyle('oil', this)">🖌️ زيتي</button>
-                        <button class="style-chip" onclick="selectStyle('pixel', this)">👾 بيكسل</button>
-                        <button class="style-chip" onclick="selectStyle('watercolor', this)">🎨 مائي</button>
-                        <button class="style-chip" onclick="selectStyle('sketch', this)">✏️ رسم</button>
-                        <button class="style-chip" onclick="selectStyle('abstract', this)">🌀 تجريدي</button>
-                    </div>
-                    <div class="size-options">
-                        <span class="style-label">الحجم:</span>
-                        <button class="style-chip active" onclick="selectSize('512', this)">512x512</button>
-                        <button class="style-chip" onclick="selectSize('768', this)">768x768</button>
-                        <button class="style-chip" onclick="selectSize('1024', this)">1024x1024</button>
-                    </div>
-                    <button class="btn-generate" id="btnGenerate" onclick="generateImage()">
-                        <i class="fas fa-wand-magic-sparkles"></i> توليد الصورة
-                    </button>
-                    <div class="sample-prompts">
-                        <span class="style-label">اقتراحات:</span>
-                        <div class="samples-grid">
-                            <button class="sample-prompt" onclick="usePrompt('قلعة عائمة في السماء عند الغروب')">🏰 قلعة عائمة</button>
-                            <button class="sample-prompt" onclick="usePrompt('غابة مضيئة مع كائنات فضائية')">🌲 غابة مضيئة</button>
-                            <button class="sample-prompt" onclick="usePrompt('مدينة مستقبلية تحت الماء')">🌊 مدينة تحت الماء</button>
-                            <button class="sample-prompt" onclick="usePrompt('تنين يطير فوق جبال مغطاة بالثلوج')">🐉 تنين وجبال</button>
-                        </div>
-                    </div>
+        <!-- 3D Visualizer -->
+        <div class="visualizer-3d" id="visualizer3D">
+            <canvas id="vizCanvas"></canvas>
+            <div class="viz-overlay">
+                <div class="track-info">
+                    <div class="track-title" id="trackTitle">اختر أغنية</div>
+                    <div class="track-artist" id="trackArtist">Sonic 2044</div>
                 </div>
-                <div class="result-card" id="resultCard" style="display:none">
-                    <div class="card-header">
-                        <i class="fas fa-image"></i>
-                        <span>النتيجة</span>
-                    </div>
-                    <div class="result-image-wrap">
-                        <div class="loading-spinner" id="loadingSpinner">
-                            <div class="spinner"></div>
-                            <p>🤖 جاري التوليد...</p>
-                        </div>
-                        <img id="resultImage" src="" alt="Generated Art" style="display:none">
-                    </div>
-                    <div class="result-actions">
-                        <button class="btn-action" onclick="saveToGallery()"><i class="fas fa-save"></i> حفظ</button>
-                        <button class="btn-action" onclick="downloadImage()"><i class="fas fa-download"></i> تحميل</button>
-                        <button class="btn-action" onclick="shareImage()"><i class="fas fa-share"></i> مشاركة</button>
-                        <button class="btn-action" onclick="addFilters()"><i class="fas fa-filter"></i> فلاتر</button>
-                    </div>
+                <div class="track-time">
+                    <span id="currentTime">0:00</span>
+                    <span id="totalTime">0:00</span>
                 </div>
             </div>
         </div>
 
-        <!-- Tab: Filters -->
-        <div class="tab-content" id="tabContentFilters">
-            <div class="filters-section">
-                <div class="upload-area" onclick="document.getElementById('filterImageInput').click()">
-                    <div class="upload-icon">🖼️</div>
-                    <h3>ارفع صورة لتطبيق الفلاتر</h3>
-                    <p>JPG, PNG, WEBP</p>
+        <!-- Progress Bar -->
+        <div class="progress-section">
+            <div class="progress-track" id="progressTrack" onclick="seek(event)">
+                <div class="progress-fill" id="progressFill"></div>
+                <div class="progress-thumb" id="progressThumb"></div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button class="ctrl-btn" onclick="toggleShuffle()" id="shuffleBtn"><i class="fas fa-shuffle"></i></button>
+            <button class="ctrl-btn" onclick="prevTrack()"><i class="fas fa-backward-step"></i></button>
+            <button class="ctrl-play" id="playBtn" onclick="togglePlay()"><i class="fas fa-play" id="playIcon"></i></button>
+            <button class="ctrl-btn" onclick="nextTrack()"><i class="fas fa-forward-step"></i></button>
+            <button class="ctrl-btn" onclick="toggleRepeat()" id="repeatBtn"><i class="fas fa-repeat"></i></button>
+        </div>
+
+        <!-- EQ Panel -->
+        <div class="eq-panel" id="eqPanel" style="display:none">
+            <div class="eq-header">
+                <h3>🎛️ Equalizer</h3>
+                <div class="eq-presets">
+                    <button class="preset-btn active" onclick="setPreset('flat', this)">مسطح</button>
+                    <button class="preset-btn" onclick="setPreset('bass', this)">Bass</button>
+                    <button class="preset-btn" onclick="setPreset('treble', this)">Treble</button>
+                    <button class="preset-btn" onclick="setPreset('vocal', this)">Vocal</button>
+                    <button class="preset-btn" onclick="setPreset('rock', this)">Rock</button>
                 </div>
-                <input type="file" id="filterImageInput" accept="image/*" style="display:none" onchange="loadFilterImage(this)">
-                <div class="filter-preview" id="filterPreview" style="display:none">
-                    <canvas id="filterCanvas"></canvas>
-                    <div class="filter-list">
-                        <h4>🎨 الفلاتر</h4>
-                        <div class="filter-grid">
-                            <button class="filter-btn" onclick="applyFilter('none')">🔲 بدون</button>
-                            <button class="filter-btn" onclick="applyFilter('grayscale')">⬜ رمادي</button>
-                            <button class="filter-btn" onclick="applyFilter('sepia')">🟤 بني</button>
-                            <button class="filter-btn" onclick="applyFilter('invert')">🔄 معكوس</button>
-                            <button class="filter-btn" onclick="applyFilter('vibrant')">🌈 زاهي</button>
-                            <button class="filter-btn" onclick="applyFilter('neon')">💜 نيون</button>
-                            <button class="filter-btn" onclick="applyFilter('pixelate')">👾 بيكسل</button>
-                            <button class="filter-btn" onclick="applyFilter('blur')">🌫️ ضبابي</button>
-                            <button class="filter-btn" onclick="applyFilter('sharpen')">🔪 حاد</button>
-                            <button class="filter-btn" onclick="applyFilter('emboss')">🗿 محفور</button>
-                            <button class="filter-btn" onclick="applyFilter('vintage')">📜 قديم</button>
-                            <button class="filter-btn" onclick="applyFilter('cool')">❄️ بارد</button>
-                        </div>
-                        <button class="btn-generate" onclick="saveFilteredImage()"><i class="fas fa-save"></i> حفظ الصورة المعدلة</button>
-                    </div>
+            </div>
+            <div class="eq-sliders">
+                <div class="eq-band">
+                    <input type="range" class="eq-slider" id="eq0" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
+                    <span>60Hz</span>
+                </div>
+                <div class="eq-band">
+                    <input type="range" class="eq-slider" id="eq1" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
+                    <span>170Hz</span>
+                </div>
+                <div class="eq-band">
+                    <input type="range" class="eq-slider" id="eq2" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
+                    <span>310Hz</span>
+                </div>
+                <div class="eq-band">
+                    <input type="range" class="eq-slider" id="eq3" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
+                    <span>600Hz</span>
+                </div>
+                <div class="eq-band">
+                    <input type="range" class="eq-slider" id="eq4" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
+                    <span>1kHz</span>
+                </div>
+                <div class="eq-band">
+                    <input type="range" class="eq-slider" id="eq5" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
+                    <span>3kHz</span>
+                </div>
+                <div class="eq-band">
+                    <input type="range" class="eq-slider" id="eq6" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
+                    <span>6kHz</span>
+                </div>
+                <div class="eq-band">
+                    <input type="range" class="eq-slider" id="eq7" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
+                    <span>12kHz</span>
+                </div>
+                <div class="eq-band">
+                    <input type="range" class="eq-slider" id="eq8" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
+                    <span>14kHz</span>
+                </div>
+                <div class="eq-band">
+                    <input type="range" class="eq-slider" id="eq9" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
+                    <span>16kHz</span>
+                </div>
+            </div>
+            <div class="eq-extra">
+                <div class="extra-knob">
+                    <span>🔊 Bass Boost</span>
+                    <input type="range" class="gold-slider" id="bassBoost" min="0" max="100" value="30" oninput="updateBass()">
+                </div>
+                <div class="extra-knob">
+                    <span>🌐 3D Spatial</span>
+                    <input type="range" class="gold-slider" id="spatial" min="0" max="100" value="50" oninput="updateSpatial()">
                 </div>
             </div>
         </div>
 
-        <!-- Tab: Gallery -->
-        <div class="tab-content" id="tabContentGallery">
-            <div class="gallery-section">
-                <div class="gallery-header">
-                    <h3><i class="fas fa-images"></i> معرضي الشخصي</h3>
-                    <button class="btn-action" onclick="clearGallery()"><i class="fas fa-trash"></i> حذف الكل</button>
-                </div>
-                <div class="gallery-grid" id="galleryGrid">
-                    <div class="empty-gallery">
-                        <div class="empty-icon">🖼️</div>
-                        <p>المعرض فارغ</p>
-                        <span>ابدأ بتوليد الصور لإضافتها هنا</span>
-                    </div>
-                </div>
+        <!-- Lyrics Panel -->
+        <div class="lyrics-panel" id="lyricsPanel" style="display:none">
+            <div class="lyrics-header">
+                <h3>🎤 كلمات الأغنية</h3>
+                <button class="btn-action" onclick="editLyrics()">✏️ تحرير</button>
+            </div>
+            <div class="lyrics-content" id="lyricsContent">
+                <p class="lyrics-line">🎵 اختر أغنية لعرض الكلمات</p>
+                <p class="lyrics-line">✨ الكلمات تظهر هنا بتأثير متحرك</p>
             </div>
         </div>
-    </div>
 
-    <!-- Image Preview Modal -->
-    <div class="modal-overlay" id="modalOverlay" onclick="closeModal()">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <button class="modal-close" onclick="closeModal()">✕</button>
-            <img id="modalImage" src="" alt="Preview">
-            <div class="modal-actions">
-                <button class="btn-action" onclick="downloadModalImage()"><i class="fas fa-download"></i></button>
-                <button class="btn-action" onclick="shareModalImage()"><i class="fas fa-share"></i></button>
-                <button class="btn-action" onclick="deleteModalImage()"><i class="fas fa-trash"></i></button>
+        <!-- Playlist -->
+        <div class="playlist-section">
+            <div class="playlist-header">
+                <h3>📋 قائمة التشغيل</h3>
+                <button class="btn-action" onclick="document.getElementById('audioInput').click()">📂 إضافة</button>
+                <input type="file" id="audioInput" accept="audio/*" multiple style="display:none" onchange="addFiles(this)">
+            </div>
+            <div class="playlist" id="playlist">
+                <div class="empty-playlist">
+                    <span>🎵</span>
+                    <p>اسحب ملفات الصوت هنا</p>
+                </div>
             </div>
         </div>
     </div>
@@ -161,10 +161,10 @@
 
     <script src="storage.js"></script>
     <script src="particles.js"></script>
-    <script src="prompts.js"></script>
-    <script src="filters.js"></script>
-    <script src="effects.js"></script>
-    <script src="gallery.js"></script>
+    <script src="visualizer.js"></script>
+    <script src="equalizer.js"></script>
+    <script src="lyrics.js"></script>
+    <script src="player.js"></script>
     <script src="app.js"></script>
 </body>
 </html>

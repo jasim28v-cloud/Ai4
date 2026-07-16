@@ -1,7 +1,9 @@
-const KEYS={gallery:'aiart2044_gallery',settings:'aiart2044_settings'};
+const KEYS={playlist:'sonic2044_playlist',settings:'sonic2044_settings',lyrics:'sonic2044_lyrics',eq:'sonic2044_eq'};
 function saveData(k,v){try{localStorage.setItem(k,JSON.stringify(v));return 1}catch(e){return 0}}
 function loadData(k,d=null){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
-function getGallery(){return loadData(KEYS.gallery,[])}
-function addToGallery(imgData,prompt,style){const g=getGallery();g.unshift({id:Date.now(),data:imgData,prompt,style,date:new Date().toLocaleDateString('ar-SA')});if(g.length>50)g.pop();saveData(KEYS.gallery,g);return g}
-function removeFromGallery(id){let g=getGallery();g=g.filter(i=>i.id!==id);saveData(KEYS.gallery,g)}
-function clearGallery(){saveData(KEYS.gallery,[])}
+function savePlaylist(pl){const data=pl.map(t=>({id:t.id,name:t.name,size:t.size,data:t.data,addedAt:t.addedAt}));return saveData(KEYS.playlist,data)}
+function loadPlaylist(){return loadData(KEYS.playlist,[])}
+function saveEQ(eq){saveData(KEYS.eq,eq)}
+function loadEQ(){return loadData(KEYS.eq,{bands:[0,0,0,0,0,0,0,0,0,0],bass:30,spatial:50})}
+function saveLyrics(trackId,lyrics){const all=loadData(KEYS.lyrics,{});all[trackId]=lyrics;saveData(KEYS.lyrics,all)}
+function getLyrics(trackId){const all=loadData(KEYS.lyrics,{});return all[trackId]||null}

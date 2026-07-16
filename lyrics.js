@@ -1,0 +1,6 @@
+let currentLyrics=[],currentLyricIndex=0;
+function toggleLyrics(){const p=document.getElementById('lyricsPanel');p.style.display=p.style.display==='none'?'block':'none';document.getElementById('btnLyrics').classList.toggle('active',p.style.display==='block')}
+function loadTrackLyrics(trackId){const saved=getLyrics(trackId);if(saved){currentLyrics=saved;renderLyrics()}else{currentLyrics=['🎵 اختر أغنية لعرض الكلمات','✨ الكلمات تظهر هنا بتأثير متحرك','🎤 أضف كلماتك المخصصة','💫 استمتع بالموسيقى'];renderLyrics()}}
+function renderLyrics(){const c=document.getElementById('lyricsContent');c.innerHTML=currentLyrics.map((l,i)=>`<p class="lyrics-line ${i===currentLyricIndex?'active':''}">${l}</p>`).join('')}
+function updateLyricPosition(time){if(!currentLyrics.length)return;const idx=Math.floor(time/3)%currentLyrics.length;if(idx!==currentLyricIndex){currentLyricIndex=idx;renderLyrics()}}
+function editLyrics(){const text=prompt('أدخل كلمات الأغنية (كل سطر = سطر جديد):',currentLyrics.join('\n'));if(text!==null){currentLyrics=text.split('\n');renderLyrics();if(window.currentTrack&&window.currentTrack.id)saveLyrics(window.currentTrack.id,currentLyrics);showToast('✅ تم حفظ الكلمات')}}
