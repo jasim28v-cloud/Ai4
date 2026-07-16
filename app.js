@@ -1,1 +1,1 @@
-initParticles();initVisualizer();initEQ();initPlayer();
+initParticles();initWeather();

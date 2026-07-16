@@ -3,156 +3,104 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>🎧 Sonic 2044</title>
+    <title>🌤️ Weather 2044</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="bg-void"></div>
-    <div class="bg-ring bg-ring-1"></div>
-    <div class="bg-ring bg-ring-2"></div>
-    <div class="bg-ring bg-ring-3"></div>
+    <div class="bg-sky" id="bgSky"></div>
+    <div class="bg-clouds" id="bgClouds"></div>
     <div id="particlesContainer"></div>
 
     <div class="app">
         <!-- Header -->
         <div class="header">
             <div class="header-left">
-                <div class="logo">🎧</div>
+                <div class="logo">🌤️</div>
                 <div class="header-text">
-                    <h1>Sonic 2044</h1>
-                    <span>✦ Ultimate Player ✦</span>
+                    <h1>Weather 2044</h1>
+                    <span>✦ Premium Edition ✦</span>
                 </div>
             </div>
             <div class="header-right">
-                <button class="btn-icon" onclick="toggleEQ()" id="btnEQ"><i class="fas fa-sliders"></i></button>
-                <button class="btn-icon" onclick="toggleLyrics()" id="btnLyrics"><i class="fas fa-microphone"></i></button>
+                <button class="btn-icon" onclick="detectLocation()" title="تحديد الموقع"><i class="fas fa-location-dot"></i></button>
+                <button class="btn-icon" onclick="toggleSearch()" title="بحث"><i class="fas fa-search"></i></button>
             </div>
         </div>
 
-        <!-- 3D Visualizer -->
-        <div class="visualizer-3d" id="visualizer3D">
-            <canvas id="vizCanvas"></canvas>
-            <div class="viz-overlay">
-                <div class="track-info">
-                    <div class="track-title" id="trackTitle">اختر أغنية</div>
-                    <div class="track-artist" id="trackArtist">Sonic 2044</div>
-                </div>
-                <div class="track-time">
-                    <span id="currentTime">0:00</span>
-                    <span id="totalTime">0:00</span>
-                </div>
-            </div>
+        <!-- Search -->
+        <div class="search-bar" id="searchBar" style="display:none">
+            <input type="text" class="search-input" id="searchInput" placeholder="🔍 ابحث عن مدينة..." onkeydown="if(event.key==='Enter')searchCity()">
+            <button class="btn-search" onclick="searchCity()"><i class="fas fa-search"></i></button>
         </div>
 
-        <!-- Progress Bar -->
-        <div class="progress-section">
-            <div class="progress-track" id="progressTrack" onclick="seek(event)">
-                <div class="progress-fill" id="progressFill"></div>
-                <div class="progress-thumb" id="progressThumb"></div>
-            </div>
-        </div>
-
-        <!-- Controls -->
-        <div class="controls">
-            <button class="ctrl-btn" onclick="toggleShuffle()" id="shuffleBtn"><i class="fas fa-shuffle"></i></button>
-            <button class="ctrl-btn" onclick="prevTrack()"><i class="fas fa-backward-step"></i></button>
-            <button class="ctrl-play" id="playBtn" onclick="togglePlay()"><i class="fas fa-play" id="playIcon"></i></button>
-            <button class="ctrl-btn" onclick="nextTrack()"><i class="fas fa-forward-step"></i></button>
-            <button class="ctrl-btn" onclick="toggleRepeat()" id="repeatBtn"><i class="fas fa-repeat"></i></button>
-        </div>
-
-        <!-- EQ Panel -->
-        <div class="eq-panel" id="eqPanel" style="display:none">
-            <div class="eq-header">
-                <h3>🎛️ Equalizer</h3>
-                <div class="eq-presets">
-                    <button class="preset-btn active" onclick="setPreset('flat', this)">مسطح</button>
-                    <button class="preset-btn" onclick="setPreset('bass', this)">Bass</button>
-                    <button class="preset-btn" onclick="setPreset('treble', this)">Treble</button>
-                    <button class="preset-btn" onclick="setPreset('vocal', this)">Vocal</button>
-                    <button class="preset-btn" onclick="setPreset('rock', this)">Rock</button>
+        <!-- Main Weather Card -->
+        <div class="weather-card">
+            <div class="weather-main">
+                <div class="weather-icon" id="weatherIcon">☀️</div>
+                <div class="weather-temp" id="weatherTemp">--°</div>
+                <div class="weather-desc" id="weatherDesc">جاري التحميل...</div>
+                <div class="weather-location" id="weatherLocation">
+                    <i class="fas fa-map-marker-alt"></i> <span id="cityName">--</span>
                 </div>
             </div>
-            <div class="eq-sliders">
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq0" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>60Hz</span>
+            <div class="weather-details">
+                <div class="detail-item">
+                    <div class="detail-icon">💧</div>
+                    <div class="detail-info">
+                        <div class="detail-value" id="humidity">--%</div>
+                        <div class="detail-label">الرطوبة</div>
+                    </div>
                 </div>
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq1" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>170Hz</span>
+                <div class="detail-item">
+                    <div class="detail-icon">🌬️</div>
+                    <div class="detail-info">
+                        <div class="detail-value" id="windSpeed">--</div>
+                        <div class="detail-label">الرياح</div>
+                    </div>
                 </div>
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq2" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>310Hz</span>
+                <div class="detail-item">
+                    <div class="detail-icon">👁️</div>
+                    <div class="detail-info">
+                        <div class="detail-value" id="visibility">--</div>
+                        <div class="detail-label">الرؤية</div>
+                    </div>
                 </div>
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq3" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>600Hz</span>
-                </div>
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq4" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>1kHz</span>
-                </div>
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq5" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>3kHz</span>
-                </div>
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq6" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>6kHz</span>
-                </div>
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq7" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>12kHz</span>
-                </div>
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq8" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>14kHz</span>
-                </div>
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq9" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>16kHz</span>
-                </div>
-            </div>
-            <div class="eq-extra">
-                <div class="extra-knob">
-                    <span>🔊 Bass Boost</span>
-                    <input type="range" class="gold-slider" id="bassBoost" min="0" max="100" value="30" oninput="updateBass()">
-                </div>
-                <div class="extra-knob">
-                    <span>🌐 3D Spatial</span>
-                    <input type="range" class="gold-slider" id="spatial" min="0" max="100" value="50" oninput="updateSpatial()">
+                <div class="detail-item">
+                    <div class="detail-icon">🌡️</div>
+                    <div class="detail-info">
+                        <div class="detail-value" id="feelsLike">--°</div>
+                        <div class="detail-label">الإحساس</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Lyrics Panel -->
-        <div class="lyrics-panel" id="lyricsPanel" style="display:none">
-            <div class="lyrics-header">
-                <h3>🎤 كلمات الأغنية</h3>
-                <button class="btn-action" onclick="editLyrics()">✏️ تحرير</button>
-            </div>
-            <div class="lyrics-content" id="lyricsContent">
-                <p class="lyrics-line">🎵 اختر أغنية لعرض الكلمات</p>
-                <p class="lyrics-line">✨ الكلمات تظهر هنا بتأثير متحرك</p>
+        <!-- Hourly Forecast -->
+        <div class="forecast-section">
+            <h3 class="section-title">⏰ كل ساعة</h3>
+            <div class="hourly-scroll" id="hourlyForecast">
+                <div class="hourly-item"><div class="hour-time">--</div><div class="hour-icon">--</div><div class="hour-temp">--°</div></div>
             </div>
         </div>
 
-        <!-- Playlist -->
-        <div class="playlist-section">
-            <div class="playlist-header">
-                <h3>📋 قائمة التشغيل</h3>
-                <button class="btn-action" onclick="document.getElementById('audioInput').click()">📂 إضافة</button>
-                <input type="file" id="audioInput" accept="audio/*" multiple style="display:none" onchange="addFiles(this)">
+        <!-- Weekly Forecast -->
+        <div class="forecast-section">
+            <h3 class="section-title">📅 الأسبوع</h3>
+            <div class="weekly-list" id="weeklyForecast">
+                <div class="weekly-item"><div class="w-day">--</div><div class="w-icon">--</div><div class="w-temp">--° / --°</div></div>
             </div>
-            <div class="playlist" id="playlist">
-                <div class="empty-playlist">
-                    <span>🎵</span>
-                    <p>اسحب ملفات الصوت هنا</p>
-                </div>
+        </div>
+
+        <!-- Favorite Cities -->
+        <div class="favorites-section">
+            <div class="section-header">
+                <h3 class="section-title">⭐ مدن مفضلة</h3>
+                <button class="btn-action" onclick="addFavoriteCity()"><i class="fas fa-plus"></i> إضافة</button>
+            </div>
+            <div class="fav-cities" id="favCities">
+                <div class="empty-fav">أضف مدنك المفضلة ⭐</div>
             </div>
         </div>
     </div>
@@ -161,10 +109,7 @@
 
     <script src="storage.js"></script>
     <script src="particles.js"></script>
-    <script src="visualizer.js"></script>
-    <script src="equalizer.js"></script>
-    <script src="lyrics.js"></script>
-    <script src="player.js"></script>
+    <script src="weather.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
