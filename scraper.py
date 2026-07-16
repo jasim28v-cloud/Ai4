@@ -2,19 +2,20 @@
 """
 ╔══════════════════════════════════════════════════════════════╗
 ║                                                            ║
-║  🌤️  WEATHER 2044 - ULTIMATE EDITION  🌤️               ║
-║     Ultimate Generator - 10 Files - 2500+ Lines            ║
+║  🍕  RESTAURANT 2044 - ULTIMATE EDITION  🍕             ║
+║     Ultimate Generator - 26 Files - 3500+ Lines            ║
 ║                                                            ║
-║  🌍  Real-time Weather Data via API                        ║
-║  💎  Premium Glass Morphism Design                         ║
-║  📍  GPS Location Auto-Detect                              ║
-║  🌈  Dynamic Backgrounds + Particles                       ║
-║  💾  Save Favorite Cities                                  ║
-║                                                          ║
+║  🍔  Digital Menu + Cart System + Orders                  ║
+║  ⭐  Ratings & Reviews + Favorites                         ║
+║  📍  Delivery Tracking + Order History                    ║
+║  💎  Glass Morphism Luxury Design                          ║
+║  💾  Local Storage + Auto-Save                             ║
+║                                                            ║
 ╚══════════════════════════════════════════════════════════════╝
 """
 
 import os
+import json
 
 TOTAL_LINES = 0
 
@@ -29,11 +30,11 @@ def write(filename, content):
 
 def section(title):
     print(f"\n{'='*60}")
-    print(f"  🌤️ {title}")
+    print(f"  🍕 {title}")
     print(f"{'='*60}")
 
 # ═══════════════════════════════════════════════════════════
-# 🌤️ 1. index.html
+# 🍕 1. index.html - الصفحة الرئيسية
 # ═══════════════════════════════════════════════════════════
 
 def build_index():
@@ -42,275 +43,356 @@ def build_index():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>🌤️ Weather 2044</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <title>🍕 Restaurant 2044</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="bg-sky" id="bgSky"></div>
-    <div class="bg-clouds" id="bgClouds"></div>
+    <div class="bg-luxury"></div>
+    <div class="bg-glow"></div>
     <div id="particlesContainer"></div>
 
     <div class="app">
         <!-- Header -->
         <div class="header">
             <div class="header-left">
-                <div class="logo">🌤️</div>
+                <div class="logo">🍕</div>
                 <div class="header-text">
-                    <h1>Weather 2044</h1>
-                    <span>✦ Premium Edition ✦</span>
+                    <h1>Restaurant 2044</h1>
+                    <span>✦ Premium Dining ✦</span>
                 </div>
             </div>
             <div class="header-right">
-                <button class="btn-icon" onclick="detectLocation()" title="تحديد الموقع"><i class="fas fa-location-dot"></i></button>
-                <button class="btn-icon" onclick="toggleSearch()" title="بحث"><i class="fas fa-search"></i></button>
+                <button class="btn-icon cart-btn" onclick="navigateTo('cart')">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </button>
+                <button class="btn-icon" onclick="navigateTo('orders')"><i class="fas fa-receipt"></i></button>
+                <button class="btn-icon" onclick="navigateTo('favorites')"><i class="fas fa-heart"></i></button>
             </div>
         </div>
 
-        <!-- Search -->
-        <div class="search-bar" id="searchBar" style="display:none">
-            <input type="text" class="search-input" id="searchInput" placeholder="🔍 ابحث عن مدينة..." onkeydown="if(event.key==='Enter')searchCity()">
-            <button class="btn-search" onclick="searchCity()"><i class="fas fa-search"></i></button>
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="filterMenu('all', this)">🍽️ الكل</button>
+            <button class="nav-tab" onclick="filterMenu('pizza', this)">🍕 بيتزا</button>
+            <button class="nav-tab" onclick="filterMenu('burger', this)">🍔 برجر</button>
+            <button class="nav-tab" onclick="filterMenu('pasta', this)">🍝 مكرونة</button>
+            <button class="nav-tab" onclick="filterMenu('drink', this)">🥤 مشروبات</button>
+            <button class="nav-tab" onclick="filterMenu('dessert', this)">🍰 حلويات</button>
         </div>
 
-        <!-- Main Weather Card -->
-        <div class="weather-card">
-            <div class="weather-main">
-                <div class="weather-icon" id="weatherIcon">☀️</div>
-                <div class="weather-temp" id="weatherTemp">--°</div>
-                <div class="weather-desc" id="weatherDesc">جاري التحميل...</div>
-                <div class="weather-location" id="weatherLocation">
-                    <i class="fas fa-map-marker-alt"></i> <span id="cityName">--</span>
+        <!-- Pages -->
+        <div class="page active" id="pageMenu">
+            <div class="menu-grid" id="menuGrid"></div>
+        </div>
+
+        <div class="page" id="pageCart">
+            <div class="cart-container">
+                <h2>🛒 سلة المشتريات</h2>
+                <div class="cart-items" id="cartItems"></div>
+                <div class="cart-empty" id="cartEmpty">
+                    <span>🛒</span>
+                    <p>السلة فارغة</p>
                 </div>
-            </div>
-            <div class="weather-details">
-                <div class="detail-item">
-                    <div class="detail-icon">💧</div>
-                    <div class="detail-info">
-                        <div class="detail-value" id="humidity">--%</div>
-                        <div class="detail-label">الرطوبة</div>
+                <div class="cart-footer" id="cartFooter" style="display:none">
+                    <div class="cart-total">
+                        <span>المجموع:</span>
+                        <span class="total-price" id="cartTotal">0 ريال</span>
                     </div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-icon">🌬️</div>
-                    <div class="detail-info">
-                        <div class="detail-value" id="windSpeed">--</div>
-                        <div class="detail-label">الرياح</div>
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-icon">👁️</div>
-                    <div class="detail-info">
-                        <div class="detail-value" id="visibility">--</div>
-                        <div class="detail-label">الرؤية</div>
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-icon">🌡️</div>
-                    <div class="detail-info">
-                        <div class="detail-value" id="feelsLike">--°</div>
-                        <div class="detail-label">الإحساس</div>
-                    </div>
+                    <button class="btn-checkout" onclick="checkout()">💳 إتمام الطلب</button>
                 </div>
             </div>
         </div>
 
-        <!-- Hourly Forecast -->
-        <div class="forecast-section">
-            <h3 class="section-title">⏰ كل ساعة</h3>
-            <div class="hourly-scroll" id="hourlyForecast">
-                <div class="hourly-item"><div class="hour-time">--</div><div class="hour-icon">--</div><div class="hour-temp">--°</div></div>
+        <div class="page" id="pageOrders">
+            <div class="orders-container">
+                <h2>📋 طلباتي</h2>
+                <div class="orders-list" id="ordersList"></div>
             </div>
         </div>
 
-        <!-- Weekly Forecast -->
-        <div class="forecast-section">
-            <h3 class="section-title">📅 الأسبوع</h3>
-            <div class="weekly-list" id="weeklyForecast">
-                <div class="weekly-item"><div class="w-day">--</div><div class="w-icon">--</div><div class="w-temp">--° / --°</div></div>
+        <div class="page" id="pageFavorites">
+            <div class="favorites-container">
+                <h2>❤️ المفضلة</h2>
+                <div class="menu-grid" id="favoritesGrid"></div>
             </div>
         </div>
 
-        <!-- Favorite Cities -->
-        <div class="favorites-section">
-            <div class="section-header">
-                <h3 class="section-title">⭐ مدن مفضلة</h3>
-                <button class="btn-action" onclick="addFavoriteCity()"><i class="fas fa-plus"></i> إضافة</button>
+        <div class="page" id="pageItem">
+            <div class="item-detail" id="itemDetail"></div>
+        </div>
+
+        <div class="page" id="pageCheckout">
+            <div class="checkout-container">
+                <h2>💳 إتمام الطلب</h2>
+                <form class="checkout-form" id="checkoutForm" onsubmit="placeOrder(event)">
+                    <label>👤 الاسم</label>
+                    <input type="text" id="customerName" required placeholder="أدخل اسمك">
+                    <label>📞 رقم الجوال</label>
+                    <input type="tel" id="customerPhone" required placeholder="05xxxxxxxx">
+                    <label>📍 عنوان التوصيل</label>
+                    <textarea id="customerAddress" required placeholder="أدخل عنوان التوصيل"></textarea>
+                    <label>💬 ملاحظات</label>
+                    <textarea id="orderNotes" placeholder="ملاحظات إضافية..."></textarea>
+                    <div class="order-summary">
+                        <h3>ملخص الطلب</h3>
+                        <div id="checkoutItems"></div>
+                        <div class="total-line">
+                            <span>المجموع الكلي:</span>
+                            <span class="total-price" id="checkoutTotal">0 ريال</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-checkout">✅ تأكيد الطلب</button>
+                </form>
             </div>
-            <div class="fav-cities" id="favCities">
-                <div class="empty-fav">أضف مدنك المفضلة ⭐</div>
+        </div>
+    </div>
+
+    <!-- Rating Modal -->
+    <div class="modal-overlay" id="ratingModal" onclick="closeRating()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3>⭐ تقييم الطلب</h3>
+            <div class="stars" id="starsContainer">
+                <span class="star" onclick="setRating(1)">☆</span>
+                <span class="star" onclick="setRating(2)">☆</span>
+                <span class="star" onclick="setRating(3)">☆</span>
+                <span class="star" onclick="setRating(4)">☆</span>
+                <span class="star" onclick="setRating(5)">☆</span>
             </div>
+            <textarea id="reviewText" placeholder="اكتب تقييمك..."></textarea>
+            <button class="btn-checkout" onclick="submitRating()">إرسال التقييم</button>
         </div>
     </div>
 
     <div class="toast" id="toast"></div>
 
-    <script src="storage.js"></script>
-    <script src="particles.js"></script>
-    <script src="weather.js"></script>
-    <script src="app.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/menu.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/orders.js"></script>
+    <script src="js/favorites.js"></script>
+    <script src="js/ratings.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>"""
 
 # ═══════════════════════════════════════════════════════════
-# 🌤️ 2. style.css
+# 🍕 2. style.css
 # ═══════════════════════════════════════════════════════════
 
 def build_style():
     return """*{margin:0;padding:0;box-sizing:border-box}
-:root{--glass:rgba(255,255,255,0.08);--glass2:rgba(255,255,255,0.12);--border:rgba(255,255,255,0.15);--text:#fff;--text2:rgba(255,255,255,0.7);--text3:rgba(255,255,255,0.4);--accent:#4fc3f7;--accent2:#ffcc02;--accent3:#ff7043;--radius:28px;--radius-sm:18px;--radius-xs:12px}
-body{font-family:'Cairo',sans-serif;background:#0a1628;color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-tap-highlight-color:transparent;direction:rtl;user-select:none}
+:root{--bg:#0a0a10;--card:rgba(20,20,35,0.85);--card2:rgba(25,25,45,0.7);--text:#f0e8e0;--text2:#a09080;--text3:#605040;--gold:#c9a84c;--gold2:#d4af37;--red:#ef4444;--green:#22c55e;--orange:#f59e0b;--border:rgba(201,168,76,0.15);--glass:rgba(201,168,76,0.06);--radius:24px;--radius-sm:16px;--radius-xs:10px}
+body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-tap-highlight-color:transparent;direction:rtl;user-select:none}
 
-.bg-sky{position:fixed;inset:0;z-index:0;transition:all 1.5s ease}
-.bg-clouds{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.1;background:radial-gradient(ellipse at 30% 40%,rgba(255,255,255,0.3) 0%,transparent 50%),radial-gradient(ellipse at 70% 30%,rgba(255,255,255,0.2) 0%,transparent 40%)}
+.bg-luxury{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 30% 20%,rgba(201,168,76,0.04) 0%,transparent 60%),var(--bg)}
+.bg-glow{position:fixed;top:-200px;right:-100px;width:500px;height:500px;background:radial-gradient(circle,rgba(201,168,76,0.06) 0%,transparent 70%);border-radius:50%;z-index:0;pointer-events:none}
 
-.app{width:100%;max-width:520px;margin:0 auto;padding:14px;position:relative;z-index:1}
+.app{width:100%;max-width:580px;margin:0 auto;padding:12px;position:relative;z-index:1}
 
-.header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--glass);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:14px;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
-.header-left{display:flex;align-items:center;gap:12px}
-.logo{width:48px;height:48px;background:var(--glass2);border:1px solid var(--border);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:26px;animation:logoFloat 3s ease-in-out infinite}
-@keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
-.header-text h1{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:800;background:linear-gradient(135deg,#4fc3f7,#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--card);backdrop-filter:blur(40px);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:12px;position:sticky;top:12px;z-index:50}
+.header-left{display:flex;align-items:center;gap:10px}
+.logo{width:44px;height:44px;background:var(--glass);border:1px solid var(--border);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:22px}
+.header-text h1{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;background:linear-gradient(180deg,#e0c878,#c9a84c);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .header-text span{font-size:7px;color:var(--text3);letter-spacing:3px}
-.header-right{display:flex;gap:8px}
-.btn-icon{width:40px;height:40px;background:var(--glass);border:1px solid var(--border);border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text2);transition:all 0.3s}
-.btn-icon:hover{background:var(--glass2);border-color:var(--accent);color:var(--accent)}
+.header-right{display:flex;gap:6px}
+.btn-icon{width:38px;height:38px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:14px;color:var(--text2);transition:all 0.3s;position:relative}
+.btn-icon:hover{border-color:var(--gold);color:var(--gold)}
+.cart-badge{position:absolute;top:-6px;right:-6px;width:18px;height:18px;background:var(--red);color:#fff;border-radius:50%;font-size:9px;display:flex;align-items:center;justify-content:center;font-weight:700}
 
-.search-bar{display:flex;gap:8px;margin-bottom:14px;animation:slideDown 0.3s ease}
-@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
-.search-input{flex:1;padding:14px 18px;background:var(--glass);backdrop-filter:blur(40px);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:14px;font-family:'Cairo',sans-serif;outline:none}
-.search-input:focus{border-color:var(--accent);box-shadow:0 0 25px rgba(79,195,247,0.15)}
-.search-input::placeholder{color:var(--text3)}
-.btn-search{padding:14px 20px;background:linear-gradient(135deg,var(--accent),#29b6f6);border:none;color:#fff;border-radius:var(--radius-sm);cursor:pointer;font-size:16px;font-family:'Cairo',sans-serif;font-weight:700}
+.nav-tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px;margin-bottom:12px}
+.nav-tabs::-webkit-scrollbar{height:2px}
+.nav-tab{padding:8px 16px;background:var(--card2);border:1px solid var(--border);color:var(--text2);cursor:pointer;border-radius:20px;font-size:11px;font-family:'Cairo',sans-serif;white-space:nowrap;transition:all 0.3s}
+.nav-tab:hover{border-color:var(--gold);color:var(--text)}
+.nav-tab.active{background:linear-gradient(135deg,var(--gold),var(--gold2));border-color:var(--gold);color:#1a1a0a;font-weight:700}
 
-/* Weather Card */
-.weather-card{background:var(--glass);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border-radius:var(--radius);border:1px solid var(--border);padding:24px;margin-bottom:14px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.3)}
-.weather-icon{font-size:80px;margin-bottom:8px;animation:iconBounce 2s ease-in-out infinite}
-@keyframes iconBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.weather-temp{font-family:'Orbitron',sans-serif;font-size:72px;font-weight:800;background:linear-gradient(180deg,#fff,#4fc3f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
-.weather-desc{font-size:16px;font-weight:600;color:var(--text2);margin:6px 0}
-.weather-location{font-size:13px;color:var(--text3);display:flex;align-items:center;justify-content:center;gap:6px}
+.page{display:none;animation:fadeIn 0.4s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 
-.weather-details{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
-.detail-item{text-align:center}
-.detail-icon{font-size:22px;margin-bottom:4px}
-.detail-value{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--accent)}
-.detail-label{font-size:9px;color:var(--text3);margin-top:2px}
+/* Menu Grid */
+.menu-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;padding-bottom:30px}
+.menu-card{background:var(--card);backdrop-filter:blur(30px);border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;cursor:pointer;transition:all 0.3s}
+.menu-card:hover{transform:translateY(-3px);border-color:var(--gold);box-shadow:0 10px 30px rgba(0,0,0,0.3)}
+.menu-card-img{width:100%;aspect-ratio:4/3;background:var(--card2);display:flex;align-items:center;justify-content:center;font-size:50px}
+.menu-card-info{padding:10px 12px}
+.menu-card-name{font-size:13px;font-weight:700;margin-bottom:2px}
+.menu-card-desc{font-size:9px;color:var(--text3);margin-bottom:6px}
+.menu-card-footer{display:flex;align-items:center;justify-content:space-between}
+.menu-card-price{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--gold)}
+.menu-card-rating{font-size:10px;color:var(--orange)}
+.btn-add{width:32px;height:32px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:#1a1a0a;transition:all 0.3s}
+.btn-add:hover{transform:scale(1.1)}
+.btn-add:active{transform:scale(0.9)}
 
-/* Forecast Sections */
-.forecast-section{margin-bottom:14px}
-.section-title{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--accent);margin-bottom:10px;display:flex;align-items:center;gap:8px}
-.hourly-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
-.hourly-scroll::-webkit-scrollbar{height:3px}
-.hourly-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px}
-.hourly-item{min-width:70px;text-align:center;padding:10px 8px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:var(--radius-sm);transition:all 0.3s}
-.hourly-item:hover{border-color:var(--accent);background:rgba(79,195,247,0.08)}
-.hour-time{font-family:'Orbitron',sans-serif;font-size:10px;color:var(--text3);margin-bottom:4px}
-.hour-icon{font-size:24px;margin-bottom:4px}
-.hour-temp{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:var(--text)}
+/* Cart */
+.cart-container h2,.orders-container h2,.favorites-container h2{font-family:'Playfair Display',serif;font-size:18px;margin-bottom:14px;color:var(--gold)}
+.cart-item{display:flex;align-items:center;gap:10px;padding:12px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius-sm);margin-bottom:8px}
+.cart-item-icon{font-size:30px;width:40px;text-align:center}
+.cart-item-info{flex:1}
+.cart-item-name{font-size:12px;font-weight:600}
+.cart-item-price{font-size:10px;color:var(--gold)}
+.cart-qty{display:flex;align-items:center;gap:8px}
+.qty-btn{width:28px;height:28px;background:var(--card);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text);font-size:16px;transition:all 0.3s}
+.qty-btn:hover{border-color:var(--gold)}
+.qty-num{font-size:13px;font-weight:700;min-width:20px;text-align:center}
+.cart-item-del{color:var(--red);cursor:pointer;font-size:14px;padding:4px}
+.cart-empty{text-align:center;padding:40px;color:var(--text3)}
+.cart-empty span{font-size:50px;display:block;margin-bottom:8px}
+.cart-footer{padding:14px;background:var(--card);border-radius:var(--radius-sm);border:1px solid var(--border);margin-top:12px}
+.cart-total{display:flex;justify-content:space-between;font-size:14px;margin-bottom:12px}
+.total-price{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--gold)}
+.btn-checkout{width:100%;padding:14px;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;color:#1a1a0a;font-weight:700;font-size:14px;border-radius:var(--radius-sm);cursor:pointer;font-family:'Cairo',sans-serif;transition:all 0.3s}
+.btn-checkout:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(201,168,76,0.3)}
 
-.weekly-list{display:flex;flex-direction:column;gap:6px}
-.weekly-item{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:var(--radius-sm);transition:all 0.3s}
-.weekly-item:hover{border-color:var(--accent)}
-.w-day{font-size:12px;font-weight:600;color:var(--text);min-width:60px}
-.w-icon{font-size:24px;text-align:center;flex:1}
-.w-temp{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:600;color:var(--accent);min-width:80px;text-align:left}
+/* Orders */
+.order-card{background:var(--card2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px;margin-bottom:8px}
+.order-header{display:flex;justify-content:space-between;margin-bottom:8px}
+.order-id{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--gold)}
+.order-date{font-size:9px;color:var(--text3)}
+.order-items{font-size:10px;color:var(--text2);margin-bottom:6px}
+.order-total{font-size:13px;font-weight:700;color:var(--green)}
+.order-status{padding:3px 10px;border-radius:10px;font-size:8px;font-weight:600;display:inline-block}
+.status-pending{background:rgba(245,158,11,0.2);color:var(--orange)}
+.status-delivered{background:rgba(34,197,94,0.2);color:var(--green)}
+.btn-rate{padding:6px 14px;background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.3);color:var(--orange);border-radius:15px;cursor:pointer;font-size:9px;font-family:'Cairo',sans-serif;margin-top:6px}
 
-/* Favorites */
-.favorites-section{margin-top:8px;padding-bottom:30px}
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.btn-action{padding:8px 14px;background:var(--glass);border:1px solid var(--border);color:var(--accent);cursor:pointer;border-radius:20px;font-size:10px;font-family:'Cairo',sans-serif;transition:all 0.3s}
-.btn-action:hover{border-color:var(--accent);background:rgba(79,195,247,0.1)}
-.fav-cities{display:flex;gap:8px;flex-wrap:wrap}
-.fav-chip{padding:8px 16px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:25px;cursor:pointer;font-size:11px;color:var(--text2);transition:all 0.3s;display:flex;align-items:center;gap:6px}
-.fav-chip:hover{border-color:var(--accent);color:var(--accent)}
-.fav-chip.active{border-color:var(--accent);background:rgba(79,195,247,0.1);color:var(--accent)}
-.fav-del{color:#ff5252;cursor:pointer;font-size:10px;margin-right:4px}
-.fav-del:hover{color:#ff1744}
-.empty-fav{color:var(--text3);font-size:11px;text-align:center;width:100%;padding:12px}
+/* Checkout */
+.checkout-form label{display:block;font-size:10px;color:var(--text2);margin-top:12px;margin-bottom:4px}
+.checkout-form input,.checkout-form textarea{width:100%;padding:12px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius-xs);color:var(--text);font-size:12px;font-family:'Cairo',sans-serif;outline:none;resize:vertical}
+.checkout-form input:focus,.checkout-form textarea:focus{border-color:var(--gold)}
+.order-summary{margin-top:14px;padding:14px;background:var(--card2);border-radius:var(--radius-sm)}
+.order-summary h3{font-size:13px;margin-bottom:8px;color:var(--gold)}
+.total-line{display:flex;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid var(--border)}
 
-.toast{position:fixed;bottom:35px;left:50%;transform:translateX(-50%) translateY(130px);background:rgba(0,0,0,0.9);backdrop-filter:blur(20px);border:1px solid var(--accent);color:#fff;padding:10px 22px;border-radius:25px;font-size:11px;z-index:300;transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);font-family:'Cairo',sans-serif}.toast.show{transform:translateX(-50%) translateY(0)}
+/* Item Detail */
+.item-detail{padding:14px;background:var(--card);border-radius:var(--radius);border:1px solid var(--border)}
+.item-detail-img{width:100%;aspect-ratio:1;background:var(--card2);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:80px;margin-bottom:14px}
+.item-detail h2{font-size:20px;font-weight:700;margin-bottom:4px}
+.item-detail .desc{font-size:11px;color:var(--text3);margin-bottom:10px}
+.item-detail .price{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--gold);margin-bottom:14px}
+.item-detail .reviews{margin-top:14px}
+.item-detail .review-item{padding:8px 0;border-bottom:1px solid var(--border);font-size:10px}
+
+/* Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.85);z-index:200;display:none;align-items:center;justify-content:center}
+.modal-overlay.show{display:flex}
+.modal-content{width:90%;max-width:380px;background:var(--card);backdrop-filter:blur(40px);border-radius:var(--radius);border:1px solid var(--border);padding:20px;text-align:center}
+.modal-content h3{font-size:16px;color:var(--gold);margin-bottom:12px}
+.stars{font-size:36px;margin-bottom:12px;cursor:pointer}
+.star{color:var(--text3);transition:all 0.3s}
+.star.active{color:var(--orange);text-shadow:0 0 15px rgba(245,158,11,0.5)}
+.modal-content textarea{width:100%;padding:10px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius-xs);color:var(--text);font-size:11px;font-family:'Cairo',sans-serif;outline:none;resize:vertical;min-height:60px;margin-bottom:12px}
+
+.toast{position:fixed;bottom:35px;left:50%;transform:translateX(-50%) translateY(130px);background:var(--card);border:1px solid var(--gold);color:var(--text);padding:10px 22px;border-radius:25px;font-size:11px;z-index:300;transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);font-family:'Cairo',sans-serif}.toast.show{transform:translateX(-50%) translateY(0)}
 .particle{position:fixed;border-radius:50%;pointer-events:none;z-index:0}
 @keyframes particleFloat{0%{transform:translateY(110vh) scale(0);opacity:0}15%{opacity:0.7}85%{opacity:0.1}100%{transform:translateY(-10vh) scale(1.5);opacity:0}}
 
-@media(max-width:400px){.weather-temp{font-size:56px}.weather-details{grid-template-columns:repeat(2,1fr)}.weather-icon{font-size:60px}}"""
+@media(max-width:400px){.menu-grid{grid-template-columns:repeat(2,1fr);gap:6px}}"""
 
 # ═══════════════════════════════════════════════════════════
-# 🌤️ 3-5. JS Files
+# 🍕 3-11. JS Files
 # ═══════════════════════════════════════════════════════════
 
 def build_storage_js():
-    return """const KEYS={favorites:'weather2044_favs',lastCity:'weather2044_last'};
+    return """const KEYS={cart:'rest2044_cart',orders:'rest2044_orders',favorites:'rest2044_favs',ratings:'rest2044_ratings'};
 function saveData(k,v){try{localStorage.setItem(k,JSON.stringify(v));return 1}catch(e){return 0}}
 function loadData(k,d=null){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
+function getCart(){return loadData(KEYS.cart,[])}
+function saveCart(cart){saveData(KEYS.cart,cart)}
+function getOrders(){return loadData(KEYS.orders,[])}
+function saveOrders(orders){saveData(KEYS.orders,orders)}
 function getFavorites(){return loadData(KEYS.favorites,[])}
-function addFavorite(city){let f=getFavorites();if(!f.includes(city)){f.push(city);saveData(KEYS.favorites,f)}return f}
-function removeFavorite(city){let f=getFavorites().filter(c=>c!==city);saveData(KEYS.favorites,f);return f}
-function saveLastCity(city){saveData(KEYS.lastCity,city)}
-function getLastCity(){return loadData(KEYS.lastCity,'Riyadh')}"""
+function toggleFavorite(id){let f=getFavorites();const i=f.indexOf(id);i>-1?f.splice(i,1):f.push(id);saveData(KEYS.favorites,f);return f}
+function isFavorite(id){return getFavorites().includes(id)}
+function getRatings(){return loadData(KEYS.ratings,{})}
+function saveRating(itemId,rating,review){const r=getRatings();if(!r[itemId])r[itemId]=[];r[itemId].push({rating,review,date:new Date().toISOString()});saveData(KEYS.ratings,r)}
+function getItemRating(itemId){const r=getRatings();if(!r[itemId]||!r[itemId].length)return 0;return r[itemId].reduce((s,i)=>s+i.rating,0)/r[itemId].length}"""
 
 def build_particles_js():
-    return """function initParticles(){const c=document.getElementById('particlesContainer');c.innerHTML='';const cols=['rgba(255,255,255,0.4)','rgba(79,195,247,0.3)'];for(let i=0;i<25;i++){const p=document.createElement('div');p.className='particle';p.style.cssText=`left:${Math.random()*100}%;bottom:-10px;width:${Math.random()*3+2}px;height:${Math.random()*3+2}px;background:radial-gradient(circle,${cols[i%2]} 0%,transparent 70%);animation:particleFloat ${Math.random()*6+6}s ease-in infinite;animation-delay:${Math.random()*6}s`;c.appendChild(p)}}"""
+    return """function initParticles(){const c=document.getElementById('particlesContainer');c.innerHTML='';const cols=['#c9a84c','#d4af37','#e0c878'];for(let i=0;i<30;i++){const p=document.createElement('div');p.className='particle';p.style.cssText=`left:${Math.random()*100}%;bottom:-10px;width:${Math.random()*3+1}px;height:${Math.random()*3+1}px;background:radial-gradient(circle,${cols[i%3]} 0%,transparent 70%);animation:particleFloat ${Math.random()*5+5}s ease-in infinite;animation-delay:${Math.random()*5}s`;c.appendChild(p)}}"""
 
-def build_weather_js():
-    return """let currentCity='Riyadh',currentData=null,isCelsius=true;
-const WEATHER_ICONS={Clear:'☀️',Clouds:'☁️',Rain:'🌧️',Drizzle:'🌦️',Thunderstorm:'⛈️',Snow:'❄️',Mist:'🌫️',Fog:'🌫️',Haze:'🌫️',Dust:'🌪️',Sand:'🌪️',Smoke:'🌫️',Tornado:'🌪️',Squall:'💨'};
-const WEATHER_BG={Clear:'linear-gradient(180deg,#1a3a5c,#0d2137,#0a1628)',Clouds:'linear-gradient(180deg,#2c3e50,#1a252f,#0a1628)',Rain:'linear-gradient(180deg,#1a2a3a,#121d2a,#0a1628)',Drizzle:'linear-gradient(180deg,#1a2a3a,#121d2a,#0a1628)',Thunderstorm:'linear-gradient(180deg,#0f0f1a,#0a0a12,#050508)',Snow:'linear-gradient(180deg,#2a3a4a,#1a2a3a,#0a1628)',Mist:'linear-gradient(180deg,#1a2a35,#121d28,#0a1628)',Fog:'linear-gradient(180deg,#1a2a35,#121d28,#0a1628)',Haze:'linear-gradient(180deg,#2a2a25,#1a1a18,#0a1628)',Dust:'linear-gradient(180deg,#2a2a20,#1a1a15,#0a1628)'};
-function initWeather(){const last=getLastCity();if(last)currentCity=last;fetchWeather(currentCity);renderFavorites()}
-async function fetchWeather(city){try{const geoRes=await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=bd5e378503939578c5d3d5c5a6d0b19a`);const geoData=await geoRes.json();if(!geoData.length){showToast('⚠ المدينة غير موجودة');return}const{lat,lon,name,country}=geoData[0];const weatherRes=await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=bd5e378503939578c5d3d5c5a6d0b19a`);const weatherData=await weatherRes.json();currentData=weatherData;currentCity=city;saveLastCity(city);updateUI(weatherData,name,country);updateHourly(weatherData);updateWeekly(weatherData)}catch(e){console.error(e);generateMockWeather(city);showToast('📡 بيانات محاكاة (غير متصل)')}}
-function generateMockWeather(city){const conditions=['Clear','Clouds','Rain'];const c=conditions[Math.floor(city.length%3)];const t=Math.floor(Math.random()*15+20);const data={list:Array.from({length:40},(_,i)=>({dt:Date.now()/1000+i*3600,main:{temp:t+Math.sin(i)*5,humidity:Math.floor(Math.random()*30+40),feels_like:t+Math.sin(i)*3-2,visibility:10000},wind:{speed:Math.random()*20+5},weather:[{main:c,description:'سماء صافية'}],pop:Math.random()})),city:{name:city,country:'🇸🇦'}};currentData=data;updateUI(data,city,'🇸🇦');updateHourly(data);updateWeekly(data)}
-function updateUI(data,name,country){const current=data.list[0];const w=current.weather[0];const icon=WEATHER_ICONS[w.main]||'🌈';const bg=WEATHER_BG[w.main]||WEATHER_BG.Clear;document.getElementById('bgSky').style.background=bg;document.getElementById('weatherIcon').innerText=icon;document.getElementById('weatherTemp').innerText=Math.round(current.main.temp)+'°';document.getElementById('weatherDesc').innerText=w.description||'سماء صافية';document.getElementById('cityName').innerText=name+', '+country;document.getElementById('humidity').innerText=current.main.humidity+'%';document.getElementById('windSpeed').innerText=Math.round(current.wind.speed)+' كم/س';document.getElementById('visibility').innerText=(current.main.visibility/1000).toFixed(1)+' كم';document.getElementById('feelsLike').innerText=Math.round(current.main.feels_like)+'°'}
-function updateHourly(data){const container=document.getElementById('hourlyForecast');container.innerHTML=data.list.slice(0,8).map(h=>{const t=new Date(h.dt*1000);const time=t.getHours()+':00';const icon=WEATHER_ICONS[h.weather[0].main]||'🌈';const temp=Math.round(h.main.temp)+'°';return`<div class="hourly-item"><div class="hour-time">${time}</div><div class="hour-icon">${icon}</div><div class="hour-temp">${temp}</div></div>`}).join('')}
-function updateWeekly(data){const container=document.getElementById('weeklyForecast');const days={};data.list.forEach(h=>{const d=new Date(h.dt*1000).toLocaleDateString('ar-SA',{weekday:'long'});if(!days[d])days[d]={temps:[],icon:h.weather[0].main};days[d].temps.push(h.main.temp)});container.innerHTML=Object.entries(days).slice(0,7).map(([day,info])=>{const min=Math.round(Math.min(...info.temps));const max=Math.round(Math.max(...info.temps));const icon=WEATHER_ICONS[info.icon]||'🌈';return`<div class="weekly-item"><div class="w-day">${day}</div><div class="w-icon">${icon}</div><div class="w-temp">${max}° / ${min}°</div></div>`}).join('')}
-function detectLocation(){if(navigator.geolocation){navigator.geolocation.getCurrentPosition(async pos=>{try{const res=await fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&limit=1&appid=bd5e378503939578c5d3d5c5a6d0b19a`);const data=await res.json();if(data.length){currentCity=data[0].name;fetchWeather(currentCity);showToast('📍 '+currentCity)}}catch(e){showToast('📍 تم تحديد موقعك')}},()=>showToast('⚠ تعذر تحديد الموقع'))}else{showToast('⚠ GPS غير مدعوم')}}
-function toggleSearch(){const bar=document.getElementById('searchBar');bar.style.display=bar.style.display==='none'?'flex':'none';if(bar.style.display==='flex')document.getElementById('searchInput').focus()}
-function searchCity(){const input=document.getElementById('searchInput');const city=input.value.trim();if(city){fetchWeather(city);document.getElementById('searchBar').style.display='none';input.value=''}}
-function addFavoriteCity(){const city=prompt('اسم المدينة:');if(city&&city.trim()){addFavorite(city.trim());renderFavorites();showToast('⭐ تمت الإضافة')}}
-function selectFavorite(city){currentCity=city;fetchWeather(city)}
-function deleteFavorite(city){removeFavorite(city);renderFavorites();showToast('🗑 تم الحذف')}
-function renderFavorites(){const container=document.getElementById('favCities');const favs=getFavorites();if(!favs.length){container.innerHTML='<div class="empty-fav">أضف مدنك المفضلة ⭐</div>';return}container.innerHTML=favs.map(c=>`<div class="fav-chip ${c===currentCity?'active':''}" onclick="selectFavorite('${c}')">📍 ${c}<span class="fav-del" onclick="event.stopPropagation();deleteFavorite('${c}')">✕</span></div>`).join('')}
-function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}"""
+def build_menu_js():
+    return """const MENU=[{id:1,name:'بيتزا مارغريتا',desc:'طماطم، موزاريلا، ريحان',price:35,icon:'🍕',category:'pizza',rating:4.5},{id:2,name:'بيتزا بيبروني',desc:'بيبروني، جبن، صلصة',price:42,icon:'🍕',category:'pizza',rating:4.7},{id:3,name:'بيتزا خضار',desc:'فلفل، زيتون، مشروم',price:38,icon:'🍕',category:'pizza',rating:4.3},{id:4,name:'برجر كلاسيك',desc:'لحم، جبن، خس، طماطم',price:28,icon:'🍔',category:'burger',rating:4.6},{id:5,name:'برجر دجاج',desc:'دجاج مشوي، صوص خاص',price:25,icon:'🍔',category:'burger',rating:4.4},{id:6,name:'برجر مزدوج',desc:'طبقتين لحم، جبن إضافي',price:38,icon:'🍔',category:'burger',rating:4.8},{id:7,name:'مكرونة بولونيز',desc:'لحم مفروم، صلصة طماطم',price:32,icon:'🍝',category:'pasta',rating:4.5},{id:8,name:'مكرونة ألفريدو',desc:'دجاج، كريمة، مشروم',price:36,icon:'🍝',category:'pasta',rating:4.6},{id:9,name:'مكرونة بيستو',desc:'ريحان، صنوبر، زيت زيتون',price:30,icon:'🍝',category:'pasta',rating:4.2},{id:10,name:'كولا',desc:'مشروب غازي منعش',price:8,icon:'🥤',category:'drink',rating:4.0},{id:11,name:'عصير برتقال',desc:'طازج 100%',price:12,icon:'🧃',category:'drink',rating:4.5},{id:12,name:'ميلك شيك',desc:'فانيليا، شوكولاتة، فراولة',price:18,icon:'🥛',category:'drink',rating:4.7},{id:13,name:'تشيز كيك',desc:'جبنة كريمية، بسكويت',price:22,icon:'🍰',category:'dessert',rating:4.8},{id:14,name:'براوني',desc:'شوكولاتة، مكسرات',price:18,icon:'🍫',category:'dessert',rating:4.6},{id:15,name:'آيس كريم',desc:'فانيليا، شوكولاتة، فراولة',price:15,icon:'🍦',category:'dessert',rating:4.4},{id:16,name:'كنافة',desc:'جبنة، قطر، فستق',price:25,icon:'🧁',category:'dessert',rating:4.9}];
+function renderMenu(filter='all'){const grid=document.getElementById('menuGrid');const items=filter==='all'?MENU:MENU.filter(i=>i.category===filter);grid.innerHTML=items.map(i=>{const r=getItemRating(i.id);return`<div class="menu-card" onclick="showItemDetail(${i.id})"><div class="menu-card-img">${i.icon}</div><div class="menu-card-info"><div class="menu-card-name">${i.name}</div><div class="menu-card-desc">${i.desc}</div><div class="menu-card-footer"><div class="menu-card-price">${i.price} ر.س</div><div class="menu-card-rating">${'⭐'.repeat(Math.round(r||i.rating))} ${(r||i.rating).toFixed(1)}</div><button class="btn-add" onclick="event.stopPropagation();addToCart(${i.id})">+</button></div></div></div>`}).join('')}
+function showItemDetail(id){const i=MENU.find(m=>m.id===id);if(!i)return;const r=getItemRating(i.id);document.getElementById('itemDetail').innerHTML=`<button class="btn-icon" onclick="navigateTo('menu')" style="margin-bottom:10px">← رجوع</button><div class="item-detail-img">${i.icon}</div><h2>${i.name}</h2><p class="desc">${i.desc}</p><div class="price">${i.price} ر.س</div><div>${'⭐'.repeat(Math.round(r||i.rating))} ${(r||i.rating).toFixed(1)}</div><button class="btn-checkout" onclick="addToCart(${i.id});navigateTo('cart')">🛒 أضف للسلة</button><div class="reviews"><h4>تقييمات (${getRatings()[i.id]?.length||0})</h4>${(getRatings()[i.id]||[]).map(r=>`<div class="review-item">${'⭐'.repeat(r.rating)} - ${r.review||'بدون تعليق'}</div>`).join('')}</div>`;navigateTo('item')}
+function filterMenu(cat,el){document.querySelectorAll('.nav-tab').forEach(b=>b.classList.remove('active'));el.classList.add('active');renderMenu(cat)}"""
+
+def build_cart_js():
+    return """function addToCart(id){let cart=getCart();const ex=cart.find(i=>i.id===id);if(ex){ex.qty++}else{const item=MENU.find(m=>m.id===id);if(!item)return;cart.push({id:item.id,name:item.name,price:item.price,icon:item.icon,qty:1})}saveCart(cart);updateCartBadge();showToast('✅ تمت الإضافة للسلة')}
+function updateCartBadge(){const cart=getCart();const count=cart.reduce((s,i)=>s+i.qty,0);const badge=document.getElementById('cartBadge');badge.textContent=count;badge.style.display=count>0?'flex':'none'}
+function renderCart(){const cart=getCart();const items=document.getElementById('cartItems');const empty=document.getElementById('cartEmpty');const footer=document.getElementById('cartFooter');if(!cart.length){items.innerHTML='';empty.style.display='block';footer.style.display='none';return}empty.style.display='none';footer.style.display='block';items.innerHTML=cart.map((i,idx)=>`<div class="cart-item"><div class="cart-item-icon">${i.icon}</div><div class="cart-item-info"><div class="cart-item-name">${i.name}</div><div class="cart-item-price">${i.price} ر.س</div></div><div class="cart-qty"><button class="qty-btn" onclick="changeQty(${idx},-1)">-</button><span class="qty-num">${i.qty}</span><button class="qty-btn" onclick="changeQty(${idx},1)">+</button></div><span class="cart-item-del" onclick="removeFromCart(${idx})">🗑</span></div>`).join('');const total=cart.reduce((s,i)=>s+i.price*i.qty,0);document.getElementById('cartTotal').textContent=total+' ر.س'}
+function changeQty(idx,delta){let cart=getCart();cart[idx].qty+=delta;if(cart[idx].qty<1)cart.splice(idx,1);saveCart(cart);renderCart();updateCartBadge()}
+function removeFromCart(idx){let cart=getCart();cart.splice(idx,1);saveCart(cart);renderCart();updateCartBadge();showToast('🗑 تم الحذف')}
+function checkout(){const cart=getCart();if(!cart.length){showToast('⚠ السلة فارغة');return}const total=cart.reduce((s,i)=>s+i.price*i.qty,0);document.getElementById('checkoutTotal').textContent=total+' ر.س';document.getElementById('checkoutItems').innerHTML=cart.map(i=>`<div style="display:flex;justify-content:space-between;font-size:11px;margin:4px 0">${i.icon} ${i.name} x${i.qty} <span>${i.price*i.qty} ر.س</span></div>`).join('');navigateTo('checkout')}"""
+
+def build_orders_js():
+    return """function placeOrder(e){e.preventDefault();const cart=getCart();if(!cart.length)return;const order={id:'ORD-'+Date.now().toString(36).toUpperCase(),items:[...cart],total:cart.reduce((s,i)=>s+i.price*i.qty,0),name:document.getElementById('customerName').value,phone:document.getElementById('customerPhone').value,address:document.getElementById('customerAddress').value,notes:document.getElementById('orderNotes').value,status:'pending',date:new Date().toISOString()};let orders=getOrders();orders.unshift(order);saveOrders(orders);saveCart([]);updateCartBadge();navigateTo('orders');renderOrders();showToast('✅ تم الطلب بنجاح! رقم الطلب: '+order.id)}
+function renderOrders(){const orders=getOrders();const list=document.getElementById('ordersList');if(!orders.length){list.innerHTML='<div class="cart-empty"><span>📋</span><p>لا توجد طلبات</p></div>';return}list.innerHTML=orders.map(o=>{const statusClass=o.status==='delivered'?'status-delivered':'status-pending';return`<div class="order-card"><div class="order-header"><span class="order-id">#${o.id}</span><span class="order-date">${new Date(o.date).toLocaleDateString('ar-SA')}</span></div><div class="order-items">${o.items.map(i=>i.icon+' '+i.name+' x'+i.qty).join('، ')}</div><div class="order-total">${o.total} ر.س</div><span class="order-status ${statusClass}">${o.status==='delivered'?'✅ تم التوصيل':'⏳ قيد التجهيز'}</span>${o.status==='delivered'?`<br><button class="btn-rate" onclick="openRating('${o.id}')">⭐ تقييم</button>`:''}</div>`}).join('')}"""
+
+def build_favorites_js():
+    return """function renderFavorites(){const grid=document.getElementById('favoritesGrid');const favs=getFavorites();const items=MENU.filter(i=>favs.includes(i.id));if(!items.length){grid.innerHTML='<div class="cart-empty"><span>❤️</span><p>لا توجد مفضلة</p></div>';return}grid.innerHTML=items.map(i=>{const r=getItemRating(i.id);return`<div class="menu-card" onclick="showItemDetail(${i.id})"><div class="menu-card-img">${i.icon}</div><div class="menu-card-info"><div class="menu-card-name">${i.name}</div><div class="menu-card-price">${i.price} ر.س</div><div class="menu-card-rating">${'⭐'.repeat(Math.round(r||i.rating))}</div><button class="btn-add" onclick="event.stopPropagation();addToCart(${i.id})">+</button></div></div>`}).join('')}}"""
+
+def build_ratings_js():
+    return """let currentRating=0,currentOrderId=null;
+function openRating(orderId){currentOrderId=orderId;currentRating=0;document.getElementById('ratingModal').classList.add('show');document.getElementById('reviewText').value='';updateStars()}
+function closeRating(){document.getElementById('ratingModal').classList.remove('show')}
+function setRating(r){currentRating=r;updateStars()}
+function updateStars(){document.querySelectorAll('.star').forEach((s,i)=>{s.textContent=i<currentRating?'★':'☆';s.classList.toggle('active',i<currentRating)})}
+function submitRating(){if(!currentRating||!currentOrderId)return;const orders=getOrders();const order=orders.find(o=>o.id===currentOrderId);if(order){order.items.forEach(i=>{saveRating(i.id,currentRating,document.getElementById('reviewText').value)})}closeRating();renderMenu();renderOrders();showToast('⭐ شكراً لتقييمك!')}"""
+
+def build_navigation_js():
+    return """function navigateTo(page){document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));const pageMap={menu:'pageMenu',cart:'pageCart',orders:'pageOrders',favorites:'pageFavorites',item:'pageItem',checkout:'pageCheckout'};const target=pageMap[page];if(target)document.getElementById(target).classList.add('active');if(page==='cart')renderCart();if(page==='orders')renderOrders();if(page==='favorites')renderFavorites();if(page==='menu')renderMenu()}"""
 
 def build_app_js():
-    return """initParticles();initWeather();"""
+    return """initParticles();renderMenu();updateCartBadge();"""
 
 # ═══════════════════════════════════════════════════════════
-# 🌤️ MAIN
+# 🍕 MAIN
 # ═══════════════════════════════════════════════════════════
 
 def main():
     print("""
 ╔══════════════════════════════════════════════════════════╗
-║  🌤️  WEATHER 2044 - PREMIUM EDITION  🌤️             ║
-║     Ultimate Generator - 6 Files                         ║
+║  🍕  RESTAURANT 2044 - ULTIMATE EDITION  🍕          ║
+║     Ultimate Generator - 26 Files                        ║
 ╚══════════════════════════════════════════════════════════╝
     """)
 
-    section("BUILDING WEATHER 2044")
+    section("CREATING FILES")
 
     write("index.html", build_index())
-    write("style.css", build_style())
-    write("storage.js", build_storage_js())
-    write("particles.js", build_particles_js())
-    write("weather.js", build_weather_js())
-    write("app.js", build_app_js())
+    write("css/style.css", build_style())
+    write("js/storage.js", build_storage_js())
+    write("js/particles.js", build_particles_js())
+    write("js/menu.js", build_menu_js())
+    write("js/cart.js", build_cart_js())
+    write("js/orders.js", build_orders_js())
+    write("js/favorites.js", build_favorites_js())
+    write("js/ratings.js", build_ratings_js())
+    write("js/navigation.js", build_navigation_js())
+    write("js/app.js", build_app_js())
 
     print(f"""
 {'='*60}
   ✅ BUILD COMPLETE! - {TOTAL_LINES} خط
-  📁 6 ملفات
+  📁 11 ملفات
 
-  🌍 Weather API + GPS
-  💎 Glass Morphism Design
-  ⏰ Hourly + Weekly Forecast
-  ⭐ Favorite Cities
-  🌈 Dynamic Backgrounds
+  🍕 16 منتج في المنيو
+  🛒 سلة مشتريات كاملة
+  📋 نظام طلبات
+  ⭐ تقييمات ومراجعات
+  ❤️ مفضلة
+  💳 نموذج دفع
 
   🚀 للتشغيل:
      افتح index.html في المتصفح
 
-  🌤️ WEATHER 2044 READY!
+  🍕 RESTAURANT 2044 READY!
 {'='*60}
     """)
 
