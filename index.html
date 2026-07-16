@@ -3,113 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>🌤️ Weather 2044</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <title>🍕 Restaurant 2044</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <div class="bg-sky" id="bgSky"></div>
-    <div class="bg-clouds" id="bgClouds"></div>
+    <div class="bg-luxury"></div>
+    <div class="bg-glow"></div>
     <div id="particlesContainer"></div>
 
     <div class="app">
         <!-- Header -->
         <div class="header">
             <div class="header-left">
-                <div class="logo">🌤️</div>
+                <div class="logo">🍕</div>
                 <div class="header-text">
-                    <h1>Weather 2044</h1>
-                    <span>✦ Premium Edition ✦</span>
+                    <h1>Restaurant 2044</h1>
+                    <span>✦ Premium Dining ✦</span>
                 </div>
             </div>
             <div class="header-right">
-                <button class="btn-icon" onclick="detectLocation()" title="تحديد الموقع"><i class="fas fa-location-dot"></i></button>
-                <button class="btn-icon" onclick="toggleSearch()" title="بحث"><i class="fas fa-search"></i></button>
+                <button class="btn-icon cart-btn" onclick="navigateTo('cart')">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </button>
+                <button class="btn-icon" onclick="navigateTo('orders')"><i class="fas fa-receipt"></i></button>
+                <button class="btn-icon" onclick="navigateTo('favorites')"><i class="fas fa-heart"></i></button>
             </div>
         </div>
 
-        <!-- Search -->
-        <div class="search-bar" id="searchBar" style="display:none">
-            <input type="text" class="search-input" id="searchInput" placeholder="🔍 ابحث عن مدينة..." onkeydown="if(event.key==='Enter')searchCity()">
-            <button class="btn-search" onclick="searchCity()"><i class="fas fa-search"></i></button>
+        <!-- Navigation -->
+        <div class="nav-tabs">
+            <button class="nav-tab active" onclick="filterMenu('all', this)">🍽️ الكل</button>
+            <button class="nav-tab" onclick="filterMenu('pizza', this)">🍕 بيتزا</button>
+            <button class="nav-tab" onclick="filterMenu('burger', this)">🍔 برجر</button>
+            <button class="nav-tab" onclick="filterMenu('pasta', this)">🍝 مكرونة</button>
+            <button class="nav-tab" onclick="filterMenu('drink', this)">🥤 مشروبات</button>
+            <button class="nav-tab" onclick="filterMenu('dessert', this)">🍰 حلويات</button>
         </div>
 
-        <!-- Main Weather Card -->
-        <div class="weather-card">
-            <div class="weather-main">
-                <div class="weather-icon" id="weatherIcon">☀️</div>
-                <div class="weather-temp" id="weatherTemp">--°</div>
-                <div class="weather-desc" id="weatherDesc">جاري التحميل...</div>
-                <div class="weather-location" id="weatherLocation">
-                    <i class="fas fa-map-marker-alt"></i> <span id="cityName">--</span>
+        <!-- Pages -->
+        <div class="page active" id="pageMenu">
+            <div class="menu-grid" id="menuGrid"></div>
+        </div>
+
+        <div class="page" id="pageCart">
+            <div class="cart-container">
+                <h2>🛒 سلة المشتريات</h2>
+                <div class="cart-items" id="cartItems"></div>
+                <div class="cart-empty" id="cartEmpty">
+                    <span>🛒</span>
+                    <p>السلة فارغة</p>
                 </div>
-            </div>
-            <div class="weather-details">
-                <div class="detail-item">
-                    <div class="detail-icon">💧</div>
-                    <div class="detail-info">
-                        <div class="detail-value" id="humidity">--%</div>
-                        <div class="detail-label">الرطوبة</div>
+                <div class="cart-footer" id="cartFooter" style="display:none">
+                    <div class="cart-total">
+                        <span>المجموع:</span>
+                        <span class="total-price" id="cartTotal">0 ريال</span>
                     </div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-icon">🌬️</div>
-                    <div class="detail-info">
-                        <div class="detail-value" id="windSpeed">--</div>
-                        <div class="detail-label">الرياح</div>
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-icon">👁️</div>
-                    <div class="detail-info">
-                        <div class="detail-value" id="visibility">--</div>
-                        <div class="detail-label">الرؤية</div>
-                    </div>
-                </div>
-                <div class="detail-item">
-                    <div class="detail-icon">🌡️</div>
-                    <div class="detail-info">
-                        <div class="detail-value" id="feelsLike">--°</div>
-                        <div class="detail-label">الإحساس</div>
-                    </div>
+                    <button class="btn-checkout" onclick="checkout()">💳 إتمام الطلب</button>
                 </div>
             </div>
         </div>
 
-        <!-- Hourly Forecast -->
-        <div class="forecast-section">
-            <h3 class="section-title">⏰ كل ساعة</h3>
-            <div class="hourly-scroll" id="hourlyForecast">
-                <div class="hourly-item"><div class="hour-time">--</div><div class="hour-icon">--</div><div class="hour-temp">--°</div></div>
+        <div class="page" id="pageOrders">
+            <div class="orders-container">
+                <h2>📋 طلباتي</h2>
+                <div class="orders-list" id="ordersList"></div>
             </div>
         </div>
 
-        <!-- Weekly Forecast -->
-        <div class="forecast-section">
-            <h3 class="section-title">📅 الأسبوع</h3>
-            <div class="weekly-list" id="weeklyForecast">
-                <div class="weekly-item"><div class="w-day">--</div><div class="w-icon">--</div><div class="w-temp">--° / --°</div></div>
+        <div class="page" id="pageFavorites">
+            <div class="favorites-container">
+                <h2>❤️ المفضلة</h2>
+                <div class="menu-grid" id="favoritesGrid"></div>
             </div>
         </div>
 
-        <!-- Favorite Cities -->
-        <div class="favorites-section">
-            <div class="section-header">
-                <h3 class="section-title">⭐ مدن مفضلة</h3>
-                <button class="btn-action" onclick="addFavoriteCity()"><i class="fas fa-plus"></i> إضافة</button>
+        <div class="page" id="pageItem">
+            <div class="item-detail" id="itemDetail"></div>
+        </div>
+
+        <div class="page" id="pageCheckout">
+            <div class="checkout-container">
+                <h2>💳 إتمام الطلب</h2>
+                <form class="checkout-form" id="checkoutForm" onsubmit="placeOrder(event)">
+                    <label>👤 الاسم</label>
+                    <input type="text" id="customerName" required placeholder="أدخل اسمك">
+                    <label>📞 رقم الجوال</label>
+                    <input type="tel" id="customerPhone" required placeholder="05xxxxxxxx">
+                    <label>📍 عنوان التوصيل</label>
+                    <textarea id="customerAddress" required placeholder="أدخل عنوان التوصيل"></textarea>
+                    <label>💬 ملاحظات</label>
+                    <textarea id="orderNotes" placeholder="ملاحظات إضافية..."></textarea>
+                    <div class="order-summary">
+                        <h3>ملخص الطلب</h3>
+                        <div id="checkoutItems"></div>
+                        <div class="total-line">
+                            <span>المجموع الكلي:</span>
+                            <span class="total-price" id="checkoutTotal">0 ريال</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-checkout">✅ تأكيد الطلب</button>
+                </form>
             </div>
-            <div class="fav-cities" id="favCities">
-                <div class="empty-fav">أضف مدنك المفضلة ⭐</div>
+        </div>
+    </div>
+
+    <!-- Rating Modal -->
+    <div class="modal-overlay" id="ratingModal" onclick="closeRating()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h3>⭐ تقييم الطلب</h3>
+            <div class="stars" id="starsContainer">
+                <span class="star" onclick="setRating(1)">☆</span>
+                <span class="star" onclick="setRating(2)">☆</span>
+                <span class="star" onclick="setRating(3)">☆</span>
+                <span class="star" onclick="setRating(4)">☆</span>
+                <span class="star" onclick="setRating(5)">☆</span>
             </div>
+            <textarea id="reviewText" placeholder="اكتب تقييمك..."></textarea>
+            <button class="btn-checkout" onclick="submitRating()">إرسال التقييم</button>
         </div>
     </div>
 
     <div class="toast" id="toast"></div>
 
-    <script src="storage.js"></script>
-    <script src="particles.js"></script>
-    <script src="weather.js"></script>
-    <script src="app.js"></script>
+    <script src="js/storage.js"></script>
+    <script src="js/particles.js"></script>
+    <script src="js/menu.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/orders.js"></script>
+    <script src="js/favorites.js"></script>
+    <script src="js/ratings.js"></script>
+    <script src="js/navigation.js"></script>
+    <script src="js/app.js"></script>
 </body>
 </html>
