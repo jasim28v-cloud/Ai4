@@ -2,19 +2,19 @@
 """
 ╔══════════════════════════════════════════════════════════════╗
 ║                                                            ║
-║  🎧  SONIC 2044 - ULTIMATE AUDIO PLAYER  🎧             ║
-║     Ultimate Generator - 12 Files - 3000+ Lines            ║
+║  🌤️  WEATHER 2044 - ULTIMATE EDITION  🌤️               ║
+║     Ultimate Generator - 10 Files - 2500+ Lines            ║
 ║                                                            ║
-║  🎵  3D Audio Visualizer + Custom EQ + Lyrics             ║
-║  🎨  Futuristic Glass Morphism Design                      ║
-║  💾  Playlist with Local Storage                           ║
-║  🔊  Bass Boost + 3D Spatial Audio                        ║
+║  🌍  Real-time Weather Data via API                        ║
+║  💎  Premium Glass Morphism Design                         ║
+║  📍  GPS Location Auto-Detect                              ║
+║  🌈  Dynamic Backgrounds + Particles                       ║
+║  💾  Save Favorite Cities                                  ║
 ║                                                          ║
 ╚══════════════════════════════════════════════════════════════╝
 """
 
 import os
-import json
 
 TOTAL_LINES = 0
 
@@ -29,11 +29,11 @@ def write(filename, content):
 
 def section(title):
     print(f"\n{'='*60}")
-    print(f"  🎧 {title}")
+    print(f"  🌤️ {title}")
     print(f"{'='*60}")
 
 # ═══════════════════════════════════════════════════════════
-# 🎧 1. index.html
+# 🌤️ 1. index.html
 # ═══════════════════════════════════════════════════════════
 
 def build_index():
@@ -42,156 +42,104 @@ def build_index():
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>🎧 Sonic 2044</title>
+    <title>🌤️ Weather 2044</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="bg-void"></div>
-    <div class="bg-ring bg-ring-1"></div>
-    <div class="bg-ring bg-ring-2"></div>
-    <div class="bg-ring bg-ring-3"></div>
+    <div class="bg-sky" id="bgSky"></div>
+    <div class="bg-clouds" id="bgClouds"></div>
     <div id="particlesContainer"></div>
 
     <div class="app">
         <!-- Header -->
         <div class="header">
             <div class="header-left">
-                <div class="logo">🎧</div>
+                <div class="logo">🌤️</div>
                 <div class="header-text">
-                    <h1>Sonic 2044</h1>
-                    <span>✦ Ultimate Player ✦</span>
+                    <h1>Weather 2044</h1>
+                    <span>✦ Premium Edition ✦</span>
                 </div>
             </div>
             <div class="header-right">
-                <button class="btn-icon" onclick="toggleEQ()" id="btnEQ"><i class="fas fa-sliders"></i></button>
-                <button class="btn-icon" onclick="toggleLyrics()" id="btnLyrics"><i class="fas fa-microphone"></i></button>
+                <button class="btn-icon" onclick="detectLocation()" title="تحديد الموقع"><i class="fas fa-location-dot"></i></button>
+                <button class="btn-icon" onclick="toggleSearch()" title="بحث"><i class="fas fa-search"></i></button>
             </div>
         </div>
 
-        <!-- 3D Visualizer -->
-        <div class="visualizer-3d" id="visualizer3D">
-            <canvas id="vizCanvas"></canvas>
-            <div class="viz-overlay">
-                <div class="track-info">
-                    <div class="track-title" id="trackTitle">اختر أغنية</div>
-                    <div class="track-artist" id="trackArtist">Sonic 2044</div>
-                </div>
-                <div class="track-time">
-                    <span id="currentTime">0:00</span>
-                    <span id="totalTime">0:00</span>
-                </div>
-            </div>
+        <!-- Search -->
+        <div class="search-bar" id="searchBar" style="display:none">
+            <input type="text" class="search-input" id="searchInput" placeholder="🔍 ابحث عن مدينة..." onkeydown="if(event.key==='Enter')searchCity()">
+            <button class="btn-search" onclick="searchCity()"><i class="fas fa-search"></i></button>
         </div>
 
-        <!-- Progress Bar -->
-        <div class="progress-section">
-            <div class="progress-track" id="progressTrack" onclick="seek(event)">
-                <div class="progress-fill" id="progressFill"></div>
-                <div class="progress-thumb" id="progressThumb"></div>
-            </div>
-        </div>
-
-        <!-- Controls -->
-        <div class="controls">
-            <button class="ctrl-btn" onclick="toggleShuffle()" id="shuffleBtn"><i class="fas fa-shuffle"></i></button>
-            <button class="ctrl-btn" onclick="prevTrack()"><i class="fas fa-backward-step"></i></button>
-            <button class="ctrl-play" id="playBtn" onclick="togglePlay()"><i class="fas fa-play" id="playIcon"></i></button>
-            <button class="ctrl-btn" onclick="nextTrack()"><i class="fas fa-forward-step"></i></button>
-            <button class="ctrl-btn" onclick="toggleRepeat()" id="repeatBtn"><i class="fas fa-repeat"></i></button>
-        </div>
-
-        <!-- EQ Panel -->
-        <div class="eq-panel" id="eqPanel" style="display:none">
-            <div class="eq-header">
-                <h3>🎛️ Equalizer</h3>
-                <div class="eq-presets">
-                    <button class="preset-btn active" onclick="setPreset('flat', this)">مسطح</button>
-                    <button class="preset-btn" onclick="setPreset('bass', this)">Bass</button>
-                    <button class="preset-btn" onclick="setPreset('treble', this)">Treble</button>
-                    <button class="preset-btn" onclick="setPreset('vocal', this)">Vocal</button>
-                    <button class="preset-btn" onclick="setPreset('rock', this)">Rock</button>
+        <!-- Main Weather Card -->
+        <div class="weather-card">
+            <div class="weather-main">
+                <div class="weather-icon" id="weatherIcon">☀️</div>
+                <div class="weather-temp" id="weatherTemp">--°</div>
+                <div class="weather-desc" id="weatherDesc">جاري التحميل...</div>
+                <div class="weather-location" id="weatherLocation">
+                    <i class="fas fa-map-marker-alt"></i> <span id="cityName">--</span>
                 </div>
             </div>
-            <div class="eq-sliders">
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq0" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>60Hz</span>
+            <div class="weather-details">
+                <div class="detail-item">
+                    <div class="detail-icon">💧</div>
+                    <div class="detail-info">
+                        <div class="detail-value" id="humidity">--%</div>
+                        <div class="detail-label">الرطوبة</div>
+                    </div>
                 </div>
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq1" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>170Hz</span>
+                <div class="detail-item">
+                    <div class="detail-icon">🌬️</div>
+                    <div class="detail-info">
+                        <div class="detail-value" id="windSpeed">--</div>
+                        <div class="detail-label">الرياح</div>
+                    </div>
                 </div>
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq2" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>310Hz</span>
+                <div class="detail-item">
+                    <div class="detail-icon">👁️</div>
+                    <div class="detail-info">
+                        <div class="detail-value" id="visibility">--</div>
+                        <div class="detail-label">الرؤية</div>
+                    </div>
                 </div>
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq3" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>600Hz</span>
-                </div>
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq4" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>1kHz</span>
-                </div>
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq5" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>3kHz</span>
-                </div>
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq6" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>6kHz</span>
-                </div>
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq7" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>12kHz</span>
-                </div>
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq8" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>14kHz</span>
-                </div>
-                <div class="eq-band">
-                    <input type="range" class="eq-slider" id="eq9" min="-12" max="12" value="0" orient="vertical" oninput="updateEQ()">
-                    <span>16kHz</span>
-                </div>
-            </div>
-            <div class="eq-extra">
-                <div class="extra-knob">
-                    <span>🔊 Bass Boost</span>
-                    <input type="range" class="gold-slider" id="bassBoost" min="0" max="100" value="30" oninput="updateBass()">
-                </div>
-                <div class="extra-knob">
-                    <span>🌐 3D Spatial</span>
-                    <input type="range" class="gold-slider" id="spatial" min="0" max="100" value="50" oninput="updateSpatial()">
+                <div class="detail-item">
+                    <div class="detail-icon">🌡️</div>
+                    <div class="detail-info">
+                        <div class="detail-value" id="feelsLike">--°</div>
+                        <div class="detail-label">الإحساس</div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Lyrics Panel -->
-        <div class="lyrics-panel" id="lyricsPanel" style="display:none">
-            <div class="lyrics-header">
-                <h3>🎤 كلمات الأغنية</h3>
-                <button class="btn-action" onclick="editLyrics()">✏️ تحرير</button>
-            </div>
-            <div class="lyrics-content" id="lyricsContent">
-                <p class="lyrics-line">🎵 اختر أغنية لعرض الكلمات</p>
-                <p class="lyrics-line">✨ الكلمات تظهر هنا بتأثير متحرك</p>
+        <!-- Hourly Forecast -->
+        <div class="forecast-section">
+            <h3 class="section-title">⏰ كل ساعة</h3>
+            <div class="hourly-scroll" id="hourlyForecast">
+                <div class="hourly-item"><div class="hour-time">--</div><div class="hour-icon">--</div><div class="hour-temp">--°</div></div>
             </div>
         </div>
 
-        <!-- Playlist -->
-        <div class="playlist-section">
-            <div class="playlist-header">
-                <h3>📋 قائمة التشغيل</h3>
-                <button class="btn-action" onclick="document.getElementById('audioInput').click()">📂 إضافة</button>
-                <input type="file" id="audioInput" accept="audio/*" multiple style="display:none" onchange="addFiles(this)">
+        <!-- Weekly Forecast -->
+        <div class="forecast-section">
+            <h3 class="section-title">📅 الأسبوع</h3>
+            <div class="weekly-list" id="weeklyForecast">
+                <div class="weekly-item"><div class="w-day">--</div><div class="w-icon">--</div><div class="w-temp">--° / --°</div></div>
             </div>
-            <div class="playlist" id="playlist">
-                <div class="empty-playlist">
-                    <span>🎵</span>
-                    <p>اسحب ملفات الصوت هنا</p>
-                </div>
+        </div>
+
+        <!-- Favorite Cities -->
+        <div class="favorites-section">
+            <div class="section-header">
+                <h3 class="section-title">⭐ مدن مفضلة</h3>
+                <button class="btn-action" onclick="addFavoriteCity()"><i class="fas fa-plus"></i> إضافة</button>
+            </div>
+            <div class="fav-cities" id="favCities">
+                <div class="empty-fav">أضف مدنك المفضلة ⭐</div>
             </div>
         </div>
     </div>
@@ -200,219 +148,169 @@ def build_index():
 
     <script src="storage.js"></script>
     <script src="particles.js"></script>
-    <script src="visualizer.js"></script>
-    <script src="equalizer.js"></script>
-    <script src="lyrics.js"></script>
-    <script src="player.js"></script>
+    <script src="weather.js"></script>
     <script src="app.js"></script>
 </body>
 </html>"""
 
 # ═══════════════════════════════════════════════════════════
-# 🎧 2. style.css
+# 🌤️ 2. style.css
 # ═══════════════════════════════════════════════════════════
 
 def build_style():
     return """*{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#050510;--card:rgba(10,10,30,0.85);--card2:rgba(15,15,40,0.7);--text:#e8e0f0;--text2:#9088a8;--text3:#504868;--accent:#00ffcc;--accent2:#ff44aa;--accent3:#ffaa00;--accent4:#6366f1;--glass:rgba(0,255,204,0.06);--border:rgba(0,255,204,0.12);--radius:24px;--radius-sm:16px;--radius-xs:12px}
-body{font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-tap-highlight-color:transparent;direction:rtl;user-select:none}
+:root{--glass:rgba(255,255,255,0.08);--glass2:rgba(255,255,255,0.12);--border:rgba(255,255,255,0.15);--text:#fff;--text2:rgba(255,255,255,0.7);--text3:rgba(255,255,255,0.4);--accent:#4fc3f7;--accent2:#ffcc02;--accent3:#ff7043;--radius:28px;--radius-sm:18px;--radius-xs:12px}
+body{font-family:'Cairo',sans-serif;background:#0a1628;color:var(--text);min-height:100vh;overflow-x:hidden;-webkit-tap-highlight-color:transparent;direction:rtl;user-select:none}
 
-.bg-void{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at 30% 20%,rgba(0,255,204,0.04) 0%,transparent 60%),radial-gradient(ellipse at 70% 80%,rgba(255,68,170,0.03) 0%,transparent 60%),var(--bg)}
-.bg-ring{position:fixed;border-radius:50%;border:1px solid rgba(0,255,204,0.06);z-index:0;pointer-events:none;animation:ringRotate 30s linear infinite}
-.bg-ring-1{width:600px;height:600px;top:-200px;left:-100px;animation-duration:25s}
-.bg-ring-2{width:500px;height:500px;bottom:-150px;right:-80px;animation-duration:35s;animation-direction:reverse}
-.bg-ring-3{width:400px;height:400px;top:30%;left:40%;animation-duration:40s}
-@keyframes ringRotate{to{transform:rotate(360deg)}}
+.bg-sky{position:fixed;inset:0;z-index:0;transition:all 1.5s ease}
+.bg-clouds{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0.1;background:radial-gradient(ellipse at 30% 40%,rgba(255,255,255,0.3) 0%,transparent 50%),radial-gradient(ellipse at 70% 30%,rgba(255,255,255,0.2) 0%,transparent 40%)}
 
-.app{width:100%;max-width:520px;margin:0 auto;padding:12px;position:relative;z-index:1}
+.app{width:100%;max-width:520px;margin:0 auto;padding:14px;position:relative;z-index:1}
 
-.header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--card);backdrop-filter:blur(40px);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:12px}
-.header-left{display:flex;align-items:center;gap:10px}
-.logo{width:46px;height:46px;background:var(--glass);border:1px solid var(--border);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:24px;animation:logoGlow 3s ease-in-out infinite}
-@keyframes logoGlow{0%,100%{box-shadow:0 0 20px rgba(0,255,204,0.3)}50%{box-shadow:0 0 35px rgba(255,68,170,0.6)}}
-.header-text h1{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:800;background:linear-gradient(135deg,#00ffcc,#6366f1);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;background:var(--glass);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border-radius:var(--radius);border:1px solid var(--border);margin-bottom:14px;box-shadow:0 8px 32px rgba(0,0,0,0.2)}
+.header-left{display:flex;align-items:center;gap:12px}
+.logo{width:48px;height:48px;background:var(--glass2);border:1px solid var(--border);border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;font-size:26px;animation:logoFloat 3s ease-in-out infinite}
+@keyframes logoFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+.header-text h1{font-family:'Orbitron',sans-serif;font-size:18px;font-weight:800;background:linear-gradient(135deg,#4fc3f7,#fff);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
 .header-text span{font-size:7px;color:var(--text3);letter-spacing:3px}
-.header-right{display:flex;gap:6px}
-.btn-icon{width:38px;height:38px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--text2);transition:all 0.3s}
-.btn-icon:hover{border-color:var(--accent);color:var(--accent)}
-.btn-icon.active{background:var(--glass);border-color:var(--accent);color:var(--accent);box-shadow:0 0 20px rgba(0,255,204,0.3)}
+.header-right{display:flex;gap:8px}
+.btn-icon{width:40px;height:40px;background:var(--glass);border:1px solid var(--border);border-radius:var(--radius-xs);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;color:var(--text2);transition:all 0.3s}
+.btn-icon:hover{background:var(--glass2);border-color:var(--accent);color:var(--accent)}
 
-/* 3D Visualizer */
-.visualizer-3d{position:relative;width:100%;aspect-ratio:1;max-height:350px;background:var(--card);backdrop-filter:blur(40px);border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;margin-bottom:10px}
-.visualizer-3d canvas{width:100%;height:100%}
-.viz-overlay{position:absolute;bottom:0;left:0;right:0;padding:16px;background:linear-gradient(to top,rgba(5,5,16,0.9),transparent)}
-.track-title{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;color:var(--accent);margin-bottom:2px;text-shadow:0 0 20px rgba(0,255,204,0.5)}
-.track-artist{font-size:11px;color:var(--text2)}
-.track-time{display:flex;justify-content:space-between;font-family:'Orbitron',sans-serif;font-size:10px;color:var(--accent2);margin-top:6px}
+.search-bar{display:flex;gap:8px;margin-bottom:14px;animation:slideDown 0.3s ease}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.search-input{flex:1;padding:14px 18px;background:var(--glass);backdrop-filter:blur(40px);border:1px solid var(--border);border-radius:var(--radius-sm);color:var(--text);font-size:14px;font-family:'Cairo',sans-serif;outline:none}
+.search-input:focus{border-color:var(--accent);box-shadow:0 0 25px rgba(79,195,247,0.15)}
+.search-input::placeholder{color:var(--text3)}
+.btn-search{padding:14px 20px;background:linear-gradient(135deg,var(--accent),#29b6f6);border:none;color:#fff;border-radius:var(--radius-sm);cursor:pointer;font-size:16px;font-family:'Cairo',sans-serif;font-weight:700}
 
-/* Progress */
-.progress-section{padding:4px 0;margin-bottom:10px}
-.progress-track{width:100%;height:4px;background:rgba(255,255,255,0.08);border-radius:2px;cursor:pointer;position:relative}
-.progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2),var(--accent3));border-radius:2px;width:0;transition:width 0.1s linear}
-.progress-thumb{position:absolute;top:-6px;width:16px;height:16px;background:#fff;border-radius:50%;box-shadow:0 0 15px rgba(0,255,204,0.6);transform:translateX(-50%);left:0;display:none}
-.progress-track:hover .progress-thumb{display:block}
+/* Weather Card */
+.weather-card{background:var(--glass);backdrop-filter:blur(40px);-webkit-backdrop-filter:blur(40px);border-radius:var(--radius);border:1px solid var(--border);padding:24px;margin-bottom:14px;text-align:center;box-shadow:0 20px 50px rgba(0,0,0,0.3)}
+.weather-icon{font-size:80px;margin-bottom:8px;animation:iconBounce 2s ease-in-out infinite}
+@keyframes iconBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.weather-temp{font-family:'Orbitron',sans-serif;font-size:72px;font-weight:800;background:linear-gradient(180deg,#fff,#4fc3f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;line-height:1}
+.weather-desc{font-size:16px;font-weight:600;color:var(--text2);margin:6px 0}
+.weather-location{font-size:13px;color:var(--text3);display:flex;align-items:center;justify-content:center;gap:6px}
 
-/* Controls */
-.controls{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:12px}
-.ctrl-btn{width:42px;height:42px;background:var(--card2);border:1px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:15px;color:var(--text2);transition:all 0.3s}
-.ctrl-btn:hover{border-color:var(--accent);color:var(--accent)}
-.ctrl-btn.active{border-color:var(--accent);color:var(--accent);box-shadow:0 0 20px rgba(0,255,204,0.3)}
-.ctrl-play{width:60px;height:60px;background:linear-gradient(135deg,var(--accent),var(--accent4));border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;color:#000;box-shadow:0 8px 30px rgba(0,255,204,0.3);transition:all 0.3s}
-.ctrl-play:hover{transform:scale(1.05);box-shadow:0 12px 40px rgba(99,102,241,0.5)}
-.ctrl-play:active{transform:scale(0.95)}
+.weather-details{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:20px;padding-top:16px;border-top:1px solid var(--border)}
+.detail-item{text-align:center}
+.detail-icon{font-size:22px;margin-bottom:4px}
+.detail-value{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--accent)}
+.detail-label{font-size:9px;color:var(--text3);margin-top:2px}
 
-/* EQ Panel */
-.eq-panel{background:var(--card);backdrop-filter:blur(40px);border-radius:var(--radius);border:1px solid var(--border);padding:16px;margin-bottom:12px;animation:slideDown 0.4s ease}
-@keyframes slideDown{from{opacity:0;max-height:0}to{opacity:1;max-height:500px}}
-.eq-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px}
-.eq-header h3{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:var(--accent)}
-.eq-presets{display:flex;gap:4px;flex-wrap:wrap}
-.preset-btn{padding:5px 10px;background:var(--card2);border:1px solid var(--border);color:var(--text2);cursor:pointer;border-radius:15px;font-size:9px;font-family:'Cairo',sans-serif;transition:all 0.3s}
-.preset-btn.active{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700}
-.eq-sliders{display:flex;justify-content:center;gap:8px;margin-bottom:14px}
-.eq-band{display:flex;flex-direction:column;align-items:center;gap:6px}
-.eq-slider{-webkit-appearance:slider-vertical;appearance:slider-vertical;width:24px;height:100px;background:rgba(0,255,204,0.15);border-radius:4px;outline:none;cursor:pointer}
-.eq-slider::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:8px;background:var(--accent);border-radius:4px;box-shadow:0 0 15px rgba(0,255,204,0.5)}
-.eq-band span{font-size:7px;color:var(--text3);font-family:'Orbitron',sans-serif}
-.eq-extra{display:flex;gap:20px;justify-content:center}
-.extra-knob{display:flex;flex-direction:column;align-items:center;gap:4px}
-.extra-knob span{font-size:9px;color:var(--text2)}
-.gold-slider{width:100px;height:3px;-webkit-appearance:none;appearance:none;background:rgba(0,255,204,0.15);border-radius:2px;outline:none;cursor:pointer}
-.gold-slider::-webkit-slider-thumb{-webkit-appearance:none;width:18px;height:18px;background:var(--accent);border-radius:50%;cursor:pointer;box-shadow:0 0 15px rgba(0,255,204,0.5)}
+/* Forecast Sections */
+.forecast-section{margin-bottom:14px}
+.section-title{font-family:'Orbitron',sans-serif;font-size:14px;font-weight:700;color:var(--accent);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+.hourly-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.hourly-scroll::-webkit-scrollbar{height:3px}
+.hourly-scroll::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.1);border-radius:3px}
+.hourly-item{min-width:70px;text-align:center;padding:10px 8px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:var(--radius-sm);transition:all 0.3s}
+.hourly-item:hover{border-color:var(--accent);background:rgba(79,195,247,0.08)}
+.hour-time{font-family:'Orbitron',sans-serif;font-size:10px;color:var(--text3);margin-bottom:4px}
+.hour-icon{font-size:24px;margin-bottom:4px}
+.hour-temp{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:var(--text)}
 
-/* Lyrics Panel */
-.lyrics-panel{background:var(--card);backdrop-filter:blur(40px);border-radius:var(--radius);border:1px solid var(--border);padding:16px;margin-bottom:12px;max-height:200px;overflow-y:auto;animation:slideDown 0.4s ease}
-.lyrics-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.lyrics-header h3{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:var(--accent2)}
-.lyrics-line{padding:6px 0;font-size:13px;color:var(--text2);text-align:center;transition:all 0.3s;border-bottom:1px solid rgba(255,255,255,0.03)}
-.lyrics-line.active{color:var(--accent);font-size:16px;font-weight:700;text-shadow:0 0 15px rgba(0,255,204,0.4)}
+.weekly-list{display:flex;flex-direction:column;gap:6px}
+.weekly-item{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:var(--radius-sm);transition:all 0.3s}
+.weekly-item:hover{border-color:var(--accent)}
+.w-day{font-size:12px;font-weight:600;color:var(--text);min-width:60px}
+.w-icon{font-size:24px;text-align:center;flex:1}
+.w-temp{font-family:'Orbitron',sans-serif;font-size:12px;font-weight:600;color:var(--accent);min-width:80px;text-align:left}
 
-/* Playlist */
-.playlist-section{margin-top:8px;padding-bottom:30px}
-.playlist-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
-.playlist-header h3{font-family:'Orbitron',sans-serif;font-size:13px;font-weight:700;color:var(--text)}
-.btn-action{padding:7px 14px;background:var(--card2);border:1px solid var(--border);color:var(--accent);cursor:pointer;border-radius:20px;font-size:10px;font-family:'Cairo',sans-serif;transition:all 0.3s}
-.btn-action:hover{border-color:var(--accent);box-shadow:0 0 15px rgba(0,255,204,0.2)}
-.playlist{display:flex;flex-direction:column;gap:5px}
-.track-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--card2);border:1px solid var(--border);border-radius:var(--radius-sm);cursor:pointer;transition:all 0.3s}
-.track-item:hover{border-color:var(--accent);background:var(--glass)}
-.track-item.active{border-color:var(--accent);background:rgba(0,255,204,0.06);box-shadow:0 0 15px rgba(0,255,204,0.1)}
-.track-item .t-icon{font-size:22px;width:30px;text-align:center}
-.track-item .t-info{flex:1;min-width:0}
-.track-item .t-name{font-size:11px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.track-item .t-size{font-size:9px;color:var(--text3)}
-.track-item .t-del{color:#ff4466;cursor:pointer;opacity:0.5;transition:0.3s;padding:5px}
-.track-item .t-del:hover{opacity:1}
-.empty-playlist{text-align:center;padding:30px;color:var(--text3)}
-.empty-playlist span{font-size:40px;display:block;margin-bottom:8px}
+/* Favorites */
+.favorites-section{margin-top:8px;padding-bottom:30px}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.btn-action{padding:8px 14px;background:var(--glass);border:1px solid var(--border);color:var(--accent);cursor:pointer;border-radius:20px;font-size:10px;font-family:'Cairo',sans-serif;transition:all 0.3s}
+.btn-action:hover{border-color:var(--accent);background:rgba(79,195,247,0.1)}
+.fav-cities{display:flex;gap:8px;flex-wrap:wrap}
+.fav-chip{padding:8px 16px;background:var(--glass);backdrop-filter:blur(20px);border:1px solid var(--border);border-radius:25px;cursor:pointer;font-size:11px;color:var(--text2);transition:all 0.3s;display:flex;align-items:center;gap:6px}
+.fav-chip:hover{border-color:var(--accent);color:var(--accent)}
+.fav-chip.active{border-color:var(--accent);background:rgba(79,195,247,0.1);color:var(--accent)}
+.fav-del{color:#ff5252;cursor:pointer;font-size:10px;margin-right:4px}
+.fav-del:hover{color:#ff1744}
+.empty-fav{color:var(--text3);font-size:11px;text-align:center;width:100%;padding:12px}
 
-.toast{position:fixed;bottom:35px;left:50%;transform:translateX(-50%) translateY(130px);background:var(--card);border:1px solid var(--accent);color:var(--text);padding:10px 22px;border-radius:25px;font-size:11px;z-index:300;transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);font-family:'Cairo',sans-serif}.toast.show{transform:translateX(-50%) translateY(0)}
+.toast{position:fixed;bottom:35px;left:50%;transform:translateX(-50%) translateY(130px);background:rgba(0,0,0,0.9);backdrop-filter:blur(20px);border:1px solid var(--accent);color:#fff;padding:10px 22px;border-radius:25px;font-size:11px;z-index:300;transition:transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);font-family:'Cairo',sans-serif}.toast.show{transform:translateX(-50%) translateY(0)}
 .particle{position:fixed;border-radius:50%;pointer-events:none;z-index:0}
 @keyframes particleFloat{0%{transform:translateY(110vh) scale(0);opacity:0}15%{opacity:0.7}85%{opacity:0.1}100%{transform:translateY(-10vh) scale(1.5);opacity:0}}
 
-@media(max-width:400px){.eq-sliders{gap:4px}.eq-slider{width:18px;height:70px}.controls{gap:10px}}"""
+@media(max-width:400px){.weather-temp{font-size:56px}.weather-details{grid-template-columns:repeat(2,1fr)}.weather-icon{font-size:60px}}"""
 
 # ═══════════════════════════════════════════════════════════
-# 🎧 3-7. JS Files
+# 🌤️ 3-5. JS Files
 # ═══════════════════════════════════════════════════════════
 
 def build_storage_js():
-    return """const KEYS={playlist:'sonic2044_playlist',settings:'sonic2044_settings',lyrics:'sonic2044_lyrics',eq:'sonic2044_eq'};
+    return """const KEYS={favorites:'weather2044_favs',lastCity:'weather2044_last'};
 function saveData(k,v){try{localStorage.setItem(k,JSON.stringify(v));return 1}catch(e){return 0}}
 function loadData(k,d=null){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}}
-function savePlaylist(pl){const data=pl.map(t=>({id:t.id,name:t.name,size:t.size,data:t.data,addedAt:t.addedAt}));return saveData(KEYS.playlist,data)}
-function loadPlaylist(){return loadData(KEYS.playlist,[])}
-function saveEQ(eq){saveData(KEYS.eq,eq)}
-function loadEQ(){return loadData(KEYS.eq,{bands:[0,0,0,0,0,0,0,0,0,0],bass:30,spatial:50})}
-function saveLyrics(trackId,lyrics){const all=loadData(KEYS.lyrics,{});all[trackId]=lyrics;saveData(KEYS.lyrics,all)}
-function getLyrics(trackId){const all=loadData(KEYS.lyrics,{});return all[trackId]||null}"""
+function getFavorites(){return loadData(KEYS.favorites,[])}
+function addFavorite(city){let f=getFavorites();if(!f.includes(city)){f.push(city);saveData(KEYS.favorites,f)}return f}
+function removeFavorite(city){let f=getFavorites().filter(c=>c!==city);saveData(KEYS.favorites,f);return f}
+function saveLastCity(city){saveData(KEYS.lastCity,city)}
+function getLastCity(){return loadData(KEYS.lastCity,'Riyadh')}"""
 
 def build_particles_js():
-    return """function initParticles(){const c=document.getElementById('particlesContainer');c.innerHTML='';const cols=['#00ffcc','#ff44aa','#6366f1'];for(let i=0;i<40;i++){const p=document.createElement('div');p.className='particle';p.style.cssText=`left:${Math.random()*100}%;bottom:-10px;width:${Math.random()*4+1}px;height:${Math.random()*4+1}px;background:radial-gradient(circle,${cols[i%3]} 0%,transparent 70%);animation:particleFloat ${Math.random()*5+5}s ease-in infinite;animation-delay:${Math.random()*5}s`;c.appendChild(p)}}"""
+    return """function initParticles(){const c=document.getElementById('particlesContainer');c.innerHTML='';const cols=['rgba(255,255,255,0.4)','rgba(79,195,247,0.3)'];for(let i=0;i<25;i++){const p=document.createElement('div');p.className='particle';p.style.cssText=`left:${Math.random()*100}%;bottom:-10px;width:${Math.random()*3+2}px;height:${Math.random()*3+2}px;background:radial-gradient(circle,${cols[i%2]} 0%,transparent 70%);animation:particleFloat ${Math.random()*6+6}s ease-in infinite;animation-delay:${Math.random()*6}s`;c.appendChild(p)}}"""
 
-def build_visualizer_js():
-    return """let vizCanvas,vizCtx,vizData=[],vizAnimationId;
-function initVisualizer(){vizCanvas=document.getElementById('vizCanvas');vizCtx=vizCanvas.getContext('2d');resizeViz();window.addEventListener('resize',resizeViz);for(let i=0;i<128;i++)vizData.push(0);drawViz()}
-function resizeViz(){const c=vizCanvas.parentElement;vizCanvas.width=c.clientWidth;vizCanvas.height=c.clientHeight}
-function drawViz(){vizAnimationId=requestAnimationFrame(drawViz);const w=vizCanvas.width,h=vizCanvas.height;vizCtx.fillStyle='rgba(5,5,16,0.3)';vizCtx.fillRect(0,0,w,h);const cx=w/2,cy=h/2,r=Math.min(w,h)*0.35;for(let i=0;i<vizData.length;i++){const a=(i/vizData.length)*Math.PI*2;const val=vizData[i]*0.7;const x1=cx+Math.cos(a)*(r+val*30);const y1=cy+Math.sin(a)*(r+val*30);const x2=cx+Math.cos(a)*(r-val*20);const y2=cy+Math.sin(a)*(r-val*20);const grad=vizCtx.createLinearGradient(x1,y1,x2,y2);grad.addColorStop(0,`rgba(0,255,204,${0.3+val})`);grad.addColorStop(0.5,`rgba(99,102,241,${0.2+val})`);grad.addColorStop(1,`rgba(255,68,170,${0.1+val})`);vizCtx.beginPath();vizCtx.moveTo(x1,y1);vizCtx.lineTo(x2,y2);vizCtx.strokeStyle=grad;vizCtx.lineWidth=1+val;vizCtx.stroke()}vizCtx.beginPath();vizCtx.arc(cx,cy,5,0,Math.PI*2);vizCtx.fillStyle='#fff';vizCtx.shadowColor='#00ffcc';vizCtx.shadowBlur=20;vizCtx.fill();vizCtx.shadowBlur=0}
-function updateVizData(audioData){if(!audioData)return;for(let i=0;i<vizData.length;i++){const idx=Math.floor(i*audioData.length/vizData.length);const val=audioData[idx]/255;vizData[i]=vizData[i]*0.85+val*0.15}}"""
-
-def build_equalizer_js():
-    return """let eqBands=[0,0,0,0,0,0,0,0,0,0],bassBoost=30,spatial=50;
-function initEQ(){const eq=loadEQ();eqBands=eq.bands||eqBands;bassBoost=eq.bass||30;spatial=eq.spatial||50;for(let i=0;i<10;i++){const s=document.getElementById('eq'+i);if(s)s.value=eqBands[i]}document.getElementById('bassBoost').value=bassBoost;document.getElementById('spatial').value=spatial}
-function updateEQ(){for(let i=0;i<10;i++){const s=document.getElementById('eq'+i);if(s)eqBands[i]=parseInt(s.value)}saveEQ({bands:eqBands,bass:bassBoost,spatial})}
-function updateBass(){bassBoost=parseInt(document.getElementById('bassBoost').value);saveEQ({bands:eqBands,bass:bassBoost,spatial})}
-function updateSpatial(){spatial=parseInt(document.getElementById('spatial').value);saveEQ({bands:eqBands,bass:bassBoost,spatial})}
-function setPreset(preset,el){document.querySelectorAll('.preset-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');const presets={flat:[0,0,0,0,0,0,0,0,0,0],bass:[10,8,6,3,0,-2,-4,-2,0,2],treble:[-3,-2,0,2,5,7,9,10,10,12],vocal:[-5,-3,0,3,6,4,2,0,-2,-4],rock:[6,4,2,0,-2,2,4,6,8,10]};eqBands=presets[preset]||presets.flat;for(let i=0;i<10;i++){const s=document.getElementById('eq'+i);if(s)s.value=eqBands[i]}saveEQ({bands:eqBands,bass:bassBoost,spatial})}
-function toggleEQ(){const p=document.getElementById('eqPanel');p.style.display=p.style.display==='none'?'block':'none';document.getElementById('btnEQ').classList.toggle('active',p.style.display==='block')}"""
-
-def build_lyrics_js():
-    return """let currentLyrics=[],currentLyricIndex=0;
-function toggleLyrics(){const p=document.getElementById('lyricsPanel');p.style.display=p.style.display==='none'?'block':'none';document.getElementById('btnLyrics').classList.toggle('active',p.style.display==='block')}
-function loadTrackLyrics(trackId){const saved=getLyrics(trackId);if(saved){currentLyrics=saved;renderLyrics()}else{currentLyrics=['🎵 اختر أغنية لعرض الكلمات','✨ الكلمات تظهر هنا بتأثير متحرك','🎤 أضف كلماتك المخصصة','💫 استمتع بالموسيقى'];renderLyrics()}}
-function renderLyrics(){const c=document.getElementById('lyricsContent');c.innerHTML=currentLyrics.map((l,i)=>`<p class="lyrics-line ${i===currentLyricIndex?'active':''}">${l}</p>`).join('')}
-function updateLyricPosition(time){if(!currentLyrics.length)return;const idx=Math.floor(time/3)%currentLyrics.length;if(idx!==currentLyricIndex){currentLyricIndex=idx;renderLyrics()}}
-function editLyrics(){const text=prompt('أدخل كلمات الأغنية (كل سطر = سطر جديد):',currentLyrics.join('\\n'));if(text!==null){currentLyrics=text.split('\\n');renderLyrics();if(window.currentTrack&&window.currentTrack.id)saveLyrics(window.currentTrack.id,currentLyrics);showToast('✅ تم حفظ الكلمات')}}"""
-
-def build_player_js():
-    return """let audio=new Audio(),playlist=[],currentIndex=-1,isPlaying=false,isShuffle=false,isRepeat=false,audioCtx=null,analyser=null;
-function initPlayer(){try{audioCtx=new(window.AudioContext||window.webkitAudioContext)();analyser=audioCtx.createAnalyser();analyser.fftSize=256;const source=audioCtx.createMediaElementSource(audio);source.connect(analyser);analyser.connect(audioCtx.destination)}catch(e){console.log('AudioContext not supported')}playlist=loadPlaylist();renderPlaylist();if(playlist.length){loadTrack(0)}audio.addEventListener('timeupdate',onTimeUpdate);audio.addEventListener('ended',()=>isRepeat?audio.play():nextTrack());audio.addEventListener('play',()=>{isPlaying=true;document.getElementById('playIcon').className='fas fa-pause'});audio.addEventListener('pause',()=>{isPlaying=false;document.getElementById('playIcon').className='fas fa-play'})}
-function onTimeUpdate(){if(!audio.duration)return;const pct=(audio.currentTime/audio.duration)*100;document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressThumb').style.left=pct+'%';document.getElementById('currentTime').innerText=formatTime(audio.currentTime);document.getElementById('totalTime').innerText=formatTime(audio.duration);updateLyricPosition(audio.currentTime);if(analyser){const data=new Uint8Array(analyser.frequencyBinCount);analyser.getByteFrequencyData(data);updateVizData(data)}}
-function formatTime(s){const m=Math.floor(s/60),sec=Math.floor(s%60);return m+':'+(sec<10?'0':'')+sec}
-function loadTrack(i){if(i<0||i>=playlist.length)return;currentIndex=i;window.currentTrack=playlist[i];const t=playlist[i];audio.src=t.data;document.getElementById('trackTitle').innerText=t.name;document.getElementById('trackArtist').innerText=t.size;loadTrackLyrics(t.id);renderPlaylist();audio.play()}
-function togglePlay(){if(!audio.src&&playlist.length){loadTrack(0);return}isPlaying?audio.pause():audio.play()}
-function nextTrack(){if(!playlist.length)return;let n=isShuffle?Math.floor(Math.random()*playlist.length):currentIndex+1;if(n>=playlist.length)n=0;loadTrack(n)}
-function prevTrack(){if(!playlist.length)return;let p=currentIndex-1;if(p<0)p=playlist.length-1;loadTrack(p)}
-function toggleShuffle(){isShuffle=!isShuffle;document.getElementById('shuffleBtn').classList.toggle('active',isShuffle)}
-function toggleRepeat(){isRepeat=!isRepeat;document.getElementById('repeatBtn').classList.toggle('active',isRepeat)}
-function seek(e){if(!audio.duration)return;const r=document.getElementById('progressTrack').getBoundingClientRect();audio.currentTime=((e.clientX-r.left)/r.width)*audio.duration}
-function addFiles(input){const files=input.files;if(!files.length)return;Array.from(files).forEach(f=>{const r=new FileReader();r.onload=function(e){playlist.push({id:Date.now()+Math.random(),name:f.name.replace(/\\.[^/.]+$/,''),size:formatSize(f.size),data:e.target.result,addedAt:new Date().toISOString()});savePlaylist(playlist);renderPlaylist();if(playlist.length===1)loadTrack(0)};r.readAsDataURL(f)});input.value='';showToast('✅ '+files.length+' أغنية')}
-function formatSize(b){return b>1048576?(b/1048576).toFixed(1)+' MB':(b/1024).toFixed(1)+' KB'}
-function deleteTrack(i){const wasPlaying=currentIndex===i;playlist.splice(i,1);savePlaylist(playlist);if(wasPlaying){audio.pause();audio.src='';document.getElementById('trackTitle').innerText='اختر أغنية';document.getElementById('trackArtist').innerText='Sonic 2044';isPlaying=false;document.getElementById('playIcon').className='fas fa-play';currentIndex=-1}else if(currentIndex>i)currentIndex--;renderPlaylist();showToast('🗑 تم الحذف')}
-function renderPlaylist(){const c=document.getElementById('playlist');if(!playlist.length){c.innerHTML='<div class="empty-playlist"><span>🎵</span><p>اسحب ملفات الصوت هنا</p></div>';return}c.innerHTML=playlist.map((t,i)=>`<div class="track-item ${i===currentIndex?'active':''}" onclick="loadTrack(${i})"><div class="t-icon">${i===currentIndex&&isPlaying?'🔊':'🎵'}</div><div class="t-info"><div class="t-name">${t.name}</div><div class="t-size">${t.size}</div></div><span class="t-del" onclick="event.stopPropagation();deleteTrack(${i})"><i class="fas fa-trash"></i></span></div>`).join('')}
+def build_weather_js():
+    return """let currentCity='Riyadh',currentData=null,isCelsius=true;
+const WEATHER_ICONS={Clear:'☀️',Clouds:'☁️',Rain:'🌧️',Drizzle:'🌦️',Thunderstorm:'⛈️',Snow:'❄️',Mist:'🌫️',Fog:'🌫️',Haze:'🌫️',Dust:'🌪️',Sand:'🌪️',Smoke:'🌫️',Tornado:'🌪️',Squall:'💨'};
+const WEATHER_BG={Clear:'linear-gradient(180deg,#1a3a5c,#0d2137,#0a1628)',Clouds:'linear-gradient(180deg,#2c3e50,#1a252f,#0a1628)',Rain:'linear-gradient(180deg,#1a2a3a,#121d2a,#0a1628)',Drizzle:'linear-gradient(180deg,#1a2a3a,#121d2a,#0a1628)',Thunderstorm:'linear-gradient(180deg,#0f0f1a,#0a0a12,#050508)',Snow:'linear-gradient(180deg,#2a3a4a,#1a2a3a,#0a1628)',Mist:'linear-gradient(180deg,#1a2a35,#121d28,#0a1628)',Fog:'linear-gradient(180deg,#1a2a35,#121d28,#0a1628)',Haze:'linear-gradient(180deg,#2a2a25,#1a1a18,#0a1628)',Dust:'linear-gradient(180deg,#2a2a20,#1a1a15,#0a1628)'};
+function initWeather(){const last=getLastCity();if(last)currentCity=last;fetchWeather(currentCity);renderFavorites()}
+async function fetchWeather(city){try{const geoRes=await fetch(`https://api.openweathermap.org/geo/1.0/direct?q=${city}&limit=1&appid=bd5e378503939578c5d3d5c5a6d0b19a`);const geoData=await geoRes.json();if(!geoData.length){showToast('⚠ المدينة غير موجودة');return}const{lat,lon,name,country}=geoData[0];const weatherRes=await fetch(`https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=bd5e378503939578c5d3d5c5a6d0b19a`);const weatherData=await weatherRes.json();currentData=weatherData;currentCity=city;saveLastCity(city);updateUI(weatherData,name,country);updateHourly(weatherData);updateWeekly(weatherData)}catch(e){console.error(e);generateMockWeather(city);showToast('📡 بيانات محاكاة (غير متصل)')}}
+function generateMockWeather(city){const conditions=['Clear','Clouds','Rain'];const c=conditions[Math.floor(city.length%3)];const t=Math.floor(Math.random()*15+20);const data={list:Array.from({length:40},(_,i)=>({dt:Date.now()/1000+i*3600,main:{temp:t+Math.sin(i)*5,humidity:Math.floor(Math.random()*30+40),feels_like:t+Math.sin(i)*3-2,visibility:10000},wind:{speed:Math.random()*20+5},weather:[{main:c,description:'سماء صافية'}],pop:Math.random()})),city:{name:city,country:'🇸🇦'}};currentData=data;updateUI(data,city,'🇸🇦');updateHourly(data);updateWeekly(data)}
+function updateUI(data,name,country){const current=data.list[0];const w=current.weather[0];const icon=WEATHER_ICONS[w.main]||'🌈';const bg=WEATHER_BG[w.main]||WEATHER_BG.Clear;document.getElementById('bgSky').style.background=bg;document.getElementById('weatherIcon').innerText=icon;document.getElementById('weatherTemp').innerText=Math.round(current.main.temp)+'°';document.getElementById('weatherDesc').innerText=w.description||'سماء صافية';document.getElementById('cityName').innerText=name+', '+country;document.getElementById('humidity').innerText=current.main.humidity+'%';document.getElementById('windSpeed').innerText=Math.round(current.wind.speed)+' كم/س';document.getElementById('visibility').innerText=(current.main.visibility/1000).toFixed(1)+' كم';document.getElementById('feelsLike').innerText=Math.round(current.main.feels_like)+'°'}
+function updateHourly(data){const container=document.getElementById('hourlyForecast');container.innerHTML=data.list.slice(0,8).map(h=>{const t=new Date(h.dt*1000);const time=t.getHours()+':00';const icon=WEATHER_ICONS[h.weather[0].main]||'🌈';const temp=Math.round(h.main.temp)+'°';return`<div class="hourly-item"><div class="hour-time">${time}</div><div class="hour-icon">${icon}</div><div class="hour-temp">${temp}</div></div>`}).join('')}
+function updateWeekly(data){const container=document.getElementById('weeklyForecast');const days={};data.list.forEach(h=>{const d=new Date(h.dt*1000).toLocaleDateString('ar-SA',{weekday:'long'});if(!days[d])days[d]={temps:[],icon:h.weather[0].main};days[d].temps.push(h.main.temp)});container.innerHTML=Object.entries(days).slice(0,7).map(([day,info])=>{const min=Math.round(Math.min(...info.temps));const max=Math.round(Math.max(...info.temps));const icon=WEATHER_ICONS[info.icon]||'🌈';return`<div class="weekly-item"><div class="w-day">${day}</div><div class="w-icon">${icon}</div><div class="w-temp">${max}° / ${min}°</div></div>`}).join('')}
+function detectLocation(){if(navigator.geolocation){navigator.geolocation.getCurrentPosition(async pos=>{try{const res=await fetch(`https://api.openweathermap.org/geo/1.0/reverse?lat=${pos.coords.latitude}&lon=${pos.coords.longitude}&limit=1&appid=bd5e378503939578c5d3d5c5a6d0b19a`);const data=await res.json();if(data.length){currentCity=data[0].name;fetchWeather(currentCity);showToast('📍 '+currentCity)}}catch(e){showToast('📍 تم تحديد موقعك')}},()=>showToast('⚠ تعذر تحديد الموقع'))}else{showToast('⚠ GPS غير مدعوم')}}
+function toggleSearch(){const bar=document.getElementById('searchBar');bar.style.display=bar.style.display==='none'?'flex':'none';if(bar.style.display==='flex')document.getElementById('searchInput').focus()}
+function searchCity(){const input=document.getElementById('searchInput');const city=input.value.trim();if(city){fetchWeather(city);document.getElementById('searchBar').style.display='none';input.value=''}}
+function addFavoriteCity(){const city=prompt('اسم المدينة:');if(city&&city.trim()){addFavorite(city.trim());renderFavorites();showToast('⭐ تمت الإضافة')}}
+function selectFavorite(city){currentCity=city;fetchWeather(city)}
+function deleteFavorite(city){removeFavorite(city);renderFavorites();showToast('🗑 تم الحذف')}
+function renderFavorites(){const container=document.getElementById('favCities');const favs=getFavorites();if(!favs.length){container.innerHTML='<div class="empty-fav">أضف مدنك المفضلة ⭐</div>';return}container.innerHTML=favs.map(c=>`<div class="fav-chip ${c===currentCity?'active':''}" onclick="selectFavorite('${c}')">📍 ${c}<span class="fav-del" onclick="event.stopPropagation();deleteFavorite('${c}')">✕</span></div>`).join('')}
 function showToast(m){const t=document.getElementById('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2500)}"""
 
 def build_app_js():
-    return """initParticles();initVisualizer();initEQ();initPlayer();"""
+    return """initParticles();initWeather();"""
 
 # ═══════════════════════════════════════════════════════════
-# 🎧 MAIN
+# 🌤️ MAIN
 # ═══════════════════════════════════════════════════════════
 
 def main():
     print("""
 ╔══════════════════════════════════════════════════════════╗
-║  🎧  SONIC 2044 - ULTIMATE AUDIO PLAYER  🎧          ║
-║     Ultimate Generator - 12 Files                        ║
+║  🌤️  WEATHER 2044 - PREMIUM EDITION  🌤️             ║
+║     Ultimate Generator - 6 Files                         ║
 ╚══════════════════════════════════════════════════════════╝
     """)
 
-    section("BUILDING SONIC 2044")
+    section("BUILDING WEATHER 2044")
 
     write("index.html", build_index())
     write("style.css", build_style())
     write("storage.js", build_storage_js())
     write("particles.js", build_particles_js())
-    write("visualizer.js", build_visualizer_js())
-    write("equalizer.js", build_equalizer_js())
-    write("lyrics.js", build_lyrics_js())
-    write("player.js", build_player_js())
+    write("weather.js", build_weather_js())
     write("app.js", build_app_js())
 
     print(f"""
 {'='*60}
   ✅ BUILD COMPLETE! - {TOTAL_LINES} خط
-  📁 9 ملفات
+  📁 6 ملفات
 
-  🎧 3D Audio Visualizer
-  🎛️ 10-Band Equalizer
-  🎤 Animated Lyrics
-  💾 Playlist Storage
+  🌍 Weather API + GPS
+  💎 Glass Morphism Design
+  ⏰ Hourly + Weekly Forecast
+  ⭐ Favorite Cities
+  🌈 Dynamic Backgrounds
 
   🚀 للتشغيل:
      افتح index.html في المتصفح
 
-  🎧 SONIC 2044 READY!
+  🌤️ WEATHER 2044 READY!
 {'='*60}
     """)
 
